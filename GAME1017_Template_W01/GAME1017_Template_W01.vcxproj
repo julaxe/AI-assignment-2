@@ -125,6 +125,7 @@
     <ClCompile Include="Pathing.cpp" />
     <ClCompile Include="PathManager.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayState.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="Label.cpp" />
@@ -143,6 +144,7 @@
     <ClInclude Include="Pathing.h" />
     <ClInclude Include="PathManager.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayState.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="Label.h" />
@@ -159,6 +161,7 @@
     <Image Include="Img\play.png" />
     <Image Include="Img\PlayerShip.png" />
     <Image Include="Img\Tiles.png" />
+    <Image Include="Img\world_map_tiles.png" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Dat\Level1.txt" />

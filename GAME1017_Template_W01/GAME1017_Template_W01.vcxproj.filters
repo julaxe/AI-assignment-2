@@ -63,6 +63,9 @@
     <ClCompile Include="PathManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PlayState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -116,6 +119,9 @@
     <ClInclude Include="PathManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PlayState.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="img\circle.png">
@@ -134,6 +140,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Img\Maga.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Img\world_map_tiles.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
