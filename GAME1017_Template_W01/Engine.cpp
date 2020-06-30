@@ -7,6 +7,7 @@
 #include "SoundManager.h"
 #include "StateManager.h"
 #include "TextureManager.h"
+#include "StartScene.h"
 #include <iostream>
 #include <fstream>
 #include <ctime>
@@ -14,6 +15,8 @@
 #define WIDTH 1024
 #define HEIGHT 768
 #define FPS 60
+
+
 using namespace std;
 
 Engine::Engine():m_running(false){ cout << "Engine class constructed!" << endl; }
@@ -44,10 +47,10 @@ bool Engine::Init(const char* title, int xpos, int ypos, int width, int height, 
 	// Example specific initialization.
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2"); // Call this before any textures are created.
 
-
 	srand((unsigned)time(NULL));
 	//push new state.
-	StateManager::PushState(new PlayState());
+	StateManager::PushState(new StartScene());
+	
 	// Final engine initialization calls.
 	m_fps = (Uint32)round((1 / (double)FPS) * 1000); // Sets FPS in milliseconds and rounds.
 	m_running = true; // Everything is okay, start the engine.
@@ -88,9 +91,11 @@ void Engine::Render()
 	SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, 255);
 	SDL_RenderClear(m_pRenderer); // Clear the screen with the draw color.
 	// Draw anew.
+
 	for (auto s : StateManager::GetStates()) {
 		s->Render();
 	}
+
 	// Flip buffers.
 	SDL_RenderPresent(m_pRenderer);
 }
