@@ -24,8 +24,13 @@ StartScene::StartScene()
 
 	FontManager::RegisterFont("Img/LTYPE.TTF", "font", 20);
 
+	//Labels
 	m_pFont = new Label("font", WIDTH / 2 - 75, 10, "Lucas101289546", { 255,255,255,255 });
 	m_pFont2 = new Label("font", WIDTH / 2 - 80, 30, "Julian101286557", { 255,255,255,255 });
+
+	//Backgound
+	TextureManager::RegisterTexture("Img/Background.jpg", "Background");
+	m_pSprite = new Sprite({ 0,0,1920,1080 }, { 0,0,WIDTH,HEIGHT }, Engine::Instance().GetRenderer(), TextureManager::GetTexture("Background"));
 }
 
 void StartScene::HandleEvents()
@@ -40,6 +45,7 @@ void StartScene::Update()
 
 void StartScene::Render()
 {
+	m_pSprite->Render();
 	m_pPlayButton->Render();
 	m_pFont->Render();
 	m_pFont2->Render();

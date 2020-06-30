@@ -13,7 +13,7 @@ public:
 	void Exit() override;
 	void Resume() override;
 private:
-	//Sprite* m_pSprite;
+	Sprite* m_pSprite;
 	PlayButton* m_pPlayButton;
 	Label* m_pFont;
 	Label* m_pFont2;
