@@ -4,16 +4,17 @@
 #include "PlayButton.h"
 
 class StartScene : public State {
+public:
+	StartScene();
+	void HandleEvents() override;
+	void Update() override;
+	void Render() override;
+	void Enter() override;
+	void Exit() override;
+	void Resume() override;
 private:
 	//Sprite* m_pSprite;
 	PlayButton* m_pPlayButton;
 	Label* m_pFont;
 	Label* m_pFont2;
-public:
-	StartScene();
-	void Update();
-	void Render();
-	void Enter();
-	void Exit();
-	void Resume();
 };

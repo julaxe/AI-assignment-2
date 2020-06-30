@@ -28,6 +28,10 @@ StartScene::StartScene()
 	m_pFont2 = new Label("font", WIDTH / 2 - 80, 30, "Julian101286557", { 255,255,255,255 });
 }
 
+void StartScene::HandleEvents()
+{
+}
+
 
 void StartScene::Update()
 {
