@@ -22,6 +22,72 @@ PlayState::~PlayState()
 
 void PlayState::HandleEvents()
 {
+	if (EVMA::KeyPressed(SDL_SCANCODE_H)) // ~ or ` key. Toggle debug mode.
+		m_showCosts = !m_showCosts;
+	if (EVMA::KeyPressed(SDL_SCANCODE_F)) 
+	{
+		m_showPath = !m_showPath;
+		for (int row = 0; row < ROWS; row++) // "This is where the fun begins."
+		{ // Update each node with the selected heuristic and set the text for debug mode.
+			for (int col = 0; col < COLS; col++)
+			{
+				if (m_level[row][col]->Node() == nullptr)
+					continue;
+				if (m_hEuclid)
+					m_level[row][col]->Node()->SetH(PAMA::HEuclid(m_level[row][col]->Node(), m_level[(int)(m_pBling->GetDstP()->y / 32)][(int)(m_pBling->GetDstP()->x / 32)]->Node()));
+				else
+					m_level[row][col]->Node()->SetH(PAMA::HManhat(m_level[row][col]->Node(), m_level[(int)(m_pBling->GetDstP()->y / 32)][(int)(m_pBling->GetDstP()->x / 32)]->Node()));
+				m_level[row][col]->m_lCost->SetText(std::to_string((int)(m_level[row][col]->Node()->H())).c_str());
+			}
+		}
+		// Now we can calculate the path. Note: I am not returning a path again, only generating one to be rendered.
+		PAMA::GetShortestPath(m_level[(int)(m_pPlayer->GetDstP()->y / 32)][(int)(m_pPlayer->GetDstP()->x / 32)]->Node(),
+			m_level[(int)(m_pBling->GetDstP()->y / 32)][(int)(m_pBling->GetDstP()->x / 32)]->Node());
+	}
+	if (EVMA::KeyPressed(SDL_SCANCODE_SPACE)) // Toggle the heuristic used for pathfinding.
+	{
+		m_hEuclid = !m_hEuclid;
+		std::cout << "Setting " << (m_hEuclid ? "Euclidian" : "Manhattan") << " heuristic..." << std::endl;
+	}
+	if (m_showCosts) {
+		if (EVMA::MousePressed(1) || EVMA::MousePressed(3)) // If user has clicked.
+		{
+			int xIdx = (EVMA::GetMousePos().x / 32);
+			int yIdx = (EVMA::GetMousePos().y / 32);
+			if (m_level[yIdx][xIdx]->IsObstacle() || m_level[yIdx][xIdx]->IsHazard()) // Node() == nullptr;
+				return; // We clicked on an invalid tile.
+			if (EVMA::MousePressed(1)) // Move the player with left-click.
+			{
+				if (m_pBling->GetDstP()->x == (float)(xIdx * 32) && m_pBling->GetDstP()->y == (float)(yIdx * 32))
+					return;
+				m_pPlayer->GetDstP()->x = (float)(xIdx * 32);
+				m_pPlayer->GetDstP()->y = (float)(yIdx * 32);
+			}
+			else if (EVMA::MousePressed(3)) // Else move the bling with right-click.
+			{
+				if (m_pPlayer->GetDstP()->x == (float)(xIdx * 32) && m_pPlayer->GetDstP()->y == (float)(yIdx * 32))
+					return;
+				m_pBling->GetDstP()->x = (float)(xIdx * 32);
+				m_pBling->GetDstP()->y = (float)(yIdx * 32);
+			}
+			for (int row = 0; row < ROWS; row++) // "This is where the fun begins."
+			{ // Update each node with the selected heuristic and set the text for debug mode.
+				for (int col = 0; col < COLS; col++)
+				{
+					if (m_level[row][col]->Node() == nullptr)
+						continue;
+					if (m_hEuclid)
+						m_level[row][col]->Node()->SetH(PAMA::HEuclid(m_level[row][col]->Node(), m_level[(int)(m_pBling->GetDstP()->y / 32)][(int)(m_pBling->GetDstP()->x / 32)]->Node()));
+					else
+						m_level[row][col]->Node()->SetH(PAMA::HManhat(m_level[row][col]->Node(), m_level[(int)(m_pBling->GetDstP()->y / 32)][(int)(m_pBling->GetDstP()->x / 32)]->Node()));
+					m_level[row][col]->m_lCost->SetText(std::to_string((int)(m_level[row][col]->Node()->H())).c_str());
+				}
+			}
+			// Now we can calculate the path. Note: I am not returning a path again, only generating one to be rendered.
+			PAMA::GetShortestPath(m_level[(int)(m_pPlayer->GetDstP()->y / 32)][(int)(m_pPlayer->GetDstP()->x / 32)]->Node(),
+				m_level[(int)(m_pBling->GetDstP()->y / 32)][(int)(m_pBling->GetDstP()->x / 32)]->Node());
+		}
+	}
 }
 
 void PlayState::Render()
@@ -49,53 +115,18 @@ void PlayState::Render()
 	}
 	m_pPlayer->Render();
 	m_pBling->Render();
-	PAMA::DrawPath(); // I save the path in a static vector to be drawn here.
+	if (m_showPath) 
+	{
+		PAMA::DrawPath(); // I save the path in a static vector to be drawn here.
+	}
 	DEMA::FlushLines(); // And... render ALL the queued lines. Phew.
 }
 
 void PlayState::Update()
 {
-	// m_pPlayer->Update(); // Just stops MagaMan from moving.
-	if (EVMA::KeyPressed(SDL_SCANCODE_GRAVE)) // ~ or ` key. Toggle debug mode.
-		m_showCosts = !m_showCosts;
-	if (EVMA::KeyPressed(SDL_SCANCODE_SPACE)) // Toggle the heuristic used for pathfinding.
-	{
-		m_hEuclid = !m_hEuclid;
-		std::cout << "Setting " << (m_hEuclid ? "Euclidian" : "Manhattan") << " heuristic..." << std::endl;
-	}
-	if (EVMA::MousePressed(1) || EVMA::MousePressed(3)) // If user has clicked.
-	{
-		int xIdx = (EVMA::GetMousePos().x / 32);
-		int yIdx = (EVMA::GetMousePos().y / 32);
-		if (m_level[yIdx][xIdx]->IsObstacle() || m_level[yIdx][xIdx]->IsHazard()) // Node() == nullptr;
-			return; // We clicked on an invalid tile.
-		if (EVMA::MousePressed(1)) // Move the player with left-click.
-		{
-			m_pPlayer->GetDstP()->x = (float)(xIdx * 32);
-			m_pPlayer->GetDstP()->y = (float)(yIdx * 32);
-		}
-		else if (EVMA::MousePressed(3)) // Else move the bling with right-click.
-		{
-			m_pBling->GetDstP()->x = (float)(xIdx * 32);
-			m_pBling->GetDstP()->y = (float)(yIdx * 32);
-		}
-		for (int row = 0; row < ROWS; row++) // "This is where the fun begins."
-		{ // Update each node with the selected heuristic and set the text for debug mode.
-			for (int col = 0; col < COLS; col++)
-			{
-				if (m_level[row][col]->Node() == nullptr)
-					continue;
-				if (m_hEuclid)
-					m_level[row][col]->Node()->SetH(PAMA::HEuclid(m_level[row][col]->Node(), m_level[(int)(m_pBling->GetDstP()->y / 32)][(int)(m_pBling->GetDstP()->x / 32)]->Node()));
-				else
-					m_level[row][col]->Node()->SetH(PAMA::HManhat(m_level[row][col]->Node(), m_level[(int)(m_pBling->GetDstP()->y / 32)][(int)(m_pBling->GetDstP()->x / 32)]->Node()));
-				m_level[row][col]->m_lCost->SetText(std::to_string((int)(m_level[row][col]->Node()->H())).c_str());
-			}
-		}
-		// Now we can calculate the path. Note: I am not returning a path again, only generating one to be rendered.
-		PAMA::GetShortestPath(m_level[(int)(m_pPlayer->GetDstP()->y / 32)][(int)(m_pPlayer->GetDstP()->x / 32)]->Node(),
-			m_level[(int)(m_pBling->GetDstP()->y / 32)][(int)(m_pBling->GetDstP()->x / 32)]->Node());
-	}
+	m_pPlayer->Update(m_level);
+	
+	
 }
 
 void PlayState::Enter()

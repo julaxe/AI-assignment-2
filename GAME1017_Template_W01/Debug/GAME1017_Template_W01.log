@@ -1,5 +1,0 @@
-﻿  StartScene.cpp
-C:\Users\lucas\Documents\GitHub\AI-assignment-2\GAME1017_Template_W01\StartScene.cpp(18,20): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\lucas\Documents\GitHub\AI-assignment-2\GAME1017_Template_W01\StartScene.cpp(20,13): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\lucas\Documents\GitHub\AI-assignment-2\GAME1017_Template_W01\StartScene.cpp(21,13): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  GAME1017_Template_W01.vcxproj -> C:\Users\lucas\Documents\GitHub\AI-assignment-2\Debug\GAME1017_Template_W01.exe

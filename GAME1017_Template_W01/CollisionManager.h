@@ -5,6 +5,7 @@
 #include <iostream>
 #include <SDL.h>
 #include "MathManager.h"
+#include "Tile.h"
 
 class CollisionManager
 {
@@ -16,7 +17,7 @@ public:
 
 	static bool LinePointCheck(const SDL_FPoint object1_start, const SDL_FPoint object1_end, const SDL_FPoint object2);
 
-	static bool PlayerCollision(const SDL_Rect player, const int dX, const int dY);
+	static bool PlayerCollision(const SDL_Rect player, const int dX, const int dY, std::array<std::array<Tile*, COLS>, ROWS> m_level);
 private:
 	CollisionManager() {}
 };

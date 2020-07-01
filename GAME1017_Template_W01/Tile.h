@@ -5,6 +5,9 @@
 #include "Pathing.h"
 #include "Label.h"
 
+#define ROWS 24
+#define COLS 32
+
 class Tile : public Sprite
 {
 public:

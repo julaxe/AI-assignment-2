@@ -151,10 +151,12 @@ void PathManager::DrawPath()
 	{
 		DEMA::QueueLine({ s_path[i]->GetFromNode()->x + 16, s_path[i]->GetFromNode()->y + 16 }, 
 			{ MAMA::HalfwayPoint(s_path[i]->GetFromNode()->Pt(), s_path[i]->GetToNode()->Pt()).x+16, 
-			MAMA::HalfwayPoint(s_path[i]->GetFromNode()->Pt(), s_path[i]->GetToNode()->Pt()).y + 16 }, { 255,255,0,255 });
+			MAMA::HalfwayPoint(s_path[i]->GetFromNode()->Pt(), s_path[i]->GetToNode()->Pt()).y + 16 }, 
+			{ 255,255,0,255 });
 		DEMA::QueueLine({ MAMA::HalfwayPoint(s_path[i]->GetFromNode()->Pt(), s_path[i]->GetToNode()->Pt()).x+16, 
 			MAMA::HalfwayPoint(s_path[i]->GetFromNode()->Pt(), s_path[i]->GetToNode()->Pt()).y + 16 },
-			{ s_path[i]->GetToNode()->x+16, s_path[i]->GetToNode()->y + 16 }, { 255,128,0,255 });
+			{ s_path[i]->GetToNode()->x+16, s_path[i]->GetToNode()->y + 16 }, 
+			{ 255,128,0,255 });
 	}
 }
 

@@ -6,7 +6,7 @@
 Player::Player(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstart, int smin, int smax, int nf)
 	:AnimatedSprite(s, d, r, t, sstart, smin, smax, nf), m_state(idle), m_dir(0) {}
 
-void Player::Update()
+void Player::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
 {
 	switch (m_state)
 	{
@@ -26,21 +26,21 @@ void Player::Update()
 		}
 		if (EVMA::KeyHeld(SDL_SCANCODE_W))
 		{
-			if (m_dst.y > 0 && !COMA::PlayerCollision({ (int)m_dst.x, (int)(m_dst.y), (int)32, (int)32 }, 0, -SPEED))
+			if (m_dst.y > 0 && !COMA::PlayerCollision({ (int)m_dst.x, (int)(m_dst.y), (int)32, (int)32 }, 0, -SPEED, m_level))
 			{
 				m_dst.y += -SPEED;
 			}
 		}
 		else if (EVMA::KeyHeld(SDL_SCANCODE_S))
 		{
-			if (m_dst.y < 768 - 32 && !COMA::PlayerCollision({ (int)m_dst.x, (int)(m_dst.y), (int)32, (int)32 }, 0, SPEED))
+			if (m_dst.y < 768 - 32 && !COMA::PlayerCollision({ (int)m_dst.x, (int)(m_dst.y), (int)32, (int)32 }, 0, SPEED, m_level))
 			{
 				m_dst.y += SPEED;
 			}
 		}
 		if (EVMA::KeyHeld(SDL_SCANCODE_A))
 		{
-			if (m_dst.x > 0  && !COMA::PlayerCollision({ (int)m_dst.x, (int)m_dst.y, (int)32, (int)32 }, -SPEED, 0))
+			if (m_dst.x > 0  && !COMA::PlayerCollision({ (int)m_dst.x, (int)m_dst.y, (int)32, (int)32 }, -SPEED, 0, m_level))
 			{
 				m_dst.x += -SPEED;
 				m_dir = 1;
@@ -48,7 +48,7 @@ void Player::Update()
 		}
 		else if (EVMA::KeyHeld(SDL_SCANCODE_D))
 		{
-			if (m_dst.x < 1024 - 32 &&  !COMA::PlayerCollision({ (int)m_dst.x, (int)m_dst.y, (int)32, (int)32 }, SPEED, 0))
+			if (m_dst.x < 1024 - 32 &&  !COMA::PlayerCollision({ (int)m_dst.x, (int)m_dst.y, (int)32, (int)32 }, SPEED, 0, m_level))
 			{
 				m_dst.x += SPEED;
 				m_dir = 0;
