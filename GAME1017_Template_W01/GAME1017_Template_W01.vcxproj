@@ -164,6 +164,7 @@
     <Image Include="Img\Maga.png" />
     <Image Include="Img\play.png" />
     <Image Include="Img\PlayerShip.png" />
+    <Image Include="Img\spiderMother.png" />
     <Image Include="Img\Tiles.png" />
     <Image Include="Img\world_map_tiles.png" />
   </ItemGroup>

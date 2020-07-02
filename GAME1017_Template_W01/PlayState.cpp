@@ -120,8 +120,16 @@ void PlayState::Update()
 	m_pPlayer->Update(m_level);
 	if (m_moving)
 	{
-
+		if (m_pPlayer->GetDstP()->x != m_pBling->GetDstP()->x || m_pPlayer->GetDstP()->y != m_pBling->GetDstP()->y)
+		{
 			SOMA::PlaySound("running", 0, -1);
+		}
+		else
+		{
+			m_moving = false;
+			SOMA::StopSound(-1);
+			return;
+		}
 	
 		if (PAMA::PathList().size() > 0 && m_pathCounter < PAMA::PathList().size())
 		{
@@ -144,9 +152,9 @@ void PlayState::Enter()
 {
 	const int SIZEOFTILES = 32;
 	m_pTileText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/Tiles.png");
-	m_pPlayerText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/Maga.png");
+	m_pPlayerText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/spiderMother.png");
 	FOMA::RegisterFont("img/ltype.ttf", "tile", 10);
-	m_pPlayer = new Player({ 0,0,32,32 }, { (float)(16) * 32, (float)(12) * 32, 32, 32 }, Engine::Instance().GetRenderer(), m_pPlayerText, 0, 0, 0, 4);
+	m_pPlayer = new Player({ 0,0,48,64 }, { (float)(16) * 32, (float)(12) * 32, 32, 32 }, Engine::Instance().GetRenderer(), m_pPlayerText, 0, 0, 0, 6);
 	m_pBling = new Sprite({ 224,64,32,32 }, { (float)(16) * 32, (float)(4) * 32, 32, 32 }, Engine::Instance().GetRenderer(), m_pTileText);
 	std::ifstream inFile("Dat/Tiledata.txt");
 	if (inFile.is_open())

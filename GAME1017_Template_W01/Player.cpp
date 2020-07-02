@@ -69,16 +69,21 @@ bool Player::Move(SDL_Point p)
 	m_velocity = { 2,2 };
 	if (m_dst.x != p.x || m_dst.y != p.y)
 	{
-		if (m_dst.x > p.x)
+		if (m_dst.x > p.x) //node is at the left
 		{
+			m_src.y = m_src.h * 3;
 			m_velocity.x *= -1;
-			m_dir = 1;
 		}
 		else if (m_dst.x == p.x) m_velocity.x = 0;
-		else m_dir = 0;
+		else { m_src.y = m_src.h * 1; } //node is at right
 
-		if (m_dst.y > p.y) m_velocity.y *= -1;
+		if (m_dst.y > p.y)//node is up
+		{
+			m_src.y = m_src.h * 0;
+			m_velocity.y *= -1;
+		}
 		else if (m_dst.y == p.y) m_velocity.y = 0;
+		else m_src.y = m_src.h * 2;//node is down
 	}
 	else
 	{
@@ -104,6 +109,6 @@ void Player::SetState(int s)
 	else // Only other is running for now...
 	{
 		m_sprite = m_spriteMin = 1;
-		m_spriteMax = 4;
+		m_spriteMax = 2;
 	}
 }

@@ -157,6 +157,9 @@
     <Image Include="Img\world_map_tiles.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Img\spiderMother.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Dat\Level1.txt">
