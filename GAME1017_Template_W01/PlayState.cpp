@@ -28,6 +28,7 @@ void PlayState::HandleEvents()
 		CalculatePath();
 		m_moving = !m_moving;
 		m_pathCounter = 0;
+		
 	}
 	if (EVMA::KeyPressed(SDL_SCANCODE_H)) // ~ or ` key. Toggle debug mode.
 	{
@@ -119,6 +120,9 @@ void PlayState::Update()
 	m_pPlayer->Update(m_level);
 	if (m_moving)
 	{
+
+			SOMA::PlaySound("running", 0, -1);
+	
 		if (PAMA::PathList().size() > 0 && m_pathCounter < PAMA::PathList().size())
 		{
 			if (m_pPlayer->Move(PAMA::PathList()[m_pathCounter]->GetToNode()->Pt()))
@@ -126,6 +130,7 @@ void PlayState::Update()
 				if (m_pPlayer->GetDstP()->x  == m_pBling->GetDstP()->x && m_pPlayer->GetDstP()->y == m_pBling->GetDstP()->y)
 				{
 					m_moving = false;
+					SOMA::StopSound(-1);
 					return;
 				}
 				m_pathCounter++;
