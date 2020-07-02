@@ -22,27 +22,18 @@ PlayState::~PlayState()
 
 void PlayState::HandleEvents()
 {
+	if (EVMA::KeyPressed(SDL_SCANCODE_M))
+	{
+		CalculatePath();
+		m_moving = !m_moving;
+		m_pathCounter = 0;
+	}
 	if (EVMA::KeyPressed(SDL_SCANCODE_H)) // ~ or ` key. Toggle debug mode.
 		m_showCosts = !m_showCosts;
 	if (EVMA::KeyPressed(SDL_SCANCODE_F)) 
 	{
 		m_showPath = !m_showPath;
-		for (int row = 0; row < ROWS; row++) // "This is where the fun begins."
-		{ // Update each node with the selected heuristic and set the text for debug mode.
-			for (int col = 0; col < COLS; col++)
-			{
-				if (m_level[row][col]->Node() == nullptr)
-					continue;
-				if (m_hEuclid)
-					m_level[row][col]->Node()->SetH(PAMA::HEuclid(m_level[row][col]->Node(), m_level[(int)(m_pBling->GetDstP()->y / 32)][(int)(m_pBling->GetDstP()->x / 32)]->Node()));
-				else
-					m_level[row][col]->Node()->SetH(PAMA::HManhat(m_level[row][col]->Node(), m_level[(int)(m_pBling->GetDstP()->y / 32)][(int)(m_pBling->GetDstP()->x / 32)]->Node()));
-				m_level[row][col]->m_lCost->SetText(std::to_string((int)(m_level[row][col]->Node()->H())).c_str());
-			}
-		}
-		// Now we can calculate the path. Note: I am not returning a path again, only generating one to be rendered.
-		PAMA::GetShortestPath(m_level[(int)(m_pPlayer->GetDstP()->y / 32)][(int)(m_pPlayer->GetDstP()->x / 32)]->Node(),
-			m_level[(int)(m_pBling->GetDstP()->y / 32)][(int)(m_pBling->GetDstP()->x / 32)]->Node());
+		CalculatePath();
 	}
 	if (EVMA::KeyPressed(SDL_SCANCODE_SPACE)) // Toggle the heuristic used for pathfinding.
 	{
@@ -70,22 +61,7 @@ void PlayState::HandleEvents()
 				m_pBling->GetDstP()->x = (float)(xIdx * 32);
 				m_pBling->GetDstP()->y = (float)(yIdx * 32);
 			}
-			for (int row = 0; row < ROWS; row++) // "This is where the fun begins."
-			{ // Update each node with the selected heuristic and set the text for debug mode.
-				for (int col = 0; col < COLS; col++)
-				{
-					if (m_level[row][col]->Node() == nullptr)
-						continue;
-					if (m_hEuclid)
-						m_level[row][col]->Node()->SetH(PAMA::HEuclid(m_level[row][col]->Node(), m_level[(int)(m_pBling->GetDstP()->y / 32)][(int)(m_pBling->GetDstP()->x / 32)]->Node()));
-					else
-						m_level[row][col]->Node()->SetH(PAMA::HManhat(m_level[row][col]->Node(), m_level[(int)(m_pBling->GetDstP()->y / 32)][(int)(m_pBling->GetDstP()->x / 32)]->Node()));
-					m_level[row][col]->m_lCost->SetText(std::to_string((int)(m_level[row][col]->Node()->H())).c_str());
-				}
-			}
-			// Now we can calculate the path. Note: I am not returning a path again, only generating one to be rendered.
-			PAMA::GetShortestPath(m_level[(int)(m_pPlayer->GetDstP()->y / 32)][(int)(m_pPlayer->GetDstP()->x / 32)]->Node(),
-				m_level[(int)(m_pBling->GetDstP()->y / 32)][(int)(m_pBling->GetDstP()->x / 32)]->Node());
+			CalculatePath();
 		}
 	}
 }
@@ -125,7 +101,21 @@ void PlayState::Render()
 void PlayState::Update()
 {
 	m_pPlayer->Update(m_level);
-	
+	if (m_moving)
+	{
+		if (PAMA::PathList().size() > 0 && m_pathCounter < PAMA::PathList().size())
+		{
+			if (m_pPlayer->Move(PAMA::PathList()[m_pathCounter]->GetToNode()->Pt()))
+			{
+				if (m_pPlayer->GetDstP()->x  == m_pBling->GetDstP()->x && m_pPlayer->GetDstP()->y == m_pBling->GetDstP()->y)
+				{
+					m_moving = false;
+					return;
+				}
+				m_pathCounter++;
+			}
+		}
+	}
 	
 }
 
@@ -217,3 +207,24 @@ void PlayState::Exit()
 void PlayState::Resume()
 {
 }
+
+void PlayState::CalculatePath()
+{
+	for (int row = 0; row < ROWS; row++) // "This is where the fun begins."
+	{ // Update each node with the selected heuristic and set the text for debug mode.
+		for (int col = 0; col < COLS; col++)
+		{
+			if (m_level[row][col]->Node() == nullptr)
+				continue;
+			if (m_hEuclid)
+				m_level[row][col]->Node()->SetH(PAMA::HEuclid(m_level[row][col]->Node(), m_level[(int)(m_pBling->GetDstP()->y / 32)][(int)(m_pBling->GetDstP()->x / 32)]->Node()));
+			else
+				m_level[row][col]->Node()->SetH(PAMA::HManhat(m_level[row][col]->Node(), m_level[(int)(m_pBling->GetDstP()->y / 32)][(int)(m_pBling->GetDstP()->x / 32)]->Node()));
+			m_level[row][col]->m_lCost->SetText(std::to_string((int)(m_level[row][col]->Node()->H())).c_str());
+		}
+	}
+	// Now we can calculate the path. Note: I am not returning a path again, only generating one to be rendered.
+	PAMA::GetShortestPath(m_level[(int)(m_pPlayer->GetDstP()->y / 32)][(int)(m_pPlayer->GetDstP()->x / 32)]->Node(),
+		m_level[(int)(m_pBling->GetDstP()->y / 32)][(int)(m_pBling->GetDstP()->x / 32)]->Node());
+}
+

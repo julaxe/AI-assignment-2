@@ -64,6 +64,35 @@ void Player::Render()
 	SDL_RenderCopyExF(m_pRend, m_pText, GetSrcP(), GetDstP(), m_angle, 0, static_cast<SDL_RendererFlip>(m_dir));
 }
 
+bool Player::Move(SDL_Point p)
+{
+	m_velocity = { 2,2 };
+	if (m_dst.x != p.x || m_dst.y != p.y)
+	{
+		if (m_dst.x > p.x)
+		{
+			m_velocity.x *= -1;
+			m_dir = 1;
+		}
+		else if (m_dst.x == p.x) m_velocity.x = 0;
+		else m_dir = 0;
+
+		if (m_dst.y > p.y) m_velocity.y *= -1;
+		else if (m_dst.y == p.y) m_velocity.y = 0;
+	}
+	else
+	{
+		SetState(idle);
+		return true;
+	}
+
+	m_dst.x += m_velocity.x;
+	m_dst.y += m_velocity.y;
+	if(m_state != running)
+		SetState(running);
+	return false;
+}
+
 void Player::SetState(int s)
 {
 	m_state = static_cast<state>(s);
