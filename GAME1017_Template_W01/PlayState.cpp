@@ -7,6 +7,7 @@
 #include "EventManager.h"
 #include "PathManager.h"
 #include "DebugManager.h"
+#include "SoundManager.h"
 
 #include <string>
 
@@ -29,7 +30,20 @@ void PlayState::HandleEvents()
 		m_pathCounter = 0;
 	}
 	if (EVMA::KeyPressed(SDL_SCANCODE_H)) // ~ or ` key. Toggle debug mode.
+	{
 		m_showCosts = !m_showCosts;
+		//Play sound effect
+		if(m_showCosts)
+		{
+			SOMA::SetMusicVolume(2);
+		}
+		else {
+			SOMA::SetMusicVolume(20);
+		}
+
+		SOMA::PlaySound("changeMode", 0, -1);
+
+	}
 	if (EVMA::KeyPressed(SDL_SCANCODE_F)) 
 	{
 		m_showPath = !m_showPath;
@@ -96,6 +110,8 @@ void PlayState::Render()
 		PAMA::DrawPath(); // I save the path in a static vector to be drawn here.
 	}
 	DEMA::FlushLines(); // And... render ALL the queued lines. Phew.
+
+	
 }
 
 void PlayState::Update()
@@ -185,6 +201,14 @@ void PlayState::Enter()
 					MAMA::Distance(m_level[row][col]->Node()->x, m_level[row][col + 1]->Node()->x, m_level[row][col]->Node()->y, m_level[row][col + 1]->Node()->y)));
 		}
 	}
+	//Music
+	SOMA::Load("Aud/Background.mp3", "Background", SOUND_MUSIC);
+	//Sound Effects 
+	SOMA::Load("Aud/changeMode.mp3", "changeMode", SOUND_SFX);
+	SOMA::Load("Aud/running-footstep-sound-effect.mp3", "running", SOUND_SFX);
+	//play music
+	SOMA::PlayMusic("Background", -1, 0);
+	SOMA::SetAllVolume(20);
 }
 
 void PlayState::Exit()
