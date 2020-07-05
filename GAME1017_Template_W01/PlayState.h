@@ -29,4 +29,10 @@ private:
 	Sprite* m_pBling;
 	bool m_showCosts = false, m_hEuclid = true, m_showPath = false, m_moving = false;
 	int m_pathCounter = 0;
+	Label* m_pLabel1;
+	Label* m_pLabel2;
+	Label* m_pLabel3;
+	Label* m_pLabel4;
+	Label* m_pLabel5;
+	Label* m_pLabel6;
 };
