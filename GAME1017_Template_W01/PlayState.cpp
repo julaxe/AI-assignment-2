@@ -261,7 +261,7 @@ void PlayState::CalculatePath()
 		}
 	}
 	// Now we can calculate the path. Note: I am not returning a path again, only generating one to be rendered.
-	PAMA::GetShortestPath(m_level[(int)(m_pPlayer->GetDstP()->y / 32)][(int)(m_pPlayer->GetDstP()->x / 32)]->Node(),
+	PAMA::GetShortestPath(m_level[(int)((m_pPlayer->GetDstP()->y + m_pPlayer->GetDstP()->h/2) / 32)][(int)((m_pPlayer->GetDstP()->x + m_pPlayer->GetDstP()->w / 2) / 32)]->Node(),
 		m_level[(int)(m_pBling->GetDstP()->y / 32)][(int)(m_pBling->GetDstP()->x / 32)]->Node());
 }
 

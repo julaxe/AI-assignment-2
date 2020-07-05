@@ -43,7 +43,6 @@ void Player::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
 			if (m_dst.x > 0  && !COMA::PlayerCollision({ (int)m_dst.x, (int)m_dst.y, (int)32, (int)32 }, -SPEED, 0, m_level))
 			{
 				m_dst.x += -SPEED;
-				m_dir = 1;
 			}
 		}
 		else if (EVMA::KeyHeld(SDL_SCANCODE_D))
@@ -51,7 +50,6 @@ void Player::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
 			if (m_dst.x < 1024 - 32 &&  !COMA::PlayerCollision({ (int)m_dst.x, (int)m_dst.y, (int)32, (int)32 }, SPEED, 0, m_level))
 			{
 				m_dst.x += SPEED;
-				m_dir = 0;
 			}
 		}
 		break;
