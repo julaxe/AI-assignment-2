@@ -106,6 +106,12 @@ void PlayState::Render()
 	}
 	m_pPlayer->Render();
 	m_pBling->Render();
+	m_pLabel1->Render();
+	m_pLabel2->Render();
+	m_pLabel3->Render();
+	m_pLabel4->Render();
+	m_pLabel5->Render();
+	m_pLabel6->Render();
 	if (m_showPath) 
 	{
 		PAMA::DrawPath(); // I save the path in a static vector to be drawn here.
@@ -222,6 +228,13 @@ void PlayState::Enter()
 	//play music
 	SOMA::PlayMusic("Background", -1, 0);
 	SOMA::SetAllVolume(20);
+	//Labels
+	m_pLabel1 = new Label("font", 10, 10, "Press 'H' to Debug mode", { 255,255,255,255 });
+	m_pLabel2 = new Label("font", 10, 30, "Press 'WASD' to Move around mode", { 255,255,255,255 });
+	m_pLabel3 = new Label("font", 10, 50, "Press 'F' to print the path", { 255,255,255,255 });
+	m_pLabel4 = new Label("font", 10, 70, "Press 'M' to move to the target", { 255,255,255,255 });
+	m_pLabel5 = new Label("font", 10, 90, "Press 'Righ Click' Change the goal position in debug mode", { 255,255,255,255 });
+	m_pLabel6 = new Label("font", 10, 110, "Press 'Left Click' Change the player position in debug mode", { 255,255,255,255 });
 }
 
 void PlayState::Exit()
