@@ -21,8 +21,8 @@ void LifeBar::draw()
 
 void LifeBar::update(Sprite * a)
 {
-	dstx = a->GetDstP()->x - 25;
-	dsty = a->GetDstP()->y - 20;
+	dstx = a->GetDstP()->x - 20;
+	dsty = a->GetDstP()->y - 10;
 
 	greenx = a->getLife();
 

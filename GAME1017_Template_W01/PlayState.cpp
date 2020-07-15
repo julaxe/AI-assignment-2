@@ -44,6 +44,10 @@ void PlayState::HandleEvents()
 		SOMA::PlaySound("changeMode", 0, -1);
 
 	}
+	if (EVMA::KeyPressed(SDL_SCANCODE_P)) {
+		m_pPlayer->getLife() -= 10;
+		SOMA::PlaySound("grunting", 0, -1);
+	}
 	if (m_debugMode) {
 		
 	}
@@ -159,6 +163,7 @@ void PlayState::Enter()
 	//Sound Effects 
 	SOMA::Load("Aud/changeMode.mp3", "changeMode", SOUND_SFX);
 	SOMA::Load("Aud/running-footstep-sound-effect.mp3", "running", SOUND_SFX);
+	SOMA::Load("Aud/Grunting-sound.mp3", "grunting", SOUND_SFX);
 	//play music
 	SOMA::PlayMusic("Background", -1, 0);
 	SOMA::SetAllVolume(20);
