@@ -26,15 +26,14 @@ void PlayState::HandleEvents()
 	if (EVMA::KeyPressed(SDL_SCANCODE_M))
 	{
 		CalculatePath();
-		m_moving = !m_moving;
 		m_pathCounter = 0;
 		
 	}
 	if (EVMA::KeyPressed(SDL_SCANCODE_H)) // ~ or ` key. Toggle debug mode.
 	{
-		m_showCosts = !m_showCosts;
+		m_debugMode = !m_debugMode;
 		//Play sound effect
-		if(m_showCosts)
+		if(m_debugMode)
 		{
 			SOMA::SetMusicVolume(2);
 		}
@@ -45,39 +44,8 @@ void PlayState::HandleEvents()
 		SOMA::PlaySound("changeMode", 0, -1);
 
 	}
-	if (EVMA::KeyPressed(SDL_SCANCODE_F)) 
-	{
-		m_showPath = !m_showPath;
-		CalculatePath();
-	}
-	if (EVMA::KeyPressed(SDL_SCANCODE_SPACE)) // Toggle the heuristic used for pathfinding.
-	{
-		m_hEuclid = !m_hEuclid;
-		std::cout << "Setting " << (m_hEuclid ? "Euclidian" : "Manhattan") << " heuristic..." << std::endl;
-	}
-	if (m_showCosts) {
-		if (EVMA::MousePressed(1) || EVMA::MousePressed(3)) // If user has clicked.
-		{
-			int xIdx = (EVMA::GetMousePos().x / 32);
-			int yIdx = (EVMA::GetMousePos().y / 32);
-			if (m_level[yIdx][xIdx]->IsObstacle() || m_level[yIdx][xIdx]->IsHazard()) // Node() == nullptr;
-				return; // We clicked on an invalid tile.
-			if (EVMA::MousePressed(1)) // Move the player with left-click.
-			{
-				if (m_pBling->GetDstP()->x == (float)(xIdx * 32) && m_pBling->GetDstP()->y == (float)(yIdx * 32))
-					return;
-				m_pPlayer->GetDstP()->x = (float)(xIdx * 32);
-				m_pPlayer->GetDstP()->y = (float)(yIdx * 32);
-			}
-			else if (EVMA::MousePressed(3)) // Else move the bling with right-click.
-			{
-				if (m_pPlayer->GetDstP()->x == (float)(xIdx * 32) && m_pPlayer->GetDstP()->y == (float)(yIdx * 32))
-					return;
-				m_pBling->GetDstP()->x = (float)(xIdx * 32);
-				m_pBling->GetDstP()->y = (float)(yIdx * 32);
-			}
-			CalculatePath();
-		}
+	if (m_debugMode) {
+		
 	}
 }
 
@@ -88,21 +56,12 @@ void PlayState::Render()
 		for (int col = 0; col < COLS; col++)
 		{
 			m_level[row][col]->Render(); // Render each tile.
-			// Render the debug data...
-			if (m_showCosts && m_level[row][col]->Node() != nullptr)
-			{
-				m_level[row][col]->m_lCost->Render();
-				m_level[row][col]->m_lX->Render();
-				m_level[row][col]->m_lY->Render();
-				// I am also rendering out each connection in blue. If this is a bit much for you, comment out the for loop below.
-				for (unsigned i = 0; i < m_level[row][col]->Node()->GetConnections().size(); i++)
-				{
-					DEMA::QueueLine({ m_level[row][col]->Node()->GetConnections()[i]->GetFromNode()->x + 16, m_level[row][col]->Node()->GetConnections()[i]->GetFromNode()->y + 16 },
-						{ m_level[row][col]->Node()->GetConnections()[i]->GetToNode()->x + 16, m_level[row][col]->Node()->GetConnections()[i]->GetToNode()->y + 16 }, { 0,0,255,255 });
-				}
-			}
 
 		}
+	}
+	if (m_debugMode)
+	{
+
 	}
 	m_pPlayer->Render();
 	m_pBling->Render();
@@ -112,44 +71,19 @@ void PlayState::Render()
 	m_pLabel4->Render();
 	m_pLabel5->Render();
 	m_pLabel6->Render();
-	if (m_showPath) 
-	{
-		PAMA::DrawPath(); // I save the path in a static vector to be drawn here.
-	}
-	DEMA::FlushLines(); // And... render ALL the queued lines. Phew.
-
 	
 }
 
 void PlayState::Update()
 {
 	m_pPlayer->Update(m_level);
-	if (m_moving)
+	if (m_pPlayer->isMoving())
 	{
-		if (m_pPlayer->GetDstP()->x != m_pBling->GetDstP()->x || m_pPlayer->GetDstP()->y != m_pBling->GetDstP()->y)
-		{
-			SOMA::PlaySound("running", 0, -1);
-		}
-		else
-		{
-			m_moving = false;
-			SOMA::StopSound(-1);
-			return;
-		}
-	
-		if (PAMA::PathList().size() > 0 && m_pathCounter < PAMA::PathList().size())
-		{
-			if (m_pPlayer->Move(PAMA::PathList()[m_pathCounter]->GetToNode()->Pt()))
-			{
-				if (m_pPlayer->GetDstP()->x  == m_pBling->GetDstP()->x && m_pPlayer->GetDstP()->y == m_pBling->GetDstP()->y)
-				{
-					m_moving = false;
-					SOMA::StopSound(-1);
-					return;
-				}
-				m_pathCounter++;
-			}
-		}
+		SOMA::PlaySound("running", 0, -1);
+	}
+	else
+	{
+		SOMA::StopSound(-1);
 	}
 	
 }

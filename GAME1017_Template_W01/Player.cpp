@@ -15,12 +15,14 @@ void Player::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
 			EVMA::KeyHeld(SDL_SCANCODE_A) || EVMA::KeyHeld(SDL_SCANCODE_D))
 		{
 			SetState(running);
+			m_isMoving = true;
 		}
 		break;
 	case running:
 		if (EVMA::KeyReleased(SDL_SCANCODE_W) || EVMA::KeyReleased(SDL_SCANCODE_S) ||
 			EVMA::KeyReleased(SDL_SCANCODE_A) || EVMA::KeyReleased(SDL_SCANCODE_D))
 		{
+			m_isMoving = false;
 			SetState(idle);
 			break; // Skip movement parsing below.
 		}

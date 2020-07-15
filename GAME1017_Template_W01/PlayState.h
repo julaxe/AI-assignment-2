@@ -27,7 +27,7 @@ private:
 	std::array<std::array<Tile*, COLS>, ROWS> m_level; // Fixed-size STL array of Tile pointers.
 	Player* m_pPlayer;
 	Sprite* m_pBling;
-	bool m_showCosts = false, m_hEuclid = true, m_showPath = false, m_moving = false;
+	bool m_debugMode = false, m_hEuclid = true;
 	int m_pathCounter = 0;
 	Label* m_pLabel1;
 	Label* m_pLabel2;
