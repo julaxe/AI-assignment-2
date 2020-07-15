@@ -1,29 +1,30 @@
 #include "Player.h"
 #include "CollisionManager.h"
 #include "EventManager.h"
+#include "DebugManager.h"
 #define SPEED 2
 
 Player::Player(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstart, int smin, int smax, int nf)
-	:AnimatedSprite(s, d, r, t, sstart, smin, smax, nf), m_state(idle), m_dir(0) {}
+	:AnimatedSprite(s, d, r, t, sstart, smin, smax, nf), m_dir(0) {}
 
 void Player::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
 {
-	switch (m_state)
+	switch (m_animationState)
 	{
-	case idle:
+	case IDLE:
 		if (EVMA::KeyHeld(SDL_SCANCODE_W) || EVMA::KeyHeld(SDL_SCANCODE_S) ||
 			EVMA::KeyHeld(SDL_SCANCODE_A) || EVMA::KeyHeld(SDL_SCANCODE_D))
 		{
-			SetState(running);
 			m_isMoving = true;
+			setAnimationState(RUNNING);
 		}
 		break;
-	case running:
+	case RUNNING:
 		if (EVMA::KeyReleased(SDL_SCANCODE_W) || EVMA::KeyReleased(SDL_SCANCODE_S) ||
 			EVMA::KeyReleased(SDL_SCANCODE_A) || EVMA::KeyReleased(SDL_SCANCODE_D))
 		{
+			setAnimationState(IDLE);
 			m_isMoving = false;
-			SetState(idle);
 			break; // Skip movement parsing below.
 		}
 		if (EVMA::KeyHeld(SDL_SCANCODE_W))
@@ -31,7 +32,6 @@ void Player::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
 			if (m_dst.y > 0 && !COMA::PlayerCollision({ (int)m_dst.x, (int)(m_dst.y), (int)32, (int)32 }, 0, -SPEED, m_level))
 			{
 				m_dst.y += -SPEED;
-				m_src.y = m_src.h * 0;
 			}
 		}
 		else if (EVMA::KeyHeld(SDL_SCANCODE_S))
@@ -39,7 +39,6 @@ void Player::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
 			if (m_dst.y < 768 - 32 && !COMA::PlayerCollision({ (int)m_dst.x, (int)(m_dst.y), (int)32, (int)32 }, 0, SPEED, m_level))
 			{
 				m_dst.y += SPEED;
-				m_src.y = m_src.h * 2;
 			}
 		}
 		if (EVMA::KeyHeld(SDL_SCANCODE_A))
@@ -47,7 +46,6 @@ void Player::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
 			if (m_dst.x > 0  && !COMA::PlayerCollision({ (int)m_dst.x, (int)m_dst.y, (int)32, (int)32 }, -SPEED, 0, m_level))
 			{
 				m_dst.x += -SPEED;
-				m_src.y = m_src.h * 3;
 			}
 		}
 		else if (EVMA::KeyHeld(SDL_SCANCODE_D))
@@ -55,7 +53,6 @@ void Player::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
 			if (m_dst.x < 1024 - 32 &&  !COMA::PlayerCollision({ (int)m_dst.x, (int)m_dst.y, (int)32, (int)32 }, SPEED, 0, m_level))
 			{
 				m_dst.x += SPEED;
-				m_src.y = m_src.h * 1;
 			}
 		}
 		break;
@@ -65,54 +62,47 @@ void Player::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
 
 void Player::Render()
 {
-	SDL_RenderCopyExF(m_pRend, m_pText, GetSrcP(), GetDstP(), m_angle, 0, static_cast<SDL_RendererFlip>(m_dir));
+	SDL_Point mousePos = EVMA::GetMousePos();
+	m_angle = -90 + MAMA::AngleBetweenPoints(-mousePos.x + (m_dst.x + m_dst.w*0.5), -mousePos.y + (m_dst.y + m_dst.h * 0.5))*-180/M_PI;
+	SDL_RenderCopyExF(m_pRend, m_pText, GetSrcP(), GetDstP(), m_angle , 0, SDL_FLIP_NONE);
 }
 
-bool Player::Move(SDL_Point p)
+
+void Player::setAnimationState(AnimationState state)
 {
-	m_velocity = { 2,2 };
-	if (m_dst.x != p.x || m_dst.y != p.y)
+	m_animationState = state;
+	switch (m_animationState)
 	{
-		if (m_dst.x > p.x) //node is at the left
-		{
-			m_src.y = m_src.h * 3;
-			m_velocity.x *= -1;
-		}
-		else if (m_dst.x == p.x) m_velocity.x = 0;
-		else { m_src.y = m_src.h * 1; } //node is at right
-
-		if (m_dst.y > p.y)//node is up
-		{
-			m_src.y = m_src.h * 0;
-			m_velocity.y *= -1;
-		}
-		else if (m_dst.y == p.y) m_velocity.y = 0;
-		else m_src.y = m_src.h * 2;//node is down
+	case IDLE:
+		m_src = { 0 , 0 , 253,216 };
+		m_spriteMax = 19;
+		m_sprite = 0;
+		break;
+	case RUNNING:
+		m_src = { 0 , 474,260,222 };
+		m_spriteMax = 19;
+		m_sprite = 0;
+		break;
+	case MELEE:
+		m_src = { 0,216,293,258 };
+		m_spriteMax = 14;
+		m_sprite = 0;
+		break;
+	case SHOOTING:
+		m_src = { 0,696,257,217 };
+		m_spriteMax = 3;
+		m_sprite = 0;
+		break;
+	default:
+		break;
 	}
-	else
-	{
-		SetState(idle);
-		return true;
-	}
-
-	m_dst.x += m_velocity.x;
-	m_dst.y += m_velocity.y;
-	if(m_state != running)
-		SetState(running);
-	return false;
 }
 
-void Player::SetState(int s)
+void Player::drawLOS()
 {
-	m_state = static_cast<state>(s);
-	m_frame = 0;
-	if (m_state == idle)
-	{
-		m_sprite = m_spriteMin = m_spriteMax = 0;
-	}
-	else // Only other is running for now...
-	{
-		m_sprite = m_spriteMin = 1;
-		m_spriteMax = 2;
-	}
+	SDL_Point PlayerPosition = { m_dst.x + m_dst.w * 0.5 ,m_dst.y + m_dst.h * 0.5 };
+	SDL_Point direction = { cos(m_angle*M_PI/180)*800, sin(m_angle * M_PI / 180)*800};
+	SDL_Point EndPosition = {PlayerPosition.x + direction.x, PlayerPosition.y + direction.y};
+	DEMA::DrawLine(PlayerPosition, EndPosition, { 255,255,255,255});
 }
+

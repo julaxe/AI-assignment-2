@@ -136,28 +136,19 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="img\circle.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Img\Enemies.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Img\PlayerShip.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Img\play.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Img\Tiles.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Img\Maga.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Img\world_map_tiles.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Img\spiderMother.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Img\EnemySpriteSheet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Img\PlayerSpritesheet.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
