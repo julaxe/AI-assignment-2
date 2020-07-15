@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "Tile.h"
 #include <array>
+#include"UiElements.h"
 
 class Player : public AnimatedSprite
 {
@@ -13,11 +14,17 @@ public:
 	void Update(std::array<std::array<Tile*, COLS>, ROWS> m_level);
 	void Render();
 	bool isMoving() { return m_isMoving; }
+	int& getLife() { return m_Life; }
+
 	void setAnimationState(AnimationState);
 	void drawLOS();
+
 private:
 	SDL_Point m_velocity;
 	bool m_isMoving;
+	int m_Life = 100;
+	std::vector<UIElements*> UIList;
+
 };
 
 #endif

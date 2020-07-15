@@ -20,12 +20,14 @@ public: // Inherited and public.
 	SDL_FRect* GetDstP() { return &m_dst; }
 	double& GetAngle() { return m_angle; }
 	void SetAngle(double a) { m_angle = a; }
+	virtual int& getLife() { return*m_pLife; };
 protected: // Private BUT inherited.
 	double m_angle;
 	SDL_Rect m_src;
 	SDL_FRect m_dst;
 	SDL_Renderer* m_pRend;
 	SDL_Texture* m_pText;
+	int* m_pLife;
 private: // Private NOT inherited.
 };
 
@@ -44,6 +46,7 @@ public:
 		}
 		m_src.x = m_src.w * m_sprite;
 	}
+
 protected:
 	int m_sprite,		// The current sprite index in row.
 		m_spriteMin,	// The sprite index to start animation on.

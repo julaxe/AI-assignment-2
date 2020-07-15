@@ -1,11 +1,17 @@
 #include "Player.h"
 #include "CollisionManager.h"
 #include "EventManager.h"
+#include "LifeBar.h"
 #include "DebugManager.h"
 #define SPEED 2
 
+
 Player::Player(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstart, int smin, int smax, int nf)
-	:AnimatedSprite(s, d, r, t, sstart, smin, smax, nf) {}
+
+	:AnimatedSprite(s, d, r, t, sstart, smin, smax, nf) {
+	UIList.push_back(new LifeBar());
+}
+
 
 void Player::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
 {
@@ -58,13 +64,23 @@ void Player::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
 		break;
 	}
 	Animate();
+	for (auto s : UIList)
+	{
+		s->update(this);
+	}
 }
 
 void Player::Render()
 {
+
 	SDL_Point mousePos = EVMA::GetMousePos();
 	m_angle = -90 + MAMA::AngleBetweenPoints(-mousePos.x + (m_dst.x + m_dst.w*0.5), -mousePos.y + (m_dst.y + m_dst.h * 0.5))*-180/M_PI;
 	SDL_RenderCopyExF(m_pRend, m_pText, GetSrcP(), GetDstP(), m_angle , 0, SDL_FLIP_NONE);
+
+	for (auto s : UIList)
+	{
+		s->draw();
+	}
 }
 
 
