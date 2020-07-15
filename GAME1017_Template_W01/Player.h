@@ -5,12 +5,7 @@
 #include "Sprite.h"
 #include "Tile.h"
 #include <array>
-enum class Direction {
-	NORTH,
-	EAST,
-	SOUTH,
-	WEST
-};
+
 class Player : public AnimatedSprite
 {
 public:
@@ -22,7 +17,6 @@ public:
 	void drawLOS();
 private:
 	SDL_Point m_velocity;
-	bool m_dir;
 	bool m_isMoving;
 };
 
