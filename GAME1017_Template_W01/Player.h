@@ -6,12 +6,7 @@
 #include "Tile.h"
 #include <array>
 #include"UiElements.h"
-enum class Direction {
-	NORTH,
-	EAST,
-	SOUTH,
-	WEST
-};
+
 class Player : public AnimatedSprite
 {
 public:
@@ -26,9 +21,7 @@ public:
 
 private:
 	SDL_Point m_velocity;
-	bool m_dir;
 	bool m_isMoving;
-	void SetState(int s);
 	int m_Life = 100;
 	std::vector<UIElements*> UIList;
 

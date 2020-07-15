@@ -2,6 +2,7 @@
 #include "States.h"
 #include "Tile.h"
 #include "Player.h"
+#include "Enemy.h"
 #include <array>
 #include <map>
 
@@ -22,10 +23,11 @@ public:
 	void CalculatePath();
 
 private:
-	SDL_Texture* m_pTileText, * m_pPlayerText;
+	SDL_Texture* m_pTileText, * m_pPlayerText, *m_pEnemyText;
 	std::map<char, Tile*> m_tiles;
 	std::array<std::array<Tile*, COLS>, ROWS> m_level; // Fixed-size STL array of Tile pointers.
 	Player* m_pPlayer;
+	Enemy* m_pEnemy;
 	Sprite* m_pBling;
 	bool m_debugMode = false, m_hEuclid = true;
 	int m_pathCounter = 0;

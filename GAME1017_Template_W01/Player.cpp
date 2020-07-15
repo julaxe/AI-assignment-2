@@ -7,7 +7,8 @@
 
 
 Player::Player(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstart, int smin, int smax, int nf)
-	:AnimatedSprite(s, d, r, t, sstart, smin, smax, nf), m_dir(0) {
+
+	:AnimatedSprite(s, d, r, t, sstart, smin, smax, nf) {
 	UIList.push_back(new LifeBar());
 }
 

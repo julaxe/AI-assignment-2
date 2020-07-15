@@ -8,6 +8,7 @@
 #include "PathManager.h"
 #include "DebugManager.h"
 #include "SoundManager.h"
+#include "Enemy.h"
 
 #include <string>
 
@@ -66,9 +67,10 @@ void PlayState::Render()
 	if (m_debugMode)
 	{
 		m_pPlayer->drawLOS();
+		m_pEnemy->drawLOS();
 	}
 	m_pPlayer->Render();
-	m_pBling->Render();
+	m_pEnemy->Render();
 	m_pLabel1->Render();
 	m_pLabel2->Render();
 	m_pLabel3->Render();
@@ -81,6 +83,7 @@ void PlayState::Render()
 void PlayState::Update()
 {
 	m_pPlayer->Update(m_level);
+	m_pEnemy->Update(m_level);
 	if (m_pPlayer->isMoving())
 	{
 		SOMA::PlaySound("running", 0, -1);
@@ -97,9 +100,10 @@ void PlayState::Enter()
 	const int SIZEOFTILES = 32;
 	m_pTileText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/Tiles.png");
 	m_pPlayerText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/PlayerSpritesheet.png");
+	m_pEnemyText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/EnemySpriteSheet.png");
 	FOMA::RegisterFont("img/ltype.ttf", "tile", 10);
 	m_pPlayer = new Player({ 0 , 0 , 253,216 }, { (float)(16) * 32, (float)(12) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pPlayerText, 0, 0, 19, 4);
-	m_pBling = new Sprite({ 224,64,32,32 }, { (float)(16) * 32, (float)(4) * 32, 32, 32 }, Engine::Instance().GetRenderer(), m_pTileText);
+	m_pEnemy = new Enemy({ 0 , 0 , 291,226 }, { (float)(16) * 32, (float)(4) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pEnemyText, 0, 0, 19, 4);
 	std::ifstream inFile("Dat/Tiledata.txt");
 	if (inFile.is_open())
 	{ // Create map of Tile prototypes.
