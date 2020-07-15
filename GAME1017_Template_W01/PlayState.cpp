@@ -61,7 +61,7 @@ void PlayState::Render()
 	}
 	if (m_debugMode)
 	{
-
+		m_pPlayer->drawLOS();
 	}
 	m_pPlayer->Render();
 	m_pBling->Render();
@@ -92,9 +92,9 @@ void PlayState::Enter()
 {
 	const int SIZEOFTILES = 32;
 	m_pTileText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/Tiles.png");
-	m_pPlayerText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/spiderMother.png");
+	m_pPlayerText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/PlayerSpritesheet.png");
 	FOMA::RegisterFont("img/ltype.ttf", "tile", 10);
-	m_pPlayer = new Player({ 0,0,48,64 }, { (float)(16) * 32, (float)(12) * 32, 32, 32 }, Engine::Instance().GetRenderer(), m_pPlayerText, 0, 0, 0, 6);
+	m_pPlayer = new Player({ 0 , 0 , 253,216 }, { (float)(16) * 32, (float)(12) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pPlayerText, 0, 0, 19, 4);
 	m_pBling = new Sprite({ 224,64,32,32 }, { (float)(16) * 32, (float)(4) * 32, 32, 32 }, Engine::Instance().GetRenderer(), m_pTileText);
 	std::ifstream inFile("Dat/Tiledata.txt");
 	if (inFile.is_open())

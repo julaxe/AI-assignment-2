@@ -4,7 +4,12 @@
 
 #include "SDL.h"
 #include <iostream>
-
+enum AnimationState {
+	IDLE,
+	RUNNING,
+	MELEE,
+	SHOOTING
+};
 class Sprite // Inline class.
 {
 public: // Inherited and public.
@@ -48,6 +53,7 @@ protected:
 		m_spriteMax,	// The sprite index to end animation on.
 		m_frame = 0,	// Frame counter.
 		m_frameMax;		// Number of frames to display each sprite.
+	AnimationState m_animationState = IDLE;
 };
 
 /* Note: A lot of animation methods use a modulus operation to wrap the frames

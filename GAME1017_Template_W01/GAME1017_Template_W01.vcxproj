@@ -163,14 +163,11 @@
     <ClInclude Include="UiElements.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="img\circle.png" />
-    <Image Include="Img\Enemies.png" />
-    <Image Include="Img\Maga.png" />
+    <Image Include="Img\EnemySpriteSheet.png" />
     <Image Include="Img\play.png" />
-    <Image Include="Img\PlayerShip.png" />
+    <Image Include="Img\PlayerSpritesheet.png" />
     <Image Include="Img\spiderMother.png" />
     <Image Include="Img\Tiles.png" />
-    <Image Include="Img\world_map_tiles.png" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Dat\Level1.txt" />
