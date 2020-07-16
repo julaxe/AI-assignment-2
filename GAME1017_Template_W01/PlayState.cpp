@@ -46,7 +46,7 @@ void PlayState::HandleEvents()
 
 	}
 	if (EVMA::KeyPressed(SDL_SCANCODE_P)) {
-		m_pPlayer->getLife() -= 10;
+		m_pEnemy->getLife() -= 10;
 		SOMA::PlaySound("grunting", 0, -1);
 	}
 	if (m_debugMode) {
