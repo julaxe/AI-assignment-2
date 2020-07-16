@@ -11,7 +11,10 @@ public:
 	void Render();
 	void setAnimationState(AnimationState);
 	void drawLOS();
+
+	void drawRadius();
 	int& getLife() { return m_Life; }
+
 private:
 	SDL_Point m_velocity;
 	int m_Life = 100;

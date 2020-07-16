@@ -28,7 +28,7 @@ void Enemy::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
 	case RUNNING:
 		if (timer < 300)
 		{
-			if (COMA::PlayerCollision({ (int)m_dst.x, (int)(m_dst.y), (int)32, (int)32 }, 0, -SPEED, m_level))
+			if (COMA::PlayerCollision({ (int)m_dst.x, (int)(m_dst.y), (int)64, (int)64 }, m_velocity.x, m_velocity.y, m_level))
 			{
 				m_dst.x -= m_velocity.x * cos(m_angle * M_PI / 180);
 				m_dst.y -= m_velocity.y * sin(m_angle * M_PI / 180);
@@ -103,4 +103,9 @@ void Enemy::drawLOS()
 	SDL_Point direction = { cos(m_angle * M_PI / 180) * 800, sin(m_angle * M_PI / 180) * 800 };
 	SDL_Point EndPosition = { PlayerPosition.x + direction.x, PlayerPosition.y + direction.y };
 	DEMA::DrawLine(PlayerPosition, EndPosition, { 255,255,255,255 });
+}
+
+void Enemy::drawRadius()
+{
+	DEMA::DrawCircle(m_dst.x + m_dst.w * 0.5, m_dst.y + m_dst.h * 0.5, 200);
 }
