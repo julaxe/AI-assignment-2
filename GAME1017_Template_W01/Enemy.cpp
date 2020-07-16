@@ -3,12 +3,14 @@
 #include "EventManager.h"
 #include "MathManager.h"
 #include "CollisionManager.h"
+#include "LifeBar.h"
 #define SPEED 2
 Enemy::Enemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstart, int smin, int smax, int nf)
 	:AnimatedSprite(s, d, r, t, sstart, smin, smax, nf) 
 {
 	m_velocity = { SPEED,SPEED };
 	m_angle = 0;
+	UIList.push_back(new LifeBar);
 }
 
 void Enemy::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
@@ -52,11 +54,19 @@ void Enemy::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
 		break;
 	}
 	timer++;
+	for (auto s : UIList)
+	{
+		s->update(this);
+	}
 }
 
 void Enemy::Render()
 {
 	SDL_RenderCopyExF(m_pRend, m_pText, GetSrcP(), GetDstP(), m_angle, 0, SDL_FLIP_NONE);
+	for (auto s : UIList)
+	{
+		s->draw();
+	}
 }
 
 void Enemy::setAnimationState(AnimationState state)
