@@ -10,6 +10,7 @@ public:
 	void Render();
 	void setAnimationState(AnimationState);
 	void drawLOS();
+	void drawRadius();
 private:
 	SDL_Point m_velocity;
 

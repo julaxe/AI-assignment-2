@@ -41,3 +41,6 @@ GAME1017_Template_W01/Debug/vc142.pdb
 .vs/GAME1017_Template_W01/v16/ipch/AutoPCH/d39712151dfff651/ENGINE.ipch
 .vs/GAME1017_Template_W01/v16/ipch/AutoPCH/ae52c8cd4495bb4e/ENEMY.ipch
 .vs/GAME1017_Template_W01/v16/ipch/AutoPCH/6b9a14987bc2118d/ENEMY.ipch
+GAME1017_Template_W01/Debug/UiElements.obj
+GAME1017_Template_W01/Debug/LifeBar.obj
+GAME1017_Template_W01/Debug/Enemy.obj

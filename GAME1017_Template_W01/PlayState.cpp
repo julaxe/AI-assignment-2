@@ -68,6 +68,7 @@ void PlayState::Render()
 	{
 		m_pPlayer->drawLOS();
 		m_pEnemy->drawLOS();
+		m_pEnemy->drawRadius();
 	}
 	m_pPlayer->Render();
 	m_pEnemy->Render();
