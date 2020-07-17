@@ -17,7 +17,7 @@ double MathManager::AngleBetweenPoints(SDL_Point p1, SDL_Point p2)
 	return atan2(dy, dx); // In radians.
 }
 
-double MathManager::AngleBetweenPoints(double dx, double dy)
+double MathManager::AngleBetweenPoints(double dy, double dx)
 {
 	return atan2(dy,dx);
 }

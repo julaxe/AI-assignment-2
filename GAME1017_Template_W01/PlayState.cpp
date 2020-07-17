@@ -86,7 +86,7 @@ void PlayState::Render()
 void PlayState::Update()
 {
 	m_pPlayer->Update(m_obstacles);
-	m_pEnemy->Update(m_level);
+	m_pEnemy->Update(m_obstacles);
 
 	if (m_pPlayer->isMoving())
 	{

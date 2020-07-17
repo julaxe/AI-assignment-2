@@ -13,10 +13,10 @@ Enemy::Enemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstar
 	UIList.push_back(new LifeBar);
 }
 
-void Enemy::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
+void Enemy::Update(std::vector<Tile*> obstacles)
 {
 	static int timer = 0;
-	m_collisionBox = m_dst;
+	
 	switch (m_animationState)
 	{
 	case IDLE:
@@ -29,17 +29,20 @@ void Enemy::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
 	case RUNNING:
 		if (timer < 300)
 		{
-			if (COMA::PlayerCollision({ (int)m_dst.x, (int)(m_dst.y), (int)64, (int)64 }, m_velocity.x, m_velocity.y, m_level))
+			if (!COMA::AABBCollisionWithTiles(this, obstacles))
 			{
-				m_dst.x -= m_velocity.x * cos(m_angle * M_PI / 180);
-				m_dst.y -= m_velocity.y * sin(m_angle * M_PI / 180);
-				m_angle += 5;
+				m_dst.x = m_collisionBox.x;
+				m_dst.y = m_collisionBox.y;
+				m_collisionBox.x += m_velocity.x * cos(m_angle * M_PI / 180);
+				m_collisionBox.y += m_velocity.y * sin(m_angle * M_PI / 180);
 			}
 			else
 			{
-				m_dst.x += m_velocity.x * cos(m_angle * M_PI / 180);
-				m_dst.y += m_velocity.y * sin(m_angle * M_PI / 180);
+				/*m_collisionBox.x -= m_velocity.x * cos(m_angle * M_PI / 180);
+				m_collisionBox.y -= m_velocity.y * sin(m_angle * M_PI / 180);*/
+				m_angle += 5;
 			}
+			
 		}
 		else 
 		{
