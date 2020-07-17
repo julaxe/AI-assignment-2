@@ -67,3 +67,58 @@ bool CollisionManager::PlayerCollision(const SDL_Rect player, const int dX, cons
 	}
 	return false;
 }
+
+bool CollisionManager::AABBCollisionWithTiles(Sprite* obj1, std::vector<Tile*> obstacles)
+{
+	for (auto obj2 : obstacles)
+	{
+		// prepare relevant variables
+		SDL_Point p1 = { obj1->GetCollisionBox()->x, obj1->GetCollisionBox()->y }; //collision box to the top corner
+		SDL_Point p2 = { obj2->GetCollisionBox()->x, obj2->GetCollisionBox()->y };
+		const float p1Width = obj1->GetCollisionBox()->w;
+		const float p1Height = obj1->GetCollisionBox()->h;
+		const float p2Width = obj2->GetCollisionBox()->w;
+		const float p2Height = obj2->GetCollisionBox()->h;
+
+
+
+		//p2 = {p2.x + p2Width * 0.4,p2.y +  p2Height * 0.3};
+		//glm::vec2 p1Center = { p1.x + p1Width * 0.5 , p1.y + p1Height * 0.5 };
+		//glm::vec2 p2Center = { p2.x + p2Width * 0.5 , p2.y + p2Height * 0.5 };
+		int angle;
+
+		if (
+			p1.x < p2.x + p2Width &&
+			p1.x + p1Width > p2.x &&
+			p1.y < p2.y + p2Height &&
+			p1.y + p1Height > p2.y
+			)
+		{
+			angle = MAMA::AngleBetweenPoints(p1, p2) * 180 / M_PI;
+			if (angle > 45 && angle <= 135) //p2 is under p1
+			{
+				obj1->GetCollisionBox()->y -= obj1->GetVelocity().y;
+				//object1->m_boundHit = BOTTOMBOUNDARY; //BOTTOMBOUNDARY
+			}
+			if (angle > -135 && angle <= -45) //p2 is on top of p1
+			{
+				obj1->GetCollisionBox()->y += obj1->GetVelocity().y;
+				//object1->m_boundHit = TOPBOUNDARY; //TOPBOUNDARY
+			}
+			if (angle > -45 && angle <= 45) //p2 at the right of p1
+			{
+				obj1->GetCollisionBox()->x -= obj1->GetVelocity().x;
+				//object1->m_boundHit = RIGHTBOUNDARY; //RIGHTBOUNDARY
+			}
+			if (angle > 135 || angle <= -135) //p2 at the left of p1
+			{
+				obj1->GetCollisionBox()->x += obj1->GetVelocity().x;
+				//object1->m_boundHit = LEFTBOUNDARY; //LEFTBOUNDARY
+			}
+
+			return true;
+		}
+	}
+	return false;
+		
+}

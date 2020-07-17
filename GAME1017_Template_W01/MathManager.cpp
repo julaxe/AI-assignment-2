@@ -10,9 +10,16 @@ double MathManager::Distance(const int& x1, const int& x2, const int& y1, const 
 	return (sqrt(((double)x2 - (double)x1) * ((double)x2 - (double)x1) + ((double)y2 - (double)y1) * ((double)y2 - (double)y1)));
 }
 
-double MathManager::AngleBetweenPoints(const double dy, const double dx)
+double MathManager::AngleBetweenPoints(SDL_Point p1, SDL_Point p2)
 {
+	int dy = p2.y - p1.y;
+	int dx = p2.x - p1.x;
 	return atan2(dy, dx); // In radians.
+}
+
+double MathManager::AngleBetweenPoints(double dx, double dy)
+{
+	return atan2(dy,dx);
 }
 
 void MathManager::SetDeltas(const double angle, double& dx, double& dy, double fx, double fy)

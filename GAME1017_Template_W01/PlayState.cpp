@@ -67,8 +67,10 @@ void PlayState::Render()
 	if (m_debugMode)
 	{
 		m_pPlayer->drawLOS();
+		m_pPlayer->drawCollisionRect();
 		m_pEnemy->drawLOS();
 		m_pEnemy->drawRadius();
+		m_pEnemy->drawCollisionRect();
 	}
 	m_pPlayer->Render();
 	m_pEnemy->Render();
@@ -83,8 +85,9 @@ void PlayState::Render()
 
 void PlayState::Update()
 {
-	m_pPlayer->Update(m_level);
+	m_pPlayer->Update(m_obstacles);
 	m_pEnemy->Update(m_level);
+
 	if (m_pPlayer->isMoving())
 	{
 		SOMA::PlaySound("running", 0, -1);
@@ -130,6 +133,8 @@ void PlayState::Enter()
 				m_level[row][col] = m_tiles[key]->Clone(); // Prototype design pattern used.
 				m_level[row][col]->GetDstP()->x = (float)(32 * col);
 				m_level[row][col]->GetDstP()->y = (float)(32 * row);
+				m_level[row][col]->GetCollisionBox()->x = (float)(32 * col);
+				m_level[row][col]->GetCollisionBox()->y = (float)(32 * row);
 				// Instantiate the labels for each tile.
 				m_level[row][col]->m_lCost = new Label("tile", m_level[row][col]->GetDstP()->x + 4, m_level[row][col]->GetDstP()->y + 18, " ", { 0,0,0,255 });
 				m_level[row][col]->m_lX = new Label("tile", m_level[row][col]->GetDstP()->x + 18, m_level[row][col]->GetDstP()->y + 2, std::to_string(col).c_str(), { 0,0,0,255 });
@@ -137,6 +142,10 @@ void PlayState::Enter()
 				// Construct the Node for a valid tile.
 				if (!m_level[row][col]->IsObstacle() && !m_level[row][col]->IsHazard())
 					m_level[row][col]->m_node = new PathNode((int)(m_level[row][col]->GetDstP()->x), (int)(m_level[row][col]->GetDstP()->y));
+				if (m_level[row][col]->IsObstacle())
+				{
+					m_obstacles.push_back(m_level[row][col]);
+				}
 			}
 		}
 	}

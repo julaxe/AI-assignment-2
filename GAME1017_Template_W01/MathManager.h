@@ -11,7 +11,8 @@ class MathManager
 public: // Public methods.
 	static double Distance(const double& x1, const double& x2, const double& y1, const double& y2);
 	static double Distance(const int& x1, const int& x2, const int& y1, const int& y2);
-	static double AngleBetweenPoints(const double dy, const double dx);
+	static double AngleBetweenPoints(SDL_Point p1, SDL_Point p2);
+	static double AngleBetweenPoints(double dx, double dy);
 	static void SetDeltas(const double angle, double& dx, double& dy, double fx = 1.0, double fy = 1.0);
 	static double SetDeltaX(const double angle, double fx = 1.0);
 	static double SetDeltaY(const double angle, double fy = 1.0);

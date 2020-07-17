@@ -66,6 +66,21 @@ void DebugManager::DrawCircle(int32_t centreX, int32_t centreY, int32_t radius)
         }
     }
 }
+void DebugManager::DrawRect(SDL_FRect rect ,SDL_Rect colour)
+{
+    int r = floor(colour.x * 255.0f);
+    int g = floor(colour.y * 255.0f);
+    int b = floor(colour.w * 255.0f);
+    int a = floor(colour.h * 255.0f);
+
+    SDL_Rect rectangle = { rect.x, rect.y, rect.w, rect.h };
+
+    const auto renderer = /* TheGame::Instance()->getRenderer()*/ Engine::Instance().GetRenderer();
+
+    SDL_SetRenderDrawColor(renderer, r, g, b, a);
+    SDL_RenderDrawRect(renderer, &rectangle);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+}
 
 
 void DebugManager::Quit()

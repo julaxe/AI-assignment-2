@@ -16,6 +16,7 @@ Enemy::Enemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstar
 void Enemy::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
 {
 	static int timer = 0;
+	m_collisionBox = m_dst;
 	switch (m_animationState)
 	{
 	case IDLE:

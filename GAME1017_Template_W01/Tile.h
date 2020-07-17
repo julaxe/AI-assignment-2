@@ -14,6 +14,7 @@ public:
 	Tile(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, const bool o, const bool h)
 		:Sprite(s, d, r, t), m_obstacle(o), m_hazard(h) 
 	{
+		m_collisionBox = d;
 		m_node = nullptr;
 		m_lCost = m_lX = m_lY = nullptr;
 	}

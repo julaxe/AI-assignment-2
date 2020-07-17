@@ -16,7 +16,6 @@ public:
 	int& getLife() { return m_Life; }
 
 private:
-	SDL_Point m_velocity;
 	int m_Life = 100;
 	std::vector<UIElements*> UIList;
 

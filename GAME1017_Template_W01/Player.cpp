@@ -10,13 +10,15 @@ Player::Player(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sst
 
 	:AnimatedSprite(s, d, r, t, sstart, smin, smax, nf) {
 	UIList.push_back(new LifeBar());
+	m_velocity = { SPEED, SPEED };
 }
 
 
-void Player::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
+void Player::Update(std::vector<Tile*> obstacles)
 {
-	int posX = m_dst.x + m_dst.w * 0.5;
-	int posY = m_dst.y + m_dst.w * 0.5;
+
+	
+	
 	switch (m_animationState)
 	{
 	case IDLE:
@@ -28,6 +30,7 @@ void Player::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
 		}
 		break;
 	case RUNNING:
+		
 		if (EVMA::KeyReleased(SDL_SCANCODE_W) || EVMA::KeyReleased(SDL_SCANCODE_S) ||
 			EVMA::KeyReleased(SDL_SCANCODE_A) || EVMA::KeyReleased(SDL_SCANCODE_D))
 		{
@@ -35,34 +38,28 @@ void Player::Update(std::array<std::array<Tile*, COLS>, ROWS> m_level)
 			m_isMoving = false;
 			break; // Skip movement parsing below.
 		}
-		if (EVMA::KeyHeld(SDL_SCANCODE_W))
+		if (!COMA::AABBCollisionWithTiles(this, obstacles))
 		{
-			if (m_dst.y > 0 && !COMA::PlayerCollision({ (int)m_dst.x, (int)(m_dst.y), (int)32, (int)32 }, 0, -SPEED*2, m_level))
+			m_dst.x = m_collisionBox.x;
+			m_dst.y = m_collisionBox.y;
+			if (EVMA::KeyHeld(SDL_SCANCODE_W))
 			{
-				m_dst.y += -SPEED;
+				m_collisionBox.y += -SPEED;
+			}
+			else if (EVMA::KeyHeld(SDL_SCANCODE_S))
+			{
+				m_collisionBox.y += SPEED;
+			}
+			if (EVMA::KeyHeld(SDL_SCANCODE_A))
+			{
+				m_collisionBox.x += -SPEED;
+			}
+			else if (EVMA::KeyHeld(SDL_SCANCODE_D))
+			{
+				m_collisionBox.x += SPEED;
 			}
 		}
-		else if (EVMA::KeyHeld(SDL_SCANCODE_S))
-		{
-			if (m_dst.y < 768 - 32 && !COMA::PlayerCollision({ (int)m_dst.x, (int)(m_dst.y), (int)32, (int)32 }, 0, SPEED*2, m_level))
-			{
-				m_dst.y += SPEED;
-			}
-		}
-		if (EVMA::KeyHeld(SDL_SCANCODE_A))
-		{
-			if (m_dst.x > 0  && !COMA::PlayerCollision({ (int)m_dst.x, (int)m_dst.y, (int)32, (int)32 }, -SPEED*2, 0, m_level))
-			{
-				m_dst.x += -SPEED;
-			}
-		}
-		else if (EVMA::KeyHeld(SDL_SCANCODE_D))
-		{
-			if (m_dst.x < 1024 - 32 &&  !COMA::PlayerCollision({ (int)m_dst.x, (int)m_dst.y, (int)32, (int)32 }, SPEED*2, 0, m_level))
-			{
-				m_dst.x += SPEED;
-			}
-		}
+		
 		break;
 	}
 	Animate();
@@ -123,4 +120,6 @@ void Player::drawLOS()
 	SDL_Point EndPosition = {PlayerPosition.x + direction.x, PlayerPosition.y + direction.y};
 	DEMA::DrawLine(PlayerPosition, EndPosition, { 255,255,255,255});
 }
+
+
 

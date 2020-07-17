@@ -26,6 +26,7 @@ private:
 	SDL_Texture* m_pTileText, * m_pPlayerText, *m_pEnemyText;
 	std::map<char, Tile*> m_tiles;
 	std::array<std::array<Tile*, COLS>, ROWS> m_level; // Fixed-size STL array of Tile pointers.
+	std::vector<Tile*> m_obstacles;
 	Player* m_pPlayer;
 	Enemy* m_pEnemy;
 	Sprite* m_pBling;
