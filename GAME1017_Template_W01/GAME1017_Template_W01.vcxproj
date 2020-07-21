@@ -116,6 +116,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="DebugManager.cpp" />
@@ -123,6 +124,7 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="FontManager.cpp" />
+    <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="LifeBar.cpp" />
     <ClCompile Include="Pathing.cpp" />
     <ClCompile Include="PathManager.cpp" />
@@ -140,13 +142,16 @@
     <ClCompile Include="UiElements.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="DebugManager.h" />
+    <ClInclude Include="DisplayManager.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="FontManager.h" />
+    <ClInclude Include="LevelManager.h" />
     <ClInclude Include="LifeBar.h" />
     <ClInclude Include="Pathing.h" />
     <ClInclude Include="PathManager.h" />

@@ -66,7 +66,7 @@ void DebugManager::DrawCircle(int32_t centreX, int32_t centreY, int32_t radius)
         }
     }
 }
-void DebugManager::DrawRect(SDL_FRect rect ,SDL_Rect colour)
+void DebugManager::DrawRect(SDL_FRect rect ,SDL_FRect colour)
 {
     int r = floor(colour.x * 255.0f);
     int g = floor(colour.y * 255.0f);

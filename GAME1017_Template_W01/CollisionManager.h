@@ -17,8 +17,6 @@ public:
 
 	static bool LinePointCheck(const SDL_FPoint object1_start, const SDL_FPoint object1_end, const SDL_FPoint object2);
 
-	static bool PlayerCollision(const SDL_Rect player, const int dX, const int dY, std::array<std::array<Tile*, COLS>, ROWS> m_level);
-
 	static bool AABBCollisionWithTiles(Sprite* obj1, std::vector<Tile*> obstacles);
 private:
 	CollisionManager() {}

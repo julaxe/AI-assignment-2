@@ -7,9 +7,10 @@ class Enemy : public AnimatedSprite
 {
 public:
 	Enemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstart, int smin, int smax, int nf);
-	void Update(std::vector<Tile*> obstacles);
+	void Update();
 	void Render();
-	void setAnimationState(AnimationState);
+	void setState(AnimationState);
+	AnimationState getState();
 	void drawLOS();
 
 	void drawRadius();

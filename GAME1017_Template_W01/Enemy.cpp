@@ -4,6 +4,7 @@
 #include "MathManager.h"
 #include "CollisionManager.h"
 #include "LifeBar.h"
+#include "LevelManager.h"
 #define SPEED 2
 Enemy::Enemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstart, int smin, int smax, int nf)
 	:AnimatedSprite(s, d, r, t, sstart, smin, smax, nf) 
@@ -13,42 +14,30 @@ Enemy::Enemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstar
 	UIList.push_back(new LifeBar);
 }
 
-void Enemy::Update(std::vector<Tile*> obstacles)
+void Enemy::Update()
 {
-	static int timer = 0;
+
 	
 	switch (m_animationState)
 	{
 	case IDLE:
-		if (timer > 0)
-		{
-			setAnimationState(RUNNING);
-			timer = 0;
-		}
 		break;
 	case RUNNING:
-		if (timer < 300)
+		
+		if (!COMA::AABBCollisionWithTiles(this, LevelManager::m_obstacles))
 		{
-			if (!COMA::AABBCollisionWithTiles(this, obstacles))
-			{
-				m_dst.x = m_collisionBox.x;
-				m_dst.y = m_collisionBox.y;
-				m_collisionBox.x += m_velocity.x * cos(m_angle * M_PI / 180);
-				m_collisionBox.y += m_velocity.y * sin(m_angle * M_PI / 180);
-			}
-			else
-			{
-				/*m_collisionBox.x -= m_velocity.x * cos(m_angle * M_PI / 180);
-				m_collisionBox.y -= m_velocity.y * sin(m_angle * M_PI / 180);*/
-				m_angle += 5;
-			}
+			m_dst.x = m_collisionBox.x;
+			m_dst.y = m_collisionBox.y;
+			m_collisionBox.x += m_velocity.x * cos(m_angle * M_PI / 180);
+			m_collisionBox.y += m_velocity.y * sin(m_angle * M_PI / 180);
+		}
+		else
+		{
+			/*m_collisionBox.x -= m_velocity.x * cos(m_angle * M_PI / 180);
+			m_collisionBox.y -= m_velocity.y * sin(m_angle * M_PI / 180);*/
+			m_angle += 5;
+		}
 			
-		}
-		else 
-		{
-			setAnimationState(IDLE);
-			timer = 0;
-		}
 		break;
 	case MELEE:
 		break;
@@ -57,7 +46,6 @@ void Enemy::Update(std::vector<Tile*> obstacles)
 	default:
 		break;
 	}
-	timer++;
 	for (auto s : UIList)
 	{
 		s->update(this);
@@ -73,7 +61,7 @@ void Enemy::Render()
 	}
 }
 
-void Enemy::setAnimationState(AnimationState state)
+void Enemy::setState(AnimationState state)
 {
 	m_animationState = state;
 	switch (m_animationState)
@@ -99,6 +87,11 @@ void Enemy::setAnimationState(AnimationState state)
 	default:
 		break;
 	}
+}
+
+AnimationState Enemy::getState()
+{
+	return m_animationState;
 }
 
 void Enemy::drawLOS()

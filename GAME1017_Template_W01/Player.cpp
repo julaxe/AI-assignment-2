@@ -3,6 +3,10 @@
 #include "EventManager.h"
 #include "LifeBar.h"
 #include "DebugManager.h"
+#include "LevelManager.h"
+#include "Engine.h"
+#include "Bullet.h"
+
 #define SPEED 2
 
 
@@ -11,10 +15,12 @@ Player::Player(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sst
 	:AnimatedSprite(s, d, r, t, sstart, smin, smax, nf) {
 	UIList.push_back(new LifeBar());
 	m_velocity = { SPEED, SPEED };
+	m_scale = 0.30f;
+	setAnimationState(IDLE);
 }
 
 
-void Player::Update(std::vector<Tile*> obstacles)
+void Player::Update()
 {
 
 	
@@ -38,7 +44,7 @@ void Player::Update(std::vector<Tile*> obstacles)
 			m_isMoving = false;
 			break; // Skip movement parsing below.
 		}
-		if (!COMA::AABBCollisionWithTiles(this, obstacles))
+		if (!COMA::AABBCollisionWithTiles(this, LevelManager::m_obstacles))
 		{
 			m_dst.x = m_collisionBox.x;
 			m_dst.y = m_collisionBox.y;
@@ -61,7 +67,24 @@ void Player::Update(std::vector<Tile*> obstacles)
 		}
 		
 		break;
+	case MELEE:
+		if (m_animationDone)
+		{
+			m_animationDone = false;
+			setAnimationState(IDLE);
+		}
+		break;
+	case SHOOTING:
+		if (m_animationDone)
+		{
+			m_animationDone = false;
+			setAnimationState(IDLE);
+		}
+		break;
+	default:
+		break;
 	}
+	
 	Animate();
 	for (auto s : UIList)
 	{
@@ -83,6 +106,16 @@ void Player::Render()
 }
 
 
+void Player::Shoot()
+{
+	SDL_Texture* BulletTexture = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/bullet1.png");
+	Bullet* m_shoot = new Bullet({ 0,0,813,306 }, { 0,0,20,8 }, Engine::Instance().GetRenderer(), BulletTexture, 0, false);
+	m_shoot->Execute(m_collisionBox, m_angle);
+	delete m_shoot; //don't need this anymore till we press shoot again.
+	m_shoot = nullptr;
+
+}
+
 void Player::setAnimationState(AnimationState state)
 {
 	m_animationState = state;
@@ -90,23 +123,35 @@ void Player::setAnimationState(AnimationState state)
 	{
 	case IDLE:
 		m_src = { 0 , 0 , 253,216 };
+		m_dst.w = 253*m_scale;
+		m_dst.h = 216 * m_scale;
 		m_spriteMax = 19;
 		m_sprite = 0;
+		m_frameMax = 4;
 		break;
 	case RUNNING:
 		m_src = { 0 , 474,260,222 };
+		m_dst.w = 260 * m_scale;
+		m_dst.h = 222 * m_scale;
 		m_spriteMax = 19;
 		m_sprite = 0;
+		m_frameMax = 4;
 		break;
 	case MELEE:
 		m_src = { 0,216,293,258 };
-		m_spriteMax = 14;
+		m_dst.w = 293 * m_scale;
+		m_dst.h = 258 * m_scale;
+		m_spriteMax = 7;
 		m_sprite = 0;
+		m_frameMax = 3;
 		break;
 	case SHOOTING:
 		m_src = { 0,696,257,217 };
-		m_spriteMax = 3;
+		m_dst.w = 257 * m_scale;
+		m_dst.h = 217 * m_scale;
+		m_spriteMax = 2;
 		m_sprite = 0;
+		m_frameMax = 4;
 		break;
 	default:
 		break;

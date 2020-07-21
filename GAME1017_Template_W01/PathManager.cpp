@@ -3,7 +3,7 @@
 #include "MathManager.h"
 #include <iostream>
 
-void PathManager::GetShortestPath(PathNode* start, PathNode* goal)
+std::vector<PathConnection*> PathManager::GetShortestPath(PathNode* start, PathNode* goal)
 {
 	// std::cout << "Starting pathing..." << std::endl;
 	s_path.clear(); // Clear the old saved path so we can save a new one.
@@ -92,6 +92,8 @@ void PathManager::GetShortestPath(PathNode* start, PathNode* goal)
 	}
 	s_closed.clear();
 	s_closed.shrink_to_fit();
+
+	return s_path;
 }
 
 NodeRecord* PathManager::GetSmallestNode()

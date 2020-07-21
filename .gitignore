@@ -49,3 +49,7 @@ GAME1017_Template_W01/Debug/Enemy.obj
 .vs/GAME1017_Template_W01/v16/ipch/AutoPCH/cb7d4230f8c9d901/BUTTON.ipch
 *.ipch
 *.obj
+.vs/GAME1017_Template_W01/v16/ipch/AutoPCH/83bd44c8d125464d/DEBUGMANAGER.ipch
+GAME1017_Template_W01/Debug/Enemy.obj
+GAME1017_Template_W01/Debug/LifeBar.obj
+GAME1017_Template_W01/Debug/UiElements.obj

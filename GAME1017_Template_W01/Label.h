@@ -12,6 +12,7 @@ public: // Public methods.
 	Label(std::string key, const float x, const float y, const char* str, const SDL_Color col = { 255,255,255,255 });
 	~Label();
 	void Render();
+	virtual void Update() {}
 	void SetText(const char* c);
 	void SetPos(const float x, const float y);
 	void SetColor(const SDL_Color& col);

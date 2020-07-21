@@ -7,7 +7,7 @@
 class PathManager
 {
 public:
-	static void GetShortestPath(PathNode* start, PathNode* goal);
+	static std::vector<PathConnection*> GetShortestPath(PathNode* start, PathNode* goal);
 	static NodeRecord* GetSmallestNode();
 	static std::vector<NodeRecord*>& OpenList();
 	static std::vector<NodeRecord*>& ClosedList();
