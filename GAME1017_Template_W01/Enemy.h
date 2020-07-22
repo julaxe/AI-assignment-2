@@ -3,6 +3,7 @@
 #include "Tile.h"
 #include <array>
 #include"UiElements.h"
+#include "LevelManager.h"
 class Enemy : public AnimatedSprite
 {
 public:
@@ -12,11 +13,21 @@ public:
 	void setState(AnimationState);
 	AnimationState getState();
 	void drawLOS();
-
 	void drawRadius();
+	std::vector<PathConnection*>& getPath() { return m_path; }
+	std::vector<PathNode*> getDestinations() { return m_destinations; }
+	void setDestinations();
 
 
 private:
+
+	void Seeking(int x, int y);
+	void Patrol();
+	void HardCodedPatrol();
 	std::vector<UIElements*> UIList;
+	std::vector<PathConnection*> m_path;
+	std::vector<PathNode*> m_destinations;
+	int destinationNumber;
+	int pathCounter;
 
 };

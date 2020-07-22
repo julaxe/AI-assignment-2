@@ -106,10 +106,10 @@ void LevelManager::drawDebug()
 	{
 		for (int col = 0; col < COLS; col++)
 		{
-			DEMA::DrawRect({ m_level[row][col]->GetDstP()->x , m_level[row][col]->GetDstP()->y, 5,5 }, { 1.0f,0.5f,0,1 });
-
-			if(m_level[row][col]->IsObstacle())
-			DEMA::DrawRect(*(m_level[row][col]->GetDstP()), { 1.0f,1.0f,1.0f,1.0f });
+			if (!m_level[row][col]->IsObstacle())
+				DEMA::DrawRect({ (float)m_level[row][col]->Node()->Pt().x , (float)m_level[row][col]->Node()->Pt().y, 5,5 }, { 1.0f,0.5f,0,1 });
+			else
+				DEMA::DrawRect(*(m_level[row][col]->GetDstP()), { 1.0f,1.0f,1.0f,1.0f });
 		}
 	}
 }

@@ -28,7 +28,7 @@ struct DisplayManager {
 	{
 		for (auto o : list)
 		{
-			DEMA::DrawRect(*(o->GetDstP()), { 1.0f,1.0f,1.0f,1.0f });
+			DEMA::DrawRect(*(o->GetCollisionBox()), { 1.0f,1.0f,1.0f,1.0f });
 		}
 	}
 

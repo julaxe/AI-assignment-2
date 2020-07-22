@@ -143,14 +143,18 @@ void PlayState::checkCollision()
 void PlayState::Enter()
 {
 	const int SIZEOFTILES = 32;
+
+	FOMA::RegisterFont("img/ltype.ttf", "tile", 10);
+	LevelManager::loadTiles();
+	LevelManager::loadLevel();
+
 	m_pPlayerText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/PlayerSpritesheet.png");
 	m_pEnemyText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/EnemySpriteSheet.png");
-	FOMA::RegisterFont("img/ltype.ttf", "tile", 10);
+	
 	m_pPlayer = new Player({ 0 , 0 , 253,216 }, { (float)(16) * 32, (float)(12) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pPlayerText, 0, 0, 19, 4);
 	m_pEnemy = new Enemy({ 0 , 0 , 291,226 }, { (float)(16) * 32, (float)(4) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pEnemyText, 0, 0, 19, 4);
 
-	LevelManager::loadTiles();
-	LevelManager::loadLevel();
+	
 
 	//Music
 	SOMA::Load("Aud/Background.mp3", "Background", SOUND_MUSIC);

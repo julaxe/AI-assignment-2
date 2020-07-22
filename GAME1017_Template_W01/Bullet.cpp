@@ -25,6 +25,8 @@ void Bullet::update()
 		m_dst.y += m_velocity.y * sin(m_angle);
 
 		m_collisionBox = m_dst;
+		m_collisionBox.h = 10;
+		m_collisionBox.w = 10;
 
 		if (CollisionManager::AABBCollisionWithTiles(this, LevelManager::m_obstacles))
 		{
