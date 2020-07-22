@@ -5,7 +5,7 @@
 #include "PathManager.h"
 
 //init of static variables
-float LevelManager::SIZEOFTILES = 32;
+float LevelManager::SIZEOFTILES = 64;
 bool LevelManager::m_hEuclid = false;
 
 SDL_Texture* LevelManager::m_pTileText;
@@ -45,14 +45,12 @@ void LevelManager::loadLevel()
 			{
 				inFile >> key;
 				m_level[row][col] = m_tiles[key]->Clone(); // Prototype design pattern used.
-				m_level[row][col]->GetDstP()->x = (float)(32 * col);
-				m_level[row][col]->GetDstP()->y = (float)(32 * row);
-				m_level[row][col]->GetCollisionBox()->x = (float)(32 * col);
-				m_level[row][col]->GetCollisionBox()->y = (float)(32 * row);
+				m_level[row][col]->GetDstP()->x = (float)(SIZEOFTILES * col);
+				m_level[row][col]->GetDstP()->y = (float)(SIZEOFTILES * row);
+				m_level[row][col]->GetCollisionBox()->x = (float)(SIZEOFTILES * col);
+				m_level[row][col]->GetCollisionBox()->y = (float)(SIZEOFTILES * row);
 				// Instantiate the labels for each tile.
-				m_level[row][col]->m_lCost = new Label("tile", m_level[row][col]->GetDstP()->x + 4, m_level[row][col]->GetDstP()->y + 18, " ", { 0,0,0,255 });
-				m_level[row][col]->m_lX = new Label("tile", m_level[row][col]->GetDstP()->x + 18, m_level[row][col]->GetDstP()->y + 2, std::to_string(col).c_str(), { 0,0,0,255 });
-				m_level[row][col]->m_lY = new Label("tile", m_level[row][col]->GetDstP()->x + 2, m_level[row][col]->GetDstP()->y + 2, std::to_string(row).c_str(), { 0,0,0,255 });
+				
 				// Construct the Node for a valid tile.
 				if (!m_level[row][col]->IsObstacle() && !m_level[row][col]->IsHazard())
 					m_level[row][col]->m_node = new PathNode((int)(m_level[row][col]->GetDstP()->x), (int)(m_level[row][col]->GetDstP()->y));
@@ -143,11 +141,10 @@ std::vector<PathConnection*> LevelManager::calculatePathTo(AnimatedSprite* obj, 
 				m_level[row][col]->Node()->SetH(PAMA::HEuclid(m_level[row][col]->Node(), m_level[(int)(goal->Pt().y / 32)][(int)(goal->Pt().x / 32)]->Node()));
 			else
 				m_level[row][col]->Node()->SetH(PAMA::HManhat(m_level[row][col]->Node(), m_level[(int)(goal->Pt().y / 32)][(int)(goal->Pt().x / 32)]->Node()));
-			m_level[row][col]->m_lCost->SetText(std::to_string((int)(m_level[row][col]->Node()->H())).c_str());
 		}
 	}
 	// Now we can calculate the path. Note: I am not returning a path again, only generating one to be rendered.
 
-	return PAMA::GetShortestPath(m_level[(int)((obj->GetDstP()->y + obj->GetDstP()->h / 2) / 32)][(int)((obj->GetDstP()->x + obj->GetDstP()->w / 2) / 32)]->Node(),
-		m_level[(int)(goal->Pt().y / 32)][(int)(goal->Pt().x / 32)]->Node());
+	return PAMA::GetShortestPath(m_level[(int)((obj->GetDstP()->y + obj->GetDstP()->h / 2) / SIZEOFTILES)][(int)((obj->GetDstP()->x + obj->GetDstP()->w / 2) / SIZEOFTILES)]->Node(),
+		m_level[(int)(goal->Pt().y / SIZEOFTILES)][(int)(goal->Pt().x / SIZEOFTILES)]->Node());
 }

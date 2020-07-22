@@ -104,9 +104,9 @@ void Enemy::drawRadius()
 void Enemy::setDestinations()
 {
 	m_destinations.push_back(LevelManager::m_level[2][2]->Node());
-	m_destinations.push_back(LevelManager::m_level[3][2]->Node());
-	m_destinations.push_back(LevelManager::m_level[3][3]->Node());
-	m_destinations.push_back(LevelManager::m_level[2][3]->Node());
+	m_destinations.push_back(LevelManager::m_level[20][2]->Node());
+	m_destinations.push_back(LevelManager::m_level[20][30]->Node());
+	m_destinations.push_back(LevelManager::m_level[2][30]->Node());
 }
 
 void Enemy::Patrol()
