@@ -28,4 +28,5 @@ private:
 	Enemy* m_pEnemy;
 	bool m_debugMode = false;
 	int m_pathCounter = 0;
+	bool RadiusCollisionCheck;
 };

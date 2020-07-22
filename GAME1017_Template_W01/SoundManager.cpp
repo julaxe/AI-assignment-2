@@ -101,7 +101,7 @@ void SoundManager::PlaySound(const std::string& id, const int loop/* = 0 */, con
 	//Changed the if insted of != I put == and && Iput ||
 	if (channel == -1 || !Mix_Playing(channel))
 	{
-		std::cout << "Effect played\n";
+		
 		if (Mix_PlayChannel(channel, s_sfxs[id], loop) == -1)
 		{
 			std::cout << "Unable to play SFX: ERROR - " << Mix_GetError() << std::endl;

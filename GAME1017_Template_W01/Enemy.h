@@ -14,6 +14,7 @@ public:
 	AnimationState getState();
 	void drawLOS();
 	void drawRadius();
+	void drawPath();
 	std::vector<PathConnection*>& getPath() { return m_path; }
 	std::vector<PathNode*> getDestinations() { return m_destinations; }
 	void setDestinations();

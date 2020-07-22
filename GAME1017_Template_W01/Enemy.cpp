@@ -24,6 +24,7 @@ Enemy::Enemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstar
 
 void Enemy::Update()
 {
+	m_pos = { m_dst.x, m_dst.y };
 	switch (m_animationState)
 	{
 	case IDLE:
@@ -101,12 +102,20 @@ void Enemy::drawRadius()
 	DEMA::DrawCircle(m_dst.x + m_dst.w * 0.5, m_dst.y + m_dst.h * 0.5, 200);
 }
 
+void Enemy::drawPath()
+{
+	for (auto p : m_path)
+	{
+		DebugManager::DrawLine(p->GetFromNode()->Pt(), p->GetToNode()->Pt(), { 255,0,0,255 });
+	}
+}
+
 void Enemy::setDestinations()
 {
 	m_destinations.push_back(LevelManager::m_level[2][2]->Node());
-	m_destinations.push_back(LevelManager::m_level[20][2]->Node());
-	m_destinations.push_back(LevelManager::m_level[20][30]->Node());
-	m_destinations.push_back(LevelManager::m_level[2][30]->Node());
+	m_destinations.push_back(LevelManager::m_level[8][2]->Node());
+	m_destinations.push_back(LevelManager::m_level[8][8]->Node());
+	m_destinations.push_back(LevelManager::m_level[2][8]->Node());
 }
 
 void Enemy::Patrol()
@@ -129,7 +138,7 @@ void Enemy::Patrol()
 		{
 			destinationNumber = 0;
 		}
-		std::cout << getDestinations()[destinationNumber]->Pt().x / 32 << " " << getDestinations()[destinationNumber]->Pt().y / 32 << std::endl;
+		std::cout << getDestinations()[destinationNumber]->Pt().x / LevelManager::SIZEOFTILES << " " << getDestinations()[destinationNumber]->Pt().y / LevelManager::SIZEOFTILES << std::endl;
 		m_path = LevelManager::calculatePathTo(this, getDestinations()[destinationNumber]);
 	}
 
@@ -138,9 +147,9 @@ void Enemy::Patrol()
 
 void Enemy::Seeking(int x, int y)
 {
-	int dy = y - m_dst.y + m_dst.h * 0.5;
-	int dx = x - m_dst.x + m_dst.w * 0.5;
-
+	int dy = y - m_dst.y - m_dst.h * 0.5;
+	int dx = x - m_dst.x - m_dst.w * 0.5;
+	
 	m_angle = MAMA::AngleBetweenPoints(dy, dx);
 	
 	m_dst.x = m_collisionBox.x;
@@ -148,7 +157,7 @@ void Enemy::Seeking(int x, int y)
 	m_collisionBox.x += m_velocity.x * cos(m_angle);
 	m_collisionBox.y += m_velocity.y * sin(m_angle);
 	
-	if (dx == 0 && dy == 0)
+	if (abs(dx) < 10 && abs(dy) < 10)
 	{
 		pathCounter++;
 	}

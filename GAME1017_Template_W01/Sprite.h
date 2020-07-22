@@ -15,9 +15,13 @@ class Sprite // Inline class.
 {
 public: // Inherited and public.
 	Sprite(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t)
-		:m_src(s), m_dst(d), m_pRend(r), m_pText(t), m_angle(0.0), m_collisionBox(d){}
+		:m_src(s), m_dst(d), m_pRend(r), m_pText(t), m_angle(0.0), m_collisionBox(d) 
+	{
+		m_pos = { m_dst.x, m_dst.y };
+	}
 	virtual void Render() {	SDL_RenderCopyExF(m_pRend, m_pText, GetSrcP(), GetDstP(), m_angle, 0, SDL_FLIP_NONE); }
 	virtual void update() {}
+	SDL_FPoint& getPosition() { return m_pos; }
 	SDL_Rect* GetSrcP() { return &m_src; }
 	SDL_FRect* GetDstP() { return &m_dst; }
 	SDL_FRect* GetCollisionBox() { return &m_collisionBox; }
@@ -28,6 +32,7 @@ public: // Inherited and public.
 	bool& isRunning() { return m_running; }
 protected: // Private BUT inherited.
 	double m_angle;
+	SDL_FPoint m_pos;
 	SDL_Rect m_src;
 	SDL_FRect m_dst;
 	SDL_FRect m_velocity;

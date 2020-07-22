@@ -6,7 +6,7 @@
 
 //init of static variables
 float LevelManager::SIZEOFTILES = 64;
-bool LevelManager::m_hEuclid = false;
+bool LevelManager::m_hEuclid = true;
 
 SDL_Texture* LevelManager::m_pTileText;
 std::ifstream LevelManager::inFile;
@@ -53,7 +53,7 @@ void LevelManager::loadLevel()
 				
 				// Construct the Node for a valid tile.
 				if (!m_level[row][col]->IsObstacle() && !m_level[row][col]->IsHazard())
-					m_level[row][col]->m_node = new PathNode((int)(m_level[row][col]->GetDstP()->x), (int)(m_level[row][col]->GetDstP()->y));
+					m_level[row][col]->m_node = new PathNode((int)(m_level[row][col]->GetDstP()->x + m_level[row][col]->GetDstP()->w*0.5), (int)(m_level[row][col]->GetDstP()->y + m_level[row][col]->GetDstP()->h*0.5));
 				if (m_level[row][col]->IsObstacle())
 				{
 					m_obstacles.push_back(m_level[row][col]);
@@ -138,9 +138,9 @@ std::vector<PathConnection*> LevelManager::calculatePathTo(AnimatedSprite* obj, 
 			if (m_level[row][col]->Node() == nullptr)
 				continue;
 			if (m_hEuclid)
-				m_level[row][col]->Node()->SetH(PAMA::HEuclid(m_level[row][col]->Node(), m_level[(int)(goal->Pt().y / 32)][(int)(goal->Pt().x / 32)]->Node()));
+				m_level[row][col]->Node()->SetH(PAMA::HEuclid(m_level[row][col]->Node(), m_level[(int)(goal->Pt().y / SIZEOFTILES)][(int)(goal->Pt().x / SIZEOFTILES)]->Node()));
 			else
-				m_level[row][col]->Node()->SetH(PAMA::HManhat(m_level[row][col]->Node(), m_level[(int)(goal->Pt().y / 32)][(int)(goal->Pt().x / 32)]->Node()));
+				m_level[row][col]->Node()->SetH(PAMA::HManhat(m_level[row][col]->Node(), m_level[(int)(goal->Pt().y / SIZEOFTILES)][(int)(goal->Pt().x / SIZEOFTILES)]->Node()));
 		}
 	}
 	// Now we can calculate the path. Note: I am not returning a path again, only generating one to be rendered.

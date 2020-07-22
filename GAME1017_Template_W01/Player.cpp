@@ -24,7 +24,7 @@ Player::Player(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sst
 
 void Player::Update()
 {
-
+	m_pos = { m_dst.x, m_dst.y };
 	
 	
 	switch (m_animationState)

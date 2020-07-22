@@ -86,6 +86,7 @@ void PlayState::Render()
 		m_pEnemy->drawLOS();
 		m_pEnemy->drawRadius();
 		m_pEnemy->drawCollisionRect();
+		//m_pEnemy->drawPath();
 		DisplayManager::drawDebug(DisplayManager::AttackList());
 	}
 	m_pPlayer->Render();
@@ -135,11 +136,28 @@ void PlayState::checkCollision()
 			}
 		}
 	}
+	if (!RadiusCollisionCheck)
+	{
+		if (COMA::CircleCircleCheck(m_pEnemy->getPosition(), m_pPlayer->getPosition(), 200, 32) ) 
+		{
+			RadiusCollisionCheck = true;
+			std::cout << "Radius COLLISION!" << std::endl;
+		}
+	}
+	else
+	{
+		if (!COMA::CircleCircleCheck(m_pEnemy->getPosition(), m_pPlayer->getPosition(), 200, 32))
+		{
+			RadiusCollisionCheck = false;
+			std::cout << "No Radius COLLISION!" << std::endl;
+		}
+	}
+	
 }
 void PlayState::Enter()
 {
-	const int SIZEOFTILES = 32;
 
+	RadiusCollisionCheck = false;
 	FOMA::RegisterFont("img/ltype.ttf", "tile", 10);
 	LevelManager::loadTiles();
 	LevelManager::loadLevel();
