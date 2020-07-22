@@ -6,6 +6,7 @@
 #include "LevelManager.h"
 #include "Engine.h"
 #include "Bullet.h"
+#include "MeleeAtk.h"
 
 #define SPEED 2
 
@@ -16,6 +17,7 @@ Player::Player(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sst
 	UIList.push_back(new LifeBar());
 	m_velocity = { SPEED, SPEED };
 	m_scale = 0.30f;
+	m_Life = 100;
 	setAnimationState(IDLE);
 }
 
@@ -114,6 +116,14 @@ void Player::Shoot()
 	delete m_shoot; //don't need this anymore till we press shoot again.
 	m_shoot = nullptr;
 
+}
+void Player::MeleeAttack()
+{
+	SDL_Texture* MeleeTexture = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/Empty.png");
+	MeleeAtk* m_melee = new MeleeAtk({ 0,0,32,32 }, { 0,0,32,32 }, Engine::Instance().GetRenderer(), MeleeTexture, 0, false);
+	m_melee->Execute(m_collisionBox, m_angle);
+	delete m_melee; //don't need this anymore till we press shoot again.
+	m_melee = nullptr;
 }
 
 void Player::setAnimationState(AnimationState state)

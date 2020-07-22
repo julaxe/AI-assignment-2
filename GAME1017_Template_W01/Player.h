@@ -13,9 +13,9 @@ public:
 	void Update();
 	void Render();
 	bool isMoving() { return m_isMoving; }
-	int& getLife() { return m_Life; }
 
 	void Shoot();
+	void MeleeAttack();
 	void setAnimationState(AnimationState);
 	void drawLOS();
 	
@@ -23,7 +23,6 @@ public:
 
 private:
 	bool m_isMoving;
-	int m_Life = 100;
 	std::vector<UIElements*> UIList;
 	float m_scale;
 	

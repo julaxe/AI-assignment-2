@@ -5,7 +5,7 @@
 #include "Sprite.h"
 struct DisplayManager {
 	static std::vector<Label*>& LabelList() { return listLabels; }
-	static std::vector<Sprite*>& BulletList() { return listBulletList; }
+	static std::vector<Sprite*>& AttackList() { return listOfAttacks; }
 
 	template<typename T>
 	static void draw(std::vector<T*> list)
@@ -32,21 +32,21 @@ struct DisplayManager {
 		}
 	}
 
-	static void deleteBulllets()
+	static void deleteAttacks()
 	{
-		for (int i = 0; i < listBulletList.size() ; i++ )
+		for (int i = 0; i < listOfAttacks.size() ; i++ )
 		{
-			if (!listBulletList[i]->isRunning())
+			if (!listOfAttacks[i]->isRunning())
 			{
-				delete listBulletList[i];
-				listBulletList[i] = nullptr;
+				delete listOfAttacks[i];
+				listOfAttacks[i] = nullptr;
 			}
 		}
-		listBulletList.erase(std::remove(listBulletList.begin(), listBulletList.end(), nullptr), listBulletList.end());
-		listBulletList.shrink_to_fit();
+		listOfAttacks.erase(std::remove(listOfAttacks.begin(), listOfAttacks.end(), nullptr), listOfAttacks.end());
+		listOfAttacks.shrink_to_fit();
 	}
 	
 private:
 	static std::vector<Label*> listLabels;
-	static std::vector<Sprite*> listBulletList;
+	static std::vector<Sprite*> listOfAttacks;
 };

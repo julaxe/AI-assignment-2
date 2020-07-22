@@ -11,13 +11,12 @@ Enemy::Enemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstar
 {
 	m_velocity = { SPEED,SPEED };
 	m_angle = 0;
+	m_Life = 100;
 	UIList.push_back(new LifeBar);
 }
 
 void Enemy::Update()
 {
-
-	
 	switch (m_animationState)
 	{
 	case IDLE:

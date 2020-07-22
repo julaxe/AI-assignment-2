@@ -14,10 +14,9 @@ public:
 	void drawLOS();
 
 	void drawRadius();
-	int& getLife() { return m_Life; }
+
 
 private:
-	int m_Life = 100;
 	std::vector<UIElements*> UIList;
 
 };

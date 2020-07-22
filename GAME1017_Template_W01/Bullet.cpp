@@ -56,9 +56,9 @@ void Bullet::Execute(SDL_FRect PlayerDst, int angle)
 	//math to put the bullet in front of the gun.
 	float PosX = (PlayerDst.x + PlayerDst.w * 0.5) + 0.5*PlayerDst.w*cos(angle*M_PI/180) +  0.2*PlayerDst.w*cos((angle+90)*M_PI/180);
 	float PosY = (PlayerDst.y + PlayerDst.h * 0.5) + 0.5*PlayerDst.h*sin(angle * M_PI / 180) + 0.2 * PlayerDst.h * sin((angle + 90) * M_PI / 180); ;
-
+	
 	m_dst.x = PosX;
 	m_dst.y = PosY;
 	
-	DisplayManager::BulletList().push_back(new Bullet(m_src, m_dst, m_pRend, m_pText, angle, true));
+	DisplayManager::AttackList().push_back(new Bullet(m_src, m_dst, m_pRend, m_pText, angle, true));
 }
