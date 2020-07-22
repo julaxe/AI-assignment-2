@@ -50,7 +50,6 @@ void PlayState::HandleEvents()
 	}
 	if (EVMA::KeyPressed(SDL_SCANCODE_K)) {
 		m_pEnemy->getLife() -= 10;
-		SOMA::PlaySound("grunting", 0, -1);
 	}
 	if(EVMA::KeyPressed(SDL_SCANCODE_P)) {
 		if (m_pEnemy->getState() == IDLE)
@@ -60,10 +59,12 @@ void PlayState::HandleEvents()
 	}
 	if (EVMA::MousePressed(1)) {
 		m_pPlayer->setAnimationState(MELEE);
+		SOMA::PlaySound("melee", 0, -1);
 	}
 	if (EVMA::MousePressed(3)) {
 		m_pPlayer->setAnimationState(SHOOTING);
 		m_pPlayer->Shoot();
+		SOMA::PlaySound("shoot", 0, -1);
 	}
 	if (m_debugMode) {
 		
@@ -100,13 +101,8 @@ void PlayState::Update()
 	DisplayManager::deleteBulllets(); // delete bullets that collided before.
 	if (m_pPlayer->isMoving())
 	{
-		SOMA::PlaySound("running", 0, -1);
-	}
-	else
-	{
-		SOMA::StopSound(-1);
-	}
-	
+		SOMA::PlaySound("running", 0, 0);
+	}	
 }
 
 void PlayState::Enter()
@@ -127,6 +123,9 @@ void PlayState::Enter()
 	SOMA::Load("Aud/changeMode.mp3", "changeMode", SOUND_SFX);
 	SOMA::Load("Aud/running-footstep-sound-effect.mp3", "running", SOUND_SFX);
 	SOMA::Load("Aud/Grunting-sound.mp3", "grunting", SOUND_SFX);
+	SOMA::Load("Aud/shoot.mp3", "shoot", SOUND_SFX);
+	SOMA::Load("Aud/melee.mp3", "melee", SOUND_SFX);
+	//play music
 	//play music
 	SOMA::PlayMusic("Background", -1, 0);
 	SOMA::SetAllVolume(20);
