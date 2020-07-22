@@ -12,9 +12,10 @@
 #include "LevelManager.h"
 #include "DisplayManager.h"
 #include <string>
+#include "CollisionManager.h"
 
 std::vector<Label*> DisplayManager::listLabels;
-std::vector<Sprite*> DisplayManager::listBulletList;
+std::vector<Sprite*> DisplayManager::listOfAttacks;
 
 PlayState::PlayState()
 {
@@ -58,10 +59,13 @@ void PlayState::HandleEvents()
 		else
 			m_pEnemy->setState(IDLE);
 	}
-	if (EVMA::MousePressed(1)) {
+	if (EVMA::MousePressed(1)) 
+	{
 		m_pPlayer->setAnimationState(MELEE);
+		m_pPlayer->MeleeAttack();
 	}
-	if (EVMA::MousePressed(3)) {
+	if (EVMA::MousePressed(3)) 
+	{
 		m_pPlayer->setAnimationState(SHOOTING);
 		m_pPlayer->Shoot();
 	}
@@ -81,13 +85,13 @@ void PlayState::Render()
 		m_pEnemy->drawLOS();
 		m_pEnemy->drawRadius();
 		m_pEnemy->drawCollisionRect();
-		DisplayManager::drawDebug(DisplayManager::BulletList());
+		DisplayManager::drawDebug(DisplayManager::AttackList());
 	}
 	m_pPlayer->Render();
 	m_pEnemy->Render();
 
 	DisplayManager::draw(DisplayManager::LabelList());
-	DisplayManager::draw(DisplayManager::BulletList());
+	DisplayManager::draw(DisplayManager::AttackList());
 }
 
 void PlayState::Update()
@@ -96,8 +100,12 @@ void PlayState::Update()
 	m_pEnemy->Update();
 	
 
-	DisplayManager::update(DisplayManager::BulletList());
-	DisplayManager::deleteBulllets(); // delete bullets that collided before.
+	DisplayManager::update(DisplayManager::AttackList());
+
+	checkCollision();
+
+	DisplayManager::deleteAttacks(); // delete bullets that collided before.
+
 	if (m_pPlayer->isMoving())
 	{
 		SOMA::PlaySound("running", 0, -1);
@@ -109,6 +117,29 @@ void PlayState::Update()
 	
 }
 
+void PlayState::Exit()
+{
+	LevelManager::clean();
+}
+
+void PlayState::Resume()
+{
+}
+
+void PlayState::checkCollision()
+{
+	for (auto a : DisplayManager::AttackList())
+	{
+		if (a->isRunning())
+		{
+			if (COMA::AABBCheck(*(a->GetCollisionBox()), *(m_pEnemy->GetCollisionBox())))
+			{
+				m_pEnemy->getLife() -= 20;
+				a->isRunning() = false;
+			}
+		}
+	}
+}
 void PlayState::Enter()
 {
 	const int SIZEOFTILES = 32;
@@ -140,13 +171,5 @@ void PlayState::Enter()
 
 }
 
-void PlayState::Exit()
-{
-	LevelManager::clean();
-}
-
-void PlayState::Resume()
-{
-}
 
 

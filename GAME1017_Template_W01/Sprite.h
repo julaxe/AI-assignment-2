@@ -24,8 +24,8 @@ public: // Inherited and public.
 	double& GetAngle() { return m_angle; }
 	SDL_FRect& GetVelocity() { return m_velocity; }
 	void SetAngle(double a) { m_angle = a; }
-	virtual int& getLife() { return*m_pLife; };
-	bool isRunning() { return m_running; }
+	virtual int& getLife() { return m_Life; };
+	bool& isRunning() { return m_running; }
 protected: // Private BUT inherited.
 	double m_angle;
 	SDL_Rect m_src;
@@ -35,7 +35,7 @@ protected: // Private BUT inherited.
 	SDL_FRect m_collisionBox;
 	SDL_Renderer* m_pRend;
 	SDL_Texture* m_pText;
-	int* m_pLife;
+	int m_Life;
 	bool m_running;
 private: // Private NOT inherited.
 };
