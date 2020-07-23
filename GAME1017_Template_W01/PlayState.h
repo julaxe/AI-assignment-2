@@ -24,8 +24,7 @@ private:
 	void checkCollision();
 	SDL_Texture* m_pPlayerText, *m_pEnemyText;
 
-	Player* m_pPlayer;
-	Enemy* m_pEnemy;
+	//Player* m_pPlayer;
 	bool m_debugMode = false;
 	int m_pathCounter = 0;
 	bool RadiusCollisionCheck;

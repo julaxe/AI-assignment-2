@@ -4,6 +4,7 @@
 #include "StateManager.h"
 #include <array>
 #include "LevelManager.h"
+#include "DisplayManager.h"
 
 
 bool CollisionManager::AABBCheck(const SDL_FRect& object1, const SDL_FRect& object2)
@@ -135,7 +136,7 @@ bool CollisionManager::LineRectCheck(const SDL_Point obj1, const SDL_FRect obj2)
 	return false;
 }
 
-bool CollisionManager::CheckLOS(Sprite* obj1, SDL_FRect obj2 /*= enemy or player*/)
+bool CollisionManager::CheckLOS(Sprite* obj1, std::vector<Sprite*> list /*= enemy or player*/)
 {
 	SDL_Point end = obj1->getLOSendPosition();
 	int iterations = 500;
@@ -149,9 +150,12 @@ bool CollisionManager::CheckLOS(Sprite* obj1, SDL_FRect obj2 /*= enemy or player
 		{
 			return false;
 		}
-		if (LineRectCheck(obj1->getLOSendPosition(), obj2))
+		for (auto e : list)
 		{
-			return true;
+			if (LineRectCheck(obj1->getLOSendPosition(), *(e->GetCollisionBox())))
+			{
+				return true;
+			}
 		}
 	}
 	return false;
