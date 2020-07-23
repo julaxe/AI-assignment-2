@@ -9,7 +9,8 @@ enum AnimationState {
 	IDLE,
 	RUNNING,
 	MELEE,
-	SHOOTING
+	SHOOTING,
+	DEATH
 };
 class Sprite // Inline class.
 {
