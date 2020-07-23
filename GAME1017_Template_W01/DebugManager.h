@@ -10,6 +10,7 @@ class DebugManager
 public: // Public methods.
 	static int s_debugMode;
 	static void DrawLine(const SDL_Point start, const SDL_Point end, const SDL_Color col);
+	static void DrawLine(const SDL_FPoint start, const SDL_Point end, const SDL_Color col);
 	static void QueueLine(const SDL_Point start, const SDL_Point end, const SDL_Color col);
 	static void FlushLines();
 	static void DrawRay(const SDL_Point start, const double angle, const double length, const SDL_Color col);

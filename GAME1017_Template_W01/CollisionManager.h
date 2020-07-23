@@ -17,7 +17,11 @@ public:
 
 	static bool LinePointCheck(const SDL_FPoint object1_start, const SDL_FPoint object1_end, const SDL_FPoint object2);
 
+	static bool AABBCollisionWithTilesUpdating(Sprite* obj1, std::vector<Tile*> obstacles);
+
 	static bool AABBCollisionWithTiles(Sprite* obj1, std::vector<Tile*> obstacles);
+
+	static SDL_FPoint CheckLOS(SDL_FPoint start, SDL_FPoint end, SDL_FRect obj);
 private:
 	CollisionManager() {}
 };

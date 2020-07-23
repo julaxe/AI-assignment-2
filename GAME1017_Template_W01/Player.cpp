@@ -7,6 +7,7 @@
 #include "Engine.h"
 #include "Bullet.h"
 #include "MeleeAtk.h"
+#include "SoundManager.h"
 
 #define SPEED 2
 
@@ -19,13 +20,14 @@ Player::Player(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sst
 	m_scale = 0.30f;
 	m_Life = 100;
 	setAnimationState(IDLE);
+	
 }
 
 
 void Player::Update()
 {
-	m_pos = { m_dst.x, m_dst.y };
-	
+	updatePosition();
+	updateCollisionBox(40.0f,40.0f);
 	
 	switch (m_animationState)
 	{
@@ -46,26 +48,33 @@ void Player::Update()
 			m_isMoving = false;
 			break; // Skip movement parsing below.
 		}
-		if (!COMA::AABBCollisionWithTiles(this, LevelManager::m_obstacles))
+		SOMA::PlaySound("running", 0, 0);
+		//m_dst.x = m_collisionBox.x;
+		//m_dst.y = m_collisionBox.y;
+		if (EVMA::KeyHeld(SDL_SCANCODE_W))
 		{
-			m_dst.x = m_collisionBox.x;
-			m_dst.y = m_collisionBox.y;
-			if (EVMA::KeyHeld(SDL_SCANCODE_W))
-			{
-				m_collisionBox.y += -SPEED;
-			}
-			else if (EVMA::KeyHeld(SDL_SCANCODE_S))
-			{
-				m_collisionBox.y += SPEED;
-			}
-			if (EVMA::KeyHeld(SDL_SCANCODE_A))
-			{
-				m_collisionBox.x += -SPEED;
-			}
-			else if (EVMA::KeyHeld(SDL_SCANCODE_D))
-			{
-				m_collisionBox.x += SPEED;
-			}
+			Move(0, -SPEED);
+			if (COMA::AABBCollisionWithTiles(this, LevelManager::m_obstacles))
+				Move(0, SPEED);
+				
+		}
+		else if (EVMA::KeyHeld(SDL_SCANCODE_S))
+		{
+			Move(0, SPEED);
+			if (COMA::AABBCollisionWithTiles(this, LevelManager::m_obstacles))
+				Move(0, -SPEED);
+		}
+		if (EVMA::KeyHeld(SDL_SCANCODE_A))
+		{
+			Move(-SPEED, 0);
+			if (COMA::AABBCollisionWithTiles(this, LevelManager::m_obstacles))
+				Move(SPEED, 0);
+		}
+		else if (EVMA::KeyHeld(SDL_SCANCODE_D))
+		{
+			Move(SPEED, 0);
+			if (COMA::AABBCollisionWithTiles(this, LevelManager::m_obstacles))
+				Move(-SPEED, 0);
 		}
 		
 		break;

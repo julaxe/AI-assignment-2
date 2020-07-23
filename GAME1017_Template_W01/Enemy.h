@@ -28,6 +28,7 @@ private:
 	std::vector<UIElements*> UIList;
 	std::vector<PathConnection*> m_path;
 	std::vector<PathNode*> m_destinations;
+	SDL_Point LOSendPosition;
 	int destinationNumber;
 	int pathCounter;
 

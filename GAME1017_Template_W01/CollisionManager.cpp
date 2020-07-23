@@ -48,7 +48,7 @@ bool CollisionManager::LinePointCheck(const SDL_FPoint object1_start, const SDL_
 }
 
 
-bool CollisionManager::AABBCollisionWithTiles(Sprite* obj1, std::vector<Tile*> obstacles)
+bool CollisionManager::AABBCollisionWithTilesUpdating(Sprite* obj1, std::vector<Tile*> obstacles)
 {
 	for (auto obj2 : obstacles)
 	{
@@ -60,11 +60,6 @@ bool CollisionManager::AABBCollisionWithTiles(Sprite* obj1, std::vector<Tile*> o
 		const float p2Width = obj2->GetCollisionBox()->w;
 		const float p2Height = obj2->GetCollisionBox()->h;
 
-
-
-		//p2 = {p2.x + p2Width * 0.4,p2.y +  p2Height * 0.3};
-		//glm::vec2 p1Center = { p1.x + p1Width * 0.5 , p1.y + p1Height * 0.5 };
-		//glm::vec2 p2Center = { p2.x + p2Width * 0.5 , p2.y + p2Height * 0.5 };
 		int angle;
 
 		if (
@@ -101,4 +96,48 @@ bool CollisionManager::AABBCollisionWithTiles(Sprite* obj1, std::vector<Tile*> o
 	}
 	return false;
 		
+}
+bool CollisionManager::AABBCollisionWithTiles(Sprite* obj1, std::vector<Tile*> obstacles)
+{
+	for (auto obj2 : obstacles)
+	{
+		// prepare relevant variables
+		SDL_Point p1 = { obj1->GetCollisionBox()->x, obj1->GetCollisionBox()->y }; //collision box to the top corner
+		SDL_Point p2 = { obj2->GetCollisionBox()->x, obj2->GetCollisionBox()->y };
+		const float p1Width = obj1->GetCollisionBox()->w;
+		const float p1Height = obj1->GetCollisionBox()->h;
+		const float p2Width = obj2->GetCollisionBox()->w;
+		const float p2Height = obj2->GetCollisionBox()->h;
+
+		if (
+			p1.x < p2.x + p2Width &&
+			p1.x + p1Width > p2.x &&
+			p1.y < p2.y + p2Height &&
+			p1.y + p1Height > p2.y
+			)
+		{
+
+			return true;
+		}
+	}
+	return false;
+
+}
+
+SDL_FPoint CollisionManager::CheckLOS(SDL_FPoint start, SDL_FPoint end, SDL_FRect obj)
+{
+	SDL_FPoint endLOS;
+	int iterations = 20;
+	for (int f = 1; f <= iterations; f++)
+	{
+		int dx = MAMA::LerpD(start.x, end.x, iterations/f);
+		int dy = MAMA::LerpD(start.y, end.y, iterations/f);
+	}
+	/*while (dx < end.x)
+	{
+
+	}*/
+	
+	
+	return endLOS;
 }

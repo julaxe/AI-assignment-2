@@ -7,6 +7,11 @@ void DebugManager::DrawLine(const SDL_Point start, const SDL_Point end, const SD
 	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), col.r, col.g, col.b, col.a);
 	SDL_RenderDrawLine(Engine::Instance().GetRenderer(), end.x, end.y, start.x, start.y);
 }
+void DebugManager::DrawLine(const SDL_FPoint start, const SDL_Point end, const SDL_Color col)
+{
+    SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), col.r, col.g, col.b, col.a);
+    SDL_RenderDrawLine(Engine::Instance().GetRenderer(), end.x, end.y, (int)start.x, (int)start.y);
+}
 
 void DebugManager::QueueLine(const SDL_Point start, const SDL_Point end, const SDL_Color col)
 {
@@ -27,7 +32,7 @@ void DebugManager::DrawRay(const SDL_Point start, const double angle, const doub
 	double dX, dY;
 	MAMA::SetDeltas(angle, dX, dY, length, length);
 	//std::cout << start.x << ',' << start.y << '|' << start.x+dX << ',' << start.y+dY << std::endl;
-	DrawLine({(int)start.x, (int)start.y}, { (int)(start.x + dX), (int)(start.y + dY) }, col);
+	//DrawLine({(int)start.x, (int)start.y}, { (int)(start.x + dX), (int)(start.y + dY) }, col);
 }
 void DebugManager::DrawCircle(int32_t centreX, int32_t centreY, int32_t radius)
 {

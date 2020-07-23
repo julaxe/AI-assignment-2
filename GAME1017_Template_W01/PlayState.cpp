@@ -108,10 +108,6 @@ void PlayState::Update()
 
 	DisplayManager::deleteAttacks(); // delete bullets that collided before.
 
-	if (m_pPlayer->isMoving())
-	{
-		SOMA::PlaySound("running", 0, 0);
-	}	
 }
 
 void PlayState::Exit()
@@ -138,7 +134,7 @@ void PlayState::checkCollision()
 	}
 	if (!RadiusCollisionCheck)
 	{
-		if (COMA::CircleCircleCheck(m_pEnemy->getPosition(), m_pPlayer->getPosition(), 200, 32) ) 
+		if (COMA::CircleCircleCheck(m_pEnemy->getPosition(), m_pPlayer->getPosition(), 200, 20) ) 
 		{
 			RadiusCollisionCheck = true;
 			std::cout << "Radius COLLISION!" << std::endl;
@@ -146,7 +142,7 @@ void PlayState::checkCollision()
 	}
 	else
 	{
-		if (!COMA::CircleCircleCheck(m_pEnemy->getPosition(), m_pPlayer->getPosition(), 200, 32))
+		if (!COMA::CircleCircleCheck(m_pEnemy->getPosition(), m_pPlayer->getPosition(), 200, 20))
 		{
 			RadiusCollisionCheck = false;
 			std::cout << "No Radius COLLISION!" << std::endl;
@@ -183,12 +179,12 @@ void PlayState::Enter()
 	SOMA::PlayMusic("Background", -1, 0);
 	SOMA::SetAllVolume(20);
 	//Labels
-	DisplayManager::LabelList().push_back(new Label("font", 10, 10, "Press 'H' to Debug mode", { 255,255,255,255 }));
+	/*DisplayManager::LabelList().push_back(new Label("font", 10, 10, "Press 'H' to Debug mode", { 255,255,255,255 }));
 	DisplayManager::LabelList().push_back(new Label("font", 10, 30, "Press 'WASD' to Move around mode", { 255,255,255,255 }));
 	DisplayManager::LabelList().push_back(new Label("font", 10, 50, "Press 'F' to print the path", { 255,255,255,255 }));
 	DisplayManager::LabelList().push_back(new Label("font", 10, 70, "Press 'M' to move to the target", { 255,255,255,255 }));
 	DisplayManager::LabelList().push_back(new Label("font", 10, 90, "Press 'Righ Click' Change the goal position in debug mode", { 255,255,255,255 }));
-	DisplayManager::LabelList().push_back(new Label("font", 10, 110, "Press 'Left Click' Change the player position in debug mode", { 255,255,255,255 }));
+	DisplayManager::LabelList().push_back(new Label("font", 10, 110, "Press 'Left Click' Change the player position in debug mode", { 255,255,255,255 }));*/
 
 }
 

@@ -24,7 +24,8 @@ Enemy::Enemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstar
 
 void Enemy::Update()
 {
-	m_pos = { m_dst.x, m_dst.y };
+	updatePosition();
+	updateCollisionBox(40.0f, 40.0f);
 	switch (m_animationState)
 	{
 	case IDLE:
@@ -91,10 +92,10 @@ AnimationState Enemy::getState()
 
 void Enemy::drawLOS()
 {
-	SDL_Point PlayerPosition = { m_dst.x + m_dst.w * 0.5 ,m_dst.y + m_dst.h * 0.5 };
-	SDL_Point direction = { cos(m_angle) * 800, sin(m_angle) * 800 };
-	SDL_Point EndPosition = { PlayerPosition.x + direction.x, PlayerPosition.y + direction.y };
-	DEMA::DrawLine(PlayerPosition, EndPosition, { 255,255,255,255 });
+	
+	SDL_Point direction = { cos(m_angle) * 2000, sin(m_angle) * 2000 };
+	LOSendPosition = { (int)m_pos.x + direction.x, (int)m_pos.y + direction.y };
+	DEMA::DrawLine(m_pos, LOSendPosition, { 255,255,255,255 });
 }
 
 void Enemy::drawRadius()
@@ -121,14 +122,9 @@ void Enemy::setDestinations()
 void Enemy::Patrol()
 {
 
-	if (pathCounter == 0)
-	{
-		Seeking(m_path[pathCounter]->GetFromNode()->Pt().x, m_path[pathCounter]->GetFromNode()->Pt().y);
-	}
-	else
-	{
-		Seeking(m_path[pathCounter]->GetToNode()->Pt().x, m_path[pathCounter]->GetToNode()->Pt().y);
-	}
+	
+	Seeking(m_path[pathCounter]->GetToNode()->Pt().x, m_path[pathCounter]->GetToNode()->Pt().y);
+	
 	if (pathCounter > m_path.size() - 1)
 	{
 		pathCounter = 0;
@@ -152,10 +148,8 @@ void Enemy::Seeking(int x, int y)
 	
 	m_angle = MAMA::AngleBetweenPoints(dy, dx);
 	
-	m_dst.x = m_collisionBox.x;
-	m_dst.y = m_collisionBox.y;
-	m_collisionBox.x += m_velocity.x * cos(m_angle);
-	m_collisionBox.y += m_velocity.y * sin(m_angle);
+	m_dst.x += m_velocity.x * cos(m_angle);
+	m_dst.y += m_velocity.y * sin(m_angle);
 	
 	if (abs(dx) < 10 && abs(dy) < 10)
 	{
