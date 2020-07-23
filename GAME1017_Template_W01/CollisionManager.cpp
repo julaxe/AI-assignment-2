@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "StateManager.h"
 #include <array>
+#include "LevelManager.h"
 
 
 bool CollisionManager::AABBCheck(const SDL_FRect& object1, const SDL_FRect& object2)
@@ -124,20 +125,34 @@ bool CollisionManager::AABBCollisionWithTiles(Sprite* obj1, std::vector<Tile*> o
 
 }
 
-SDL_FPoint CollisionManager::CheckLOS(SDL_FPoint start, SDL_FPoint end, SDL_FRect obj)
+bool CollisionManager::LineRectCheck(const SDL_Point obj1, const SDL_FRect obj2)
 {
-	SDL_FPoint endLOS = {0, 0};
-	int iterations = 20;
-	for (int f = 1; f <= iterations; f++)
+	if (obj1.x >= obj2.x && obj1.x <= obj2.x + obj2.w &&
+		obj1.y >= obj2.y && obj1.y <= obj2.y + obj2.h)
 	{
-		int dx = MAMA::LerpD(start.x, end.x, iterations/f);
-		int dy = MAMA::LerpD(start.y, end.y, iterations/f);
+		return true;
 	}
-	/*while (dx < end.x)
-	{
+	return false;
+}
 
-	}*/
-	
-	
-	return endLOS;
+bool CollisionManager::CheckLOS(Sprite* obj1, SDL_FRect obj2 /*= enemy or player*/)
+{
+	SDL_Point end = obj1->getLOSendPosition();
+	int iterations = 500;
+	for (int i = 1; i <= iterations; i++)
+	{
+		double factor = (double)i / (double)iterations;
+		int dx = MAMA::LerpD(obj1->getPosition().x, end.x, factor);
+		int dy = MAMA::LerpD(obj1->getPosition().y, end.y, factor);
+		obj1->getLOSendPosition() = { dx, dy };
+		if (LevelManager::m_level[dy / LevelManager::SIZEOFTILES][dx / LevelManager::SIZEOFTILES]->IsObstacle())
+		{
+			return false;
+		}
+		if (LineRectCheck(obj1->getLOSendPosition(), obj2))
+		{
+			return true;
+		}
+	}
+	return false;
 }

@@ -21,7 +21,9 @@ public:
 
 	static bool AABBCollisionWithTiles(Sprite* obj1, std::vector<Tile*> obstacles);
 
-	static SDL_FPoint CheckLOS(SDL_FPoint start, SDL_FPoint end, SDL_FRect obj);
+	static bool LineRectCheck(const SDL_Point obj1, const SDL_FRect obj2);
+	static bool CheckLOS(Sprite* obj1, SDL_FRect obj2);
+
 private:
 	CollisionManager() {}
 };

@@ -107,8 +107,8 @@ void Player::Render()
 {
 
 	SDL_Point mousePos = EVMA::GetMousePos();
-	m_angle = -90 + MAMA::AngleBetweenPoints(-mousePos.x + (m_dst.x + m_dst.w*0.5), -mousePos.y + (m_dst.y + m_dst.h * 0.5))*-180/M_PI;
-	SDL_RenderCopyExF(m_pRend, m_pText, GetSrcP(), GetDstP(), m_angle , 0, SDL_FLIP_NONE);
+	m_angle = MAMA::AngleBetweenPoints(mousePos.y - (m_dst.y + m_dst.h * 0.5), mousePos.x - (m_dst.x + m_dst.w * 0.5));
+	SDL_RenderCopyExF(m_pRend, m_pText, GetSrcP(), GetDstP(), m_angle * 180 / M_PI , 0, SDL_FLIP_NONE);
 
 	for (auto s : UIList)
 	{
@@ -121,7 +121,7 @@ void Player::Shoot()
 {
 	SDL_Texture* BulletTexture = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/bullet1.png");
 	Bullet* m_shoot = new Bullet({ 0,0,813,306 }, { 0,0,20,8 }, Engine::Instance().GetRenderer(), BulletTexture, 0, false);
-	m_shoot->Execute(m_collisionBox, m_angle);
+	m_shoot->Execute(m_collisionBox, m_angle * 180 / M_PI);
 	delete m_shoot; //don't need this anymore till we press shoot again.
 	m_shoot = nullptr;
 
@@ -130,7 +130,7 @@ void Player::MeleeAttack()
 {
 	SDL_Texture* MeleeTexture = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/Empty.png");
 	MeleeAtk* m_melee = new MeleeAtk({ 0,0,32,32 }, { 0,0,32,32 }, Engine::Instance().GetRenderer(), MeleeTexture, 0, false);
-	m_melee->Execute(m_collisionBox, m_angle);
+	m_melee->Execute(m_collisionBox, m_angle * 180 / M_PI);
 	delete m_melee; //don't need this anymore till we press shoot again.
 	m_melee = nullptr;
 }
@@ -177,13 +177,6 @@ void Player::setAnimationState(AnimationState state)
 	}
 }
 
-void Player::drawLOS()
-{
-	SDL_Point PlayerPosition = { m_dst.x + m_dst.w * 0.5 ,m_dst.y + m_dst.h * 0.5 };
-	SDL_Point direction = { cos(m_angle*M_PI/180)*800, sin(m_angle * M_PI / 180)*800};
-	SDL_Point EndPosition = {PlayerPosition.x + direction.x, PlayerPosition.y + direction.y};
-	DEMA::DrawLine(PlayerPosition, EndPosition, { 255,255,255,255});
-}
 
 
 

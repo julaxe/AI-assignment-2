@@ -81,10 +81,10 @@ void PlayState::Render()
 	if (m_debugMode)
 	{
 		LevelManager::drawDebug();
-		m_pPlayer->drawLOS();
+		m_pPlayer->drawLOS(m_pEnemy);
 		m_pPlayer->drawCollisionRect();
-		m_pEnemy->drawLOS();
-		m_pEnemy->drawRadius();
+		m_pEnemy->drawLOS(m_pPlayer);
+		m_pEnemy->drawRadius(200);
 		m_pEnemy->drawCollisionRect();
 		//m_pEnemy->drawPath();
 		DisplayManager::drawDebug(DisplayManager::AttackList());

@@ -17,8 +17,6 @@ public:
 	void Shoot();
 	void MeleeAttack();
 	void setAnimationState(AnimationState);
-	void drawLOS();
-	
 	
 
 private:

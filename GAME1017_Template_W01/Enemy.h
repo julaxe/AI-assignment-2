@@ -12,8 +12,6 @@ public:
 	void Render();
 	void setState(AnimationState);
 	AnimationState getState();
-	void drawLOS();
-	void drawRadius();
 	void drawPath();
 	std::vector<PathConnection*>& getPath() { return m_path; }
 	std::vector<PathNode*> getDestinations() { return m_destinations; }
@@ -28,7 +26,7 @@ private:
 	std::vector<UIElements*> UIList;
 	std::vector<PathConnection*> m_path;
 	std::vector<PathNode*> m_destinations;
-	SDL_Point LOSendPosition;
+	
 	int destinationNumber;
 	int pathCounter;
 

@@ -22,6 +22,7 @@ public: // Inherited and public.
 	virtual void Render() {	SDL_RenderCopyExF(m_pRend, m_pText, GetSrcP(), GetDstP(), m_angle, 0, SDL_FLIP_NONE); }
 	virtual void update() {}
 	SDL_FPoint& getPosition() { return m_pos; }
+	SDL_Point& getLOSendPosition() { return LOSendPosition; }
 	SDL_Rect* GetSrcP() { return &m_src; }
 	SDL_FRect* GetDstP() { return &m_dst; }
 	SDL_FRect* GetCollisionBox() { return &m_collisionBox; }
@@ -33,13 +34,9 @@ public: // Inherited and public.
 	void updateCollisionBox(float width, float heigth) 
 		{ m_collisionBox = { (float)m_dst.x + (float)(m_dst.w * 0.5 - width*0.5), (float)m_dst.y + (float)(m_dst.h * 0.5 - heigth*0.5), width, heigth }; }
 	void updatePosition() { m_pos = { (float)(m_dst.x + m_dst.w * 0.5),(float)( m_dst.y + m_dst.h * 0.5) }; }
-	void Move(int speedX, int speedY) 
-	{
-		m_dst.y += speedY;
-		m_collisionBox.y += speedY;
-		m_dst.x += speedX; 
-		m_collisionBox.x += speedX;
-	}
+	void Move(int speedX, int speedY);
+	void drawLOS(Sprite* pbj);
+	void drawRadius(int radius);
 protected: // Private BUT inherited.
 	double m_angle;
 	SDL_FPoint m_pos;
@@ -50,6 +47,7 @@ protected: // Private BUT inherited.
 	SDL_FRect m_collisionBox;
 	SDL_Renderer* m_pRend;
 	SDL_Texture* m_pText;
+	SDL_Point LOSendPosition;
 	int m_Life;
 	bool m_running;
 private: // Private NOT inherited.
