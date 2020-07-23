@@ -114,7 +114,9 @@ void PlayState::Update()
 
 	DisplayManager::update(DisplayManager::EnemiesList());
 	
-
+	if (m_pEnemy->getLife() == 0) {
+		m_pEnemy->setState(DEATH);
+	}
 	DisplayManager::update(DisplayManager::AttackList());
 
 	checkCollision();
@@ -143,8 +145,10 @@ void PlayState::checkCollision()
 				if (COMA::AABBCheck(*(a->GetCollisionBox()), *(e->GetCollisionBox())))
 				{
 					e->getLife() -= 20;
+					SoundManager::PlaySound("grunting", 0, -1);
 					a->isRunning() = false;
 				}
+
 			}
 		}
 	}
@@ -196,6 +200,7 @@ void PlayState::Enter()
 	SOMA::Load("Aud/Grunting-sound.mp3", "grunting", SOUND_SFX);
 	SOMA::Load("Aud/shoot.mp3", "shoot", SOUND_SFX);
 	SOMA::Load("Aud/melee.mp3", "melee", SOUND_SFX);
+	SOMA::Load("Aud/Death.mp3", "death", SOUND_SFX);
 	//play music
 	//play music
 	SOMA::PlayMusic("Background", -1, 0);

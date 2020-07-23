@@ -3,6 +3,7 @@
 #include "EventManager.h"
 #include "MathManager.h"
 #include "CollisionManager.h"
+#include "SoundManager.h"
 #include "LifeBar.h"
 #include "LevelManager.h"
 #include "DisplayManager.h"
@@ -50,6 +51,9 @@ void Enemy::update()
 	case MELEE:
 		break;
 	case SHOOTING:
+		break;
+	case DEATH:
+		Die();
 		break;
 	default:
 		break;
@@ -172,3 +176,7 @@ void Enemy::HardCodedPatrol()
 	}
 }
 
+void Enemy::Die()
+{
+	SoundManager::PlaySound("death", 0, -1);
+}
