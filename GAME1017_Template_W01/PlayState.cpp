@@ -16,6 +16,8 @@
 
 std::vector<Label*> DisplayManager::listLabels;
 std::vector<Sprite*> DisplayManager::listOfAttacks;
+std::vector<Sprite*> DisplayManager::listOfEnemies;
+std::vector<Sprite*> DisplayManager::listOfPlayer;
 
 PlayState::PlayState()
 {
@@ -50,24 +52,30 @@ void PlayState::HandleEvents()
 
 	}
 	if (EVMA::KeyPressed(SDL_SCANCODE_K)) {
-		m_pEnemy->getLife() -= 10;
+		for (auto e : DisplayManager::EnemiesList())
+		{
+			e->getLife() -= 10;
+		}
 	}
 	if(EVMA::KeyPressed(SDL_SCANCODE_P)) {
-		if (m_pEnemy->getState() == IDLE)
-			m_pEnemy->setState(RUNNING);
-		else
-			m_pEnemy->setState(IDLE);
+		for (auto e : DisplayManager::EnemiesList())
+		{
+			if (dynamic_cast<Enemy*>(e)->getState() == IDLE)
+				dynamic_cast<Enemy*>(e)->setState(RUNNING);
+			else
+				dynamic_cast<Enemy*>(e)->setState(IDLE);
+		}
 	}
 	if (EVMA::MousePressed(1)) 
 	{
-		m_pPlayer->setAnimationState(MELEE);
+		dynamic_cast<Player*>(DisplayManager::PlayerList()[0])->setAnimationState(MELEE);
 		SOMA::PlaySound("melee", 0, -1);
-		m_pPlayer->MeleeAttack();
+		dynamic_cast<Player*>(DisplayManager::PlayerList()[0])->MeleeAttack();
 	}
 	if (EVMA::MousePressed(3)) 
 	{
-		m_pPlayer->setAnimationState(SHOOTING);
-		m_pPlayer->Shoot();
+		dynamic_cast<Player*>(DisplayManager::PlayerList()[0])->setAnimationState(SHOOTING);
+		dynamic_cast<Player*>(DisplayManager::PlayerList()[0])->Shoot();
 		SOMA::PlaySound("shoot", 0, -1);
 	}
 	if (m_debugMode) {
@@ -81,30 +89,36 @@ void PlayState::Render()
 	if (m_debugMode)
 	{
 		LevelManager::drawDebug();
-		m_pPlayer->drawLOS(m_pEnemy);
-		m_pPlayer->drawCollisionRect();
-		m_pEnemy->drawLOS(m_pPlayer);
-		m_pEnemy->drawRadius(200);
-		m_pEnemy->drawCollisionRect();
-		//m_pEnemy->drawPath();
-		DisplayManager::drawDebug(DisplayManager::AttackList());
-	}
-	m_pPlayer->Render();
-	m_pEnemy->Render();
+		for (auto e : DisplayManager::EnemiesList())
+		{
+			e->drawLOS();
+			e->drawRadius(200);
+			//e->drawPath();
+		}
 
+		DisplayManager::PlayerList()[0]->drawLOS();
+		DisplayManager::drawDebug(DisplayManager::AttackList());
+		DisplayManager::drawDebug(DisplayManager::PlayerList());
+		DisplayManager::drawDebug(DisplayManager::EnemiesList());
+	}
+	
+	DisplayManager::draw(DisplayManager::PlayerList());
+	DisplayManager::draw(DisplayManager::EnemiesList());
 	DisplayManager::draw(DisplayManager::LabelList());
 	DisplayManager::draw(DisplayManager::AttackList());
 }
 
 void PlayState::Update()
 {
-	m_pPlayer->Update();
-	m_pEnemy->Update();
-	//std::string str = "Number of enemies: " + std::to_string(Enemy::getEnemynumber());
 	
 	for (auto a : DisplayManager::LabelList()) {
 		a->Update();
 	}
+
+	DisplayManager::update(DisplayManager::PlayerList());
+
+	DisplayManager::update(DisplayManager::EnemiesList());
+
 	
 	if (m_pEnemy->getLife() == 0) {
 		m_pEnemy->setState(DEATH);
@@ -132,28 +146,38 @@ void PlayState::checkCollision()
 	{
 		if (a->isRunning())
 		{
-			if (COMA::AABBCheck(*(a->GetCollisionBox()), *(m_pEnemy->GetCollisionBox())))
+			for (auto e : DisplayManager::EnemiesList())
 			{
-				m_pEnemy->getLife() -= 20;
-				SoundManager::PlaySound("grunting", 0, -1);
-				a->isRunning() = false;
+				if (COMA::AABBCheck(*(a->GetCollisionBox()), *(e->GetCollisionBox())))
+				{
+					e->getLife() -= 20;
+					SoundManager::PlaySound("grunting", 0, -1);
+					a->isRunning() = false;
+				}
+
 			}
 		}
 	}
 	if (!RadiusCollisionCheck)
 	{
-		if (COMA::CircleCircleCheck(m_pEnemy->getPosition(), m_pPlayer->getPosition(), 200, 20) ) 
+		for (auto e : DisplayManager::EnemiesList())
 		{
-			RadiusCollisionCheck = true;
-			std::cout << "Radius COLLISION!" << std::endl;
+			if (COMA::CircleCircleCheck(e->getPosition(), DisplayManager::PlayerList()[0]->getPosition(), 200, 20) )
+			{
+				RadiusCollisionCheck = true;
+				std::cout << "Radius COLLISION!" << std::endl;
+			}
 		}
 	}
 	else
 	{
-		if (!COMA::CircleCircleCheck(m_pEnemy->getPosition(), m_pPlayer->getPosition(), 200, 20))
+		for (auto e : DisplayManager::EnemiesList())
 		{
-			RadiusCollisionCheck = false;
-			std::cout << "No Radius COLLISION!" << std::endl;
+			if (!COMA::CircleCircleCheck(e->getPosition(), DisplayManager::PlayerList()[0]->getPosition(), 200, 20))
+			{
+				RadiusCollisionCheck = false;
+				std::cout << "No Radius COLLISION!" << std::endl;
+			}
 		}
 	}
 	
@@ -169,8 +193,8 @@ void PlayState::Enter()
 	m_pPlayerText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/PlayerSpritesheet.png");
 	m_pEnemyText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/EnemySpriteSheet.png");
 	
-	m_pPlayer = new Player({ 0 , 0 , 253,216 }, { (float)(16) * 32, (float)(14) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pPlayerText, 0, 0, 19, 4);
-	m_pEnemy = new Enemy({ 0 , 0 , 291,226 }, { (float)(16) * 32, (float)(4) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pEnemyText, 0, 0, 19, 4);
+	DisplayManager::PlayerList().push_back(new Player({ 0 , 0 , 253,216 }, { (float)(16) * 32, (float)(14) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pPlayerText, 0, 0, 19, 4));
+	DisplayManager::EnemiesList().push_back(new Enemy({ 0 , 0 , 291,226 }, { (float)(16) * 32, (float)(4) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pEnemyText, 0, 0, 19, 4));
 
 	
 

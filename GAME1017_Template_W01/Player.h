@@ -10,8 +10,8 @@ class Player : public AnimatedSprite
 {
 public:
 	Player(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstart, int smin, int smax, int nf);
-	void Update();
-	void Render();
+	void update() override;
+	void Render() override;
 	bool isMoving() { return m_isMoving; }
 
 	void Shoot();

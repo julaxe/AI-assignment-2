@@ -6,6 +6,7 @@
 #include "SoundManager.h"
 #include "LifeBar.h"
 #include "LevelManager.h"
+#include "DisplayManager.h"
 #define SPEED 2
 
 int Enemy::m_enemyNumber = 0;
@@ -26,10 +27,21 @@ Enemy::Enemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstar
 
 }
 
-void Enemy::Update()
+void Enemy::update()
 {
 	updatePosition();
 	updateCollisionBox(40.0f, 40.0f);
+	if (updateLOS(DisplayManager::PlayerList()) && !LOSalert)
+	{
+		LOSalert = true;
+		std::cout << "Player in LOS" << std::endl;
+	}
+	else if (!updateLOS(DisplayManager::PlayerList()) && LOSalert)
+	{
+		LOSalert = false;
+		std::cout << "Player OUT of LOS" << std::endl;
+	}
+
 	switch (m_animationState)
 	{
 	case IDLE:

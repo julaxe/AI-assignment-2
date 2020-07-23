@@ -6,6 +6,8 @@
 struct DisplayManager {
 	static std::vector<Label*>& LabelList() { return listLabels; }
 	static std::vector<Sprite*>& AttackList() { return listOfAttacks; }
+	static std::vector<Sprite*>& EnemiesList() { return listOfEnemies; }
+	static std::vector<Sprite*>& PlayerList() { return listOfPlayer; }
 
 	template<typename T>
 	static void draw(std::vector<T*> list)
@@ -49,4 +51,6 @@ struct DisplayManager {
 private:
 	static std::vector<Label*> listLabels;
 	static std::vector<Sprite*> listOfAttacks;
+	static std::vector<Sprite*> listOfEnemies;
+	static std::vector<Sprite*> listOfPlayer;
 };

@@ -8,6 +8,7 @@
 #include "Bullet.h"
 #include "MeleeAtk.h"
 #include "SoundManager.h"
+#include "DisplayManager.h"
 
 #define SPEED 2
 
@@ -24,10 +25,20 @@ Player::Player(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sst
 }
 
 
-void Player::Update()
+void Player::update()
 {
 	updatePosition();
-	updateCollisionBox(40.0f,40.0f);
+	updateCollisionBox(40.0f, 40.0f);
+	if (updateLOS(DisplayManager::EnemiesList()) && !LOSalert)
+	{
+		LOSalert = true;
+		std::cout << "Enemy in LOS" << std::endl;
+	}
+	else if (!updateLOS(DisplayManager::EnemiesList()) && LOSalert)
+	{
+		LOSalert = false;
+		std::cout << "Enemy OUT of LOS" << std::endl;
+	}
 	
 	switch (m_animationState)
 	{

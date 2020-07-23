@@ -16,12 +16,14 @@ class Sprite // Inline class.
 {
 public: // Inherited and public.
 	Sprite(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t)
-		:m_src(s), m_dst(d), m_pRend(r), m_pText(t), m_angle(0.0), m_collisionBox(d) 
+		:m_src(s), m_dst(d), m_pRend(r), m_pText(t), m_angle(0.0), m_collisionBox(d), LOSalert(false)
 	{
 		updatePosition();
 	}
 	virtual void Render() {	SDL_RenderCopyExF(m_pRend, m_pText, GetSrcP(), GetDstP(), m_angle, 0, SDL_FLIP_NONE); }
 	virtual void update() {}
+
+
 	SDL_FPoint& getPosition() { return m_pos; }
 	SDL_Point& getLOSendPosition() { return LOSendPosition; }
 	SDL_Rect* GetSrcP() { return &m_src; }
@@ -32,12 +34,18 @@ public: // Inherited and public.
 	void SetAngle(double a) { m_angle = a; }
 	virtual int& getLife() { return m_Life; };
 	bool& isRunning() { return m_running; }
+
+
 	void updateCollisionBox(float width, float heigth) 
 		{ m_collisionBox = { (float)m_dst.x + (float)(m_dst.w * 0.5 - width*0.5), (float)m_dst.y + (float)(m_dst.h * 0.5 - heigth*0.5), width, heigth }; }
 	void updatePosition() { m_pos = { (float)(m_dst.x + m_dst.w * 0.5),(float)( m_dst.y + m_dst.h * 0.5) }; }
 	void Move(int speedX, int speedY);
-	void drawLOS(Sprite* pbj);
+
+
+	void drawLOS();
 	void drawRadius(int radius);
+	bool updateLOS(std::vector<Sprite*> list);
+
 protected: // Private BUT inherited.
 	double m_angle;
 	SDL_FPoint m_pos;
@@ -49,8 +57,11 @@ protected: // Private BUT inherited.
 	SDL_Renderer* m_pRend;
 	SDL_Texture* m_pText;
 	SDL_Point LOSendPosition;
+
 	int m_Life;
 	bool m_running;
+
+	bool LOSalert;
 private: // Private NOT inherited.
 };
 
@@ -72,6 +83,8 @@ public:
 		}
 		m_src.x = m_src.w * m_sprite;
 	}
+	virtual void update() = 0;
+	virtual void Render() = 0;
 	void drawCollisionRect()
 	{
 		DEMA::DrawRect(m_collisionBox, { 1.0f,1.0f,1.0f,1.0f });

@@ -8,8 +8,8 @@ class Enemy : public AnimatedSprite
 {
 public:
 	Enemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstart, int smin, int smax, int nf);
-	void Update();
-	void Render();
+	void update() override;
+	void Render() override;
 	void setState(AnimationState);
 	AnimationState getState();
 	void drawPath();
