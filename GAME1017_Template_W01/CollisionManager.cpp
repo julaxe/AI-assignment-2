@@ -126,7 +126,7 @@ bool CollisionManager::AABBCollisionWithTiles(Sprite* obj1, std::vector<Tile*> o
 
 SDL_FPoint CollisionManager::CheckLOS(SDL_FPoint start, SDL_FPoint end, SDL_FRect obj)
 {
-	SDL_FPoint endLOS;
+	SDL_FPoint endLOS = {0, 0};
 	int iterations = 20;
 	for (int f = 1; f <= iterations; f++)
 	{

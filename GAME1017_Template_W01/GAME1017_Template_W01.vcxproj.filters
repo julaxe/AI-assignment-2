@@ -198,5 +198,8 @@
     <Text Include="Dat\Tiledata.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="Dat\Level2.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

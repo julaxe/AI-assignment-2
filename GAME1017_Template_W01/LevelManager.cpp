@@ -35,7 +35,7 @@ void LevelManager::loadTiles()
 
 void LevelManager::loadLevel()
 {
-	inFile.open("Dat/Level1.txt");
+	inFile.open("Dat/Level2.txt");
 	if (inFile.is_open())
 	{ // Build the level from Tile prototypes.
 		char key;

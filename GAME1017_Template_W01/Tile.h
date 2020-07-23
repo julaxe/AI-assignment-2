@@ -5,8 +5,8 @@
 #include "Pathing.h"
 #include "Label.h"
 
-#define ROWS 24
-#define COLS 32
+#define ROWS 12
+#define COLS 16
 
 class Tile : public Sprite
 {
