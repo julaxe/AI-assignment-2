@@ -100,6 +100,11 @@ void PlayState::Update()
 {
 	m_pPlayer->Update();
 	m_pEnemy->Update();
+	//std::string str = "Number of enemies: " + std::to_string(Enemy::getEnemynumber());
+	
+	for (auto a : DisplayManager::LabelList()) {
+		a->Update();
+	}
 	
 	if (m_pEnemy->getLife() == 0) {
 		m_pEnemy->setState(DEATH);
@@ -185,11 +190,12 @@ void PlayState::Enter()
 	//Labels
 	/*DisplayManager::LabelList().push_back(new Label("font", 10, 10, "Press 'H' to Debug mode", { 255,255,255,255 }));
 	DisplayManager::LabelList().push_back(new Label("font", 10, 30, "Press 'WASD' to Move around mode", { 255,255,255,255 }));
-	DisplayManager::LabelList().push_back(new Label("font", 10, 50, "Press 'F' to print the path", { 255,255,255,255 }));
+	DisplayManager::LabelList().push_back(new Label("font", 10, 50, "Press 'K' to deal damage to the enemy", { 255,255,255,255 }));
 	DisplayManager::LabelList().push_back(new Label("font", 10, 70, "Press 'M' to move to the target", { 255,255,255,255 }));
 	DisplayManager::LabelList().push_back(new Label("font", 10, 90, "Press 'Righ Click' Change the goal position in debug mode", { 255,255,255,255 }));
 	DisplayManager::LabelList().push_back(new Label("font", 10, 110, "Press 'Left Click' Change the player position in debug mode", { 255,255,255,255 }));*/
-
+	
+	DisplayManager::LabelList().push_back(new Label("font", 10, 10, "Number of enemies: ", {255,255,255,255}));
 }
 
 

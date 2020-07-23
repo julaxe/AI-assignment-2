@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include "Enemy.h"
 #include "Label.h"
 #include "FontManager.h"
 #include <cstring>
@@ -19,6 +20,12 @@ Label::~Label()
 void Label::Render()
 {
 	SDL_RenderCopyF(Engine::Instance().GetRenderer(), m_pTexture, 0, &m_rTextRect);
+}
+
+void Label::Update()
+{
+	str = "Number of enemies: " + std::to_string(Enemy::getEnemynumber());
+	Label::SetText(str.c_str());
 }
 
 void Label::SetText(const char* str)

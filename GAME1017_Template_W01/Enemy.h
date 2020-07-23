@@ -16,7 +16,7 @@ public:
 	std::vector<PathConnection*>& getPath() { return m_path; }
 	std::vector<PathNode*> getDestinations() { return m_destinations; }
 	void setDestinations();
-
+	static int getEnemynumber() { return m_enemyNumber; }
 
 private:
 
@@ -30,5 +30,6 @@ private:
 	
 	int destinationNumber;
 	int pathCounter;
-
+	static int m_enemyNumber;
+	bool alife;
 };

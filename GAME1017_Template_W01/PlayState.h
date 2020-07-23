@@ -19,7 +19,6 @@ public:
 	void Exit() override;
 	void Resume() override;
 
-
 private:
 	void checkCollision();
 	SDL_Texture* m_pPlayerText, *m_pEnemyText;

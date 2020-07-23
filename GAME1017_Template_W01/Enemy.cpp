@@ -7,6 +7,8 @@
 #include "LifeBar.h"
 #include "LevelManager.h"
 #define SPEED 2
+
+int Enemy::m_enemyNumber = 0;
 Enemy::Enemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstart, int smin, int smax, int nf)
 	:AnimatedSprite(s, d, r, t, sstart, smin, smax, nf) 
 {
@@ -19,7 +21,8 @@ Enemy::Enemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstar
 	destinationNumber = 0;
 	pathCounter = 0;
 	m_path = LevelManager::calculatePathTo(this, getDestinations()[destinationNumber]);
-	
+	m_enemyNumber++;
+	alife = true;
 
 }
 
@@ -166,5 +169,9 @@ void Enemy::HardCodedPatrol()
 
 void Enemy::Die()
 {
-	SoundManager::PlaySound("death", 0, -1);
+	if (alife) {
+		SoundManager::PlaySound("death", 0, -1);
+		m_enemyNumber--;
+		alife = false;
+	}
 }
