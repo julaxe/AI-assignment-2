@@ -42,6 +42,10 @@ void Enemy::update()
 		std::cout << "Player OUT of LOS" << std::endl;
 	}
 
+	if (getLife() <= 0) {
+		setState(DEATH);
+	}
+
 	switch (m_animationState)
 	{
 	case IDLE:

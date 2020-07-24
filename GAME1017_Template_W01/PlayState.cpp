@@ -119,10 +119,6 @@ void PlayState::Update()
 
 	DisplayManager::update(DisplayManager::EnemiesList());
 
-	
-	if (m_pEnemy->getLife() == 0) {
-		m_pEnemy->setState(DEATH);
-	}
 	DisplayManager::update(DisplayManager::AttackList());
 
 	checkCollision();
