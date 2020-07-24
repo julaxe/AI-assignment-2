@@ -1,8 +1,8 @@
 #include "LabelEnemiesAlive.h"
 #include "DisplayManager.h"
 
-void LabelEnemiesAlive::Update()
+void LabelEnemiesAlive::update()
 {
-	str = "Number of enemies: " + std::to_string(DisplayManager::EnemiesList().size());
+	str = "Enemies: " + std::to_string(DisplayManager::EnemiesList().size());
 	Label::SetText(str.c_str());
 }

@@ -1,6 +1,7 @@
 #include "LabelEnemiesKilled.h"
-
-/*void LabelEnemiesKilled::Update()
+#include "DisplayManager.h"
+void LabelEnemiesKilled::update()
 {
-
-}*/
+	str = "Kills: " + std::to_string(DisplayManager::getEnemiesKilled());
+	Label::SetText(str.c_str());
+}
