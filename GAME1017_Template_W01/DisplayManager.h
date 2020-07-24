@@ -47,7 +47,13 @@ struct DisplayManager {
 		listOfAttacks.erase(std::remove(listOfAttacks.begin(), listOfAttacks.end(), nullptr), listOfAttacks.end());
 		listOfAttacks.shrink_to_fit();
 	}
-	
+
+	static void deleteNullPtr(std::vector<Sprite*>& list)
+	{
+		list.erase(std::remove(list.begin(), list.end(), nullptr), list.end());
+		list.shrink_to_fit();
+	}
+
 private:
 	static std::vector<Label*> listLabels;
 	static std::vector<Sprite*> listOfAttacks;

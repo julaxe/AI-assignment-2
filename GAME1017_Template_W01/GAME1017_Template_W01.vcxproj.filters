@@ -193,6 +193,9 @@
     <Image Include="Img\PlayerSpritesheet.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Img\skeleton.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Dat\Level1.txt">

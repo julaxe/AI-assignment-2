@@ -21,6 +21,7 @@ public:
 
 private:
 	void checkCollision();
+	void deleteDeathEnemies();
 	SDL_Texture* m_pPlayerText, *m_pEnemyText;
 
 	//Player* m_pPlayer;

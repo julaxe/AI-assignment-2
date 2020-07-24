@@ -7,9 +7,9 @@
 #include "LifeBar.h"
 #include "LevelManager.h"
 #include "DisplayManager.h"
+#include "Engine.h"
 #define SPEED 2
 
-int Enemy::m_enemyNumber = 0;
 Enemy::Enemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstart, int smin, int smax, int nf)
 	:AnimatedSprite(s, d, r, t, sstart, smin, smax, nf) 
 {
@@ -22,9 +22,8 @@ Enemy::Enemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstar
 	destinationNumber = 0;
 	pathCounter = 0;
 	m_path = LevelManager::calculatePathTo(this, getDestinations()[destinationNumber]);
-	m_enemyNumber++;
-	alife = true;
-
+	m_alive = true;
+	deathTimer = 0;
 }
 
 void Enemy::update()
@@ -42,17 +41,21 @@ void Enemy::update()
 		std::cout << "Player OUT of LOS" << std::endl;
 	}
 
-	if (getLife() <= 0) {
-		setState(DEATH);
-	}
-
 	switch (m_animationState)
 	{
 	case IDLE:
+		if (getLife() <= 0) {
+			setState(DEATH);
+			SoundManager::PlaySound("death", 0, -1);
+		}
 		break;
 	case RUNNING:
 		
 		Patrol();
+		if (getLife() <= 0) {
+			setState(DEATH);
+			SoundManager::PlaySound("death", 0, -1);
+		}
 			
 		break;
 	case MELEE:
@@ -185,9 +188,24 @@ void Enemy::HardCodedPatrol()
 
 void Enemy::Die()
 {
-	if (alife) {
-		SoundManager::PlaySound("death", 0, -1);
-		m_enemyNumber--;
-		alife = false;
+	int frameRate = 5;
+	m_pText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/skeleton.png");
+	if (deathTimer == 0)
+	{
+		m_src = { 0,0,64,64 };
 	}
+	if (deathTimer % frameRate == 0)
+	{
+		m_src.x += 64;
+		if (m_src.x >= 64 * 3)
+		{
+			m_src.x = 0;
+			m_src.y += 64;
+			if (m_src.y >= 64 * 5)
+			{
+				m_alive = false;
+			}
+		}
+	}
+	deathTimer++;
 }

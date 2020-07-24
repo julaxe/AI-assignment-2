@@ -89,6 +89,7 @@ void PlayState::Render()
 	if (m_debugMode)
 	{
 		LevelManager::drawDebug();
+		
 		for (auto e : DisplayManager::EnemiesList())
 		{
 			e->drawLOS();
@@ -124,6 +125,8 @@ void PlayState::Update()
 	checkCollision();
 
 	DisplayManager::deleteAttacks(); // delete bullets that collided before.
+	deleteDeathEnemies();
+
 
 }
 
@@ -177,6 +180,19 @@ void PlayState::checkCollision()
 		}
 	}
 	
+}
+void PlayState::deleteDeathEnemies()
+{
+	for (int i= 0; i < DisplayManager::EnemiesList().size(); i++)
+	{
+		if (!dynamic_cast<Enemy*>(DisplayManager::EnemiesList()[i])->IsAlive())
+		{
+			delete DisplayManager::EnemiesList()[i];
+			DisplayManager::EnemiesList()[i] = nullptr;
+			//+1 counter enemies killed
+		}
+	}
+	DisplayManager::deleteNullPtr(DisplayManager::EnemiesList());
 }
 void PlayState::Enter()
 {

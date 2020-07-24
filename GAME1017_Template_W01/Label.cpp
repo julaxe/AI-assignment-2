@@ -24,8 +24,8 @@ void Label::Render()
 
 void Label::Update()
 {
-	str = "Number of enemies: " + std::to_string(Enemy::getEnemynumber());
-	Label::SetText(str.c_str());
+	//str = "Number of enemies: " + );
+	//Label::SetText(str.c_str());
 }
 
 void Label::SetText(const char* str)

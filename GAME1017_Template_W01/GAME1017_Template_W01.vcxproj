@@ -176,6 +176,7 @@
     <Image Include="Img\EnemySpriteSheet.png" />
     <Image Include="Img\play.png" />
     <Image Include="Img\PlayerSpritesheet.png" />
+    <Image Include="Img\skeleton.png" />
     <Image Include="Img\spiderMother.png" />
     <Image Include="Img\Tiles.png" />
   </ItemGroup>
