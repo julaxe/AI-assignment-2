@@ -16,11 +16,10 @@ public:
 	std::vector<PathConnection*>& getPath() { return m_path; }
 	std::vector<PathNode*> getDestinations() { return m_destinations; }
 	void setDestinations();
-<<<<<<< HEAD
 
-=======
+
 	bool IsAlive() { return m_alive; }
->>>>>>> b96610e32eff313582d8fc4973937138464f725b
+
 
 private:
 
@@ -35,9 +34,7 @@ private:
 	int deathTimer;
 	int destinationNumber;
 	int pathCounter;
-<<<<<<< HEAD
-	bool alife;
-=======
+
 	bool m_alive;
->>>>>>> b96610e32eff313582d8fc4973937138464f725b
+
 };

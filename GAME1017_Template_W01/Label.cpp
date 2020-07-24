@@ -24,12 +24,7 @@ void Label::Render()
 
 void Label::Update()
 {
-<<<<<<< HEAD
-	
-=======
-	//str = "Number of enemies: " + );
-	//Label::SetText(str.c_str());
->>>>>>> b96610e32eff313582d8fc4973937138464f725b
+
 }
 
 void Label::SetText(const char* str)

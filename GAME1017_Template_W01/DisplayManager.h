@@ -48,10 +48,8 @@ struct DisplayManager {
 		listOfAttacks.erase(std::remove(listOfAttacks.begin(), listOfAttacks.end(), nullptr), listOfAttacks.end());
 		listOfAttacks.shrink_to_fit();
 	}
-<<<<<<< HEAD
 	
 protected:
-=======
 
 	static void deleteNullPtr(std::vector<Sprite*>& list)
 	{
@@ -60,7 +58,7 @@ protected:
 	}
 
 private:
->>>>>>> b96610e32eff313582d8fc4973937138464f725b
+
 	static std::vector<Label*> listLabels;
 	static std::vector<Sprite*> listOfAttacks;
 	static std::vector<Sprite*> listOfEnemies;
