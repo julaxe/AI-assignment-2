@@ -1,5 +1,5 @@
 #include "Engine.h"
-#include "Enemy.h"
+#include "DisplayManager.h"
 #include "Label.h"
 #include "FontManager.h"
 #include <cstring>
@@ -24,8 +24,12 @@ void Label::Render()
 
 void Label::Update()
 {
-	str = "Number of enemies: " + std::to_string(Enemy::getEnemynumber());
-	Label::SetText(str.c_str());
+<<<<<<< HEAD
+	
+=======
+	//str = "Number of enemies: " + );
+	//Label::SetText(str.c_str());
+>>>>>>> b96610e32eff313582d8fc4973937138464f725b
 }
 
 void Label::SetText(const char* str)

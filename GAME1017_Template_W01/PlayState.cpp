@@ -13,6 +13,8 @@
 #include "DisplayManager.h"
 #include <string>
 #include "CollisionManager.h"
+#include "LabelEnemiesAlive.h"
+#include "LabelEnemiesKilled.h"
 
 std::vector<Label*> DisplayManager::listLabels;
 std::vector<Sprite*> DisplayManager::listOfAttacks;
@@ -89,6 +91,7 @@ void PlayState::Render()
 	if (m_debugMode)
 	{
 		LevelManager::drawDebug();
+		
 		for (auto e : DisplayManager::EnemiesList())
 		{
 			e->drawLOS();
@@ -124,6 +127,8 @@ void PlayState::Update()
 	checkCollision();
 
 	DisplayManager::deleteAttacks(); // delete bullets that collided before.
+	deleteDeathEnemies();
+
 
 }
 
@@ -178,6 +183,19 @@ void PlayState::checkCollision()
 	}
 	
 }
+void PlayState::deleteDeathEnemies()
+{
+	for (int i= 0; i < DisplayManager::EnemiesList().size(); i++)
+	{
+		if (!dynamic_cast<Enemy*>(DisplayManager::EnemiesList()[i])->IsAlive())
+		{
+			delete DisplayManager::EnemiesList()[i];
+			DisplayManager::EnemiesList()[i] = nullptr;
+			//+1 counter enemies killed
+		}
+	}
+	DisplayManager::deleteNullPtr(DisplayManager::EnemiesList());
+}
 void PlayState::Enter()
 {
 
@@ -215,7 +233,8 @@ void PlayState::Enter()
 	DisplayManager::LabelList().push_back(new Label("font", 10, 90, "Press 'Righ Click' Change the goal position in debug mode", { 255,255,255,255 }));
 	DisplayManager::LabelList().push_back(new Label("font", 10, 110, "Press 'Left Click' Change the player position in debug mode", { 255,255,255,255 }));*/
 	
-	DisplayManager::LabelList().push_back(new Label("font", 10, 10, "Number of enemies: ", {255,255,255,255}));
+	DisplayManager::LabelList().push_back(new LabelEnemiesAlive("font", 10, 10, "Number of enemies: ", {255,255,255,255}));
+	DisplayManager::LabelList().push_back(new LabelEnemiesKilled("font", 10, 10, "Number of enemies: ", { 255,255,255,255 }));
 }
 
 

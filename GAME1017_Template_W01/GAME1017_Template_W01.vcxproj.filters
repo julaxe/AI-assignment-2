@@ -93,6 +93,12 @@
     <ClCompile Include="Sprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LabelEnemiesKilled.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LabelEnemiesAlive.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -176,6 +182,12 @@
     <ClInclude Include="MeleeAtk.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LabelEnemiesAlive.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LabelEnemiesKilled.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Img\play.png">
@@ -191,6 +203,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Img\PlayerSpritesheet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Img\skeleton.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

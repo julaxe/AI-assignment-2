@@ -2,6 +2,7 @@
 #include <vector>
 #include <map>
 #include "Label.h"
+#include "LabelEnemiesAlive.h"
 #include "Sprite.h"
 struct DisplayManager {
 	static std::vector<Label*>& LabelList() { return listLabels; }
@@ -47,8 +48,19 @@ struct DisplayManager {
 		listOfAttacks.erase(std::remove(listOfAttacks.begin(), listOfAttacks.end(), nullptr), listOfAttacks.end());
 		listOfAttacks.shrink_to_fit();
 	}
+<<<<<<< HEAD
 	
+protected:
+=======
+
+	static void deleteNullPtr(std::vector<Sprite*>& list)
+	{
+		list.erase(std::remove(list.begin(), list.end(), nullptr), list.end());
+		list.shrink_to_fit();
+	}
+
 private:
+>>>>>>> b96610e32eff313582d8fc4973937138464f725b
 	static std::vector<Label*> listLabels;
 	static std::vector<Sprite*> listOfAttacks;
 	static std::vector<Sprite*> listOfEnemies;
