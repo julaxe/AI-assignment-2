@@ -99,6 +99,9 @@
     <ClCompile Include="LabelEnemiesAlive.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DestructableObj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -186,6 +189,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LabelEnemiesKilled.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DestructableObj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

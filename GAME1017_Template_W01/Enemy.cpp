@@ -192,9 +192,9 @@ void Enemy::HardCodedPatrol()
 
 void Enemy::Die()
 {
-	if (alife) {
+	if (m_alive) {
 		SoundManager::PlaySound("death", 0, -1);
-		alife = false;
+		m_alive = false;
 	}
 	int frameRate = 5;
 	m_pText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/skeleton.png");
