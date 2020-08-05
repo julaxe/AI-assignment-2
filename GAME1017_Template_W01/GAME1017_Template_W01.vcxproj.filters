@@ -117,6 +117,9 @@
     <ClCompile Include="DestructableObj.cpp">
       <Filter>SpriteObjects</Filter>
     </ClCompile>
+    <ClCompile Include="RangeEnemy.cpp">
+      <Filter>SpriteObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionManager.h">
@@ -208,6 +211,9 @@
     </ClInclude>
     <ClInclude Include="DestructableObj.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RangeEnemy.h">
+      <Filter>SpriteObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

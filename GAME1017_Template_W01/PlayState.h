@@ -22,7 +22,7 @@ public:
 private:
 	void checkCollision();
 	void deleteDeathEnemies();
-	SDL_Texture* m_pPlayerText, *m_pEnemyText, *m_barrelText;
+	SDL_Texture* m_pPlayerText, *m_pEnemyText, *m_barrelText, * m_pRangeEnemyText;
 
 	//Player* m_pPlayer;
 	bool m_debugMode = false;

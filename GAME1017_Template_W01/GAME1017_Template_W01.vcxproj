@@ -135,6 +135,7 @@
     <ClCompile Include="PlayButton.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayState.cpp" />
+    <ClCompile Include="RangeEnemy.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="StartScene.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="PlayButton.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayState.h" />
+    <ClInclude Include="RangeEnemy.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="StartScene.h" />
     <ClInclude Include="StateManager.h" />
