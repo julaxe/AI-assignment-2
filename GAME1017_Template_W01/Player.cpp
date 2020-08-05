@@ -29,6 +29,8 @@ void Player::update()
 {
 	updatePosition();
 	updateCollisionBox(40.0f, 40.0f);
+	updateAngleWithMouse();
+
 	if (updateLOS(DisplayManager::EnemiesList()) && !LOSalert)
 	{
 		LOSalert = true;
@@ -117,8 +119,7 @@ void Player::update()
 void Player::Render()
 {
 
-	SDL_Point mousePos = EVMA::GetMousePos();
-	m_angle = MAMA::AngleBetweenPoints(mousePos.y - (m_dst.y + m_dst.h * 0.5), mousePos.x - (m_dst.x + m_dst.w * 0.5));
+	
 	SDL_RenderCopyExF(m_pRend, m_pText, GetSrcP(), GetDstP(), m_angle * 180 / M_PI , 0, SDL_FLIP_NONE);
 
 	for (auto s : UIList)

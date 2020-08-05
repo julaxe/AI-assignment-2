@@ -8,7 +8,7 @@ Bullet::Bullet(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int ang
 {
 	m_running = running;
 	m_angle = angle * M_PI / 180;
-	m_velocity = { 4.0f,4.0f,0,0 };
+	m_velocity = { 8.0f,8.0f,0,0 };
 	timer = 0;
 	m_muzzle = false;
 }
@@ -56,8 +56,13 @@ void Bullet::Render()
 void Bullet::Execute(SDL_FRect PlayerDst, int angle)
 {
 	//math to put the bullet in front of the gun.
-	float PosX = (PlayerDst.x + PlayerDst.w * 0.5) + 0.5*PlayerDst.w*cos(angle*M_PI/180) +  0.2*PlayerDst.w*cos((angle+90)*M_PI/180);
-	float PosY = (PlayerDst.y + PlayerDst.h * 0.5) + 0.5*PlayerDst.h*sin(angle * M_PI / 180) + 0.2 * PlayerDst.h * sin((angle + 90) * M_PI / 180); ;
+	int angleToGun = 20;
+	float centerX = (PlayerDst.x + PlayerDst.w * 0.5);
+	float centerY = (PlayerDst.y + PlayerDst.h * 0.5);
+	float frontX = 0.7 * PlayerDst.w * cos((angle+ angleToGun) * M_PI / 180);
+	float frontY = 0.7 * PlayerDst.w * sin((angle + angleToGun) * M_PI / 180);
+	float PosX = centerX + frontX;
+	float PosY = centerY + frontY;
 	
 	m_dst.x = PosX;
 	m_dst.y = PosY;

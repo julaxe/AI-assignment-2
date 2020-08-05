@@ -1,5 +1,6 @@
 #include "Sprite.h"
 #include "CollisionManager.h"
+#include "EventManager.h"
 
 void Sprite::Move(int speedX, int speedY)
 {
@@ -7,6 +8,12 @@ void Sprite::Move(int speedX, int speedY)
 	m_collisionBox.y += speedY;
 	m_dst.x += speedX;
 	m_collisionBox.x += speedX;
+}
+
+void Sprite::updateAngleWithMouse()
+{
+	SDL_Point mousePos = EVMA::GetMousePos();
+	m_angle = MAMA::AngleBetweenPoints(mousePos.y - (m_dst.y + m_dst.h * 0.5), mousePos.x - (m_dst.x + m_dst.w * 0.5));
 }
 
 void Sprite::drawLOS()
