@@ -20,11 +20,13 @@ public:
 	void SetH(double h) { m_h = h; } // Setter.
 	bool updateLOSwithPlayer();
 	bool inLOS() { return m_inLOS; }
+	bool& isObstacle() { return m_isObstacle; }
 private:
 	double m_h; // Heuristic cost for node.
 	std::vector<PathConnection*> m_connections;
 	SDL_Point LOSendPosition;
 	bool m_inLOS;
+	bool m_isObstacle;
 };
 
 class PathConnection
