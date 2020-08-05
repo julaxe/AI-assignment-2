@@ -20,6 +20,7 @@ std::vector<Label*> DisplayManager::listLabels;
 std::vector<Sprite*> DisplayManager::listOfAttacks;
 std::vector<Sprite*> DisplayManager::listOfEnemies;
 std::vector<Sprite*> DisplayManager::listOfPlayer;
+int DisplayManager::enemiesKilled = 0;
 
 PlayState::PlayState()
 {
@@ -57,6 +58,7 @@ void PlayState::HandleEvents()
 		for (auto e : DisplayManager::EnemiesList())
 		{
 			e->getLife() -= 10;
+			SoundManager::PlaySound("grunting", 0, -1);
 		}
 	}
 	if(EVMA::KeyPressed(SDL_SCANCODE_P)) {
@@ -114,9 +116,7 @@ void PlayState::Render()
 void PlayState::Update()
 {
 	
-	for (auto a : DisplayManager::LabelList()) {
-		a->Update();
-	}
+	DisplayManager::update(DisplayManager::LabelList());
 
 	DisplayManager::update(DisplayManager::PlayerList());
 
@@ -191,7 +191,7 @@ void PlayState::deleteDeathEnemies()
 		{
 			delete DisplayManager::EnemiesList()[i];
 			DisplayManager::EnemiesList()[i] = nullptr;
-			//+1 counter enemies killed
+			DisplayManager::getEnemiesKilled() += 1;
 		}
 	}
 	DisplayManager::deleteNullPtr(DisplayManager::EnemiesList());
@@ -226,15 +226,10 @@ void PlayState::Enter()
 	SOMA::PlayMusic("Background", -1, 0);
 	SOMA::SetAllVolume(20);
 	//Labels
-	/*DisplayManager::LabelList().push_back(new Label("font", 10, 10, "Press 'H' to Debug mode", { 255,255,255,255 }));
-	DisplayManager::LabelList().push_back(new Label("font", 10, 30, "Press 'WASD' to Move around mode", { 255,255,255,255 }));
-	DisplayManager::LabelList().push_back(new Label("font", 10, 50, "Press 'K' to deal damage to the enemy", { 255,255,255,255 }));
-	DisplayManager::LabelList().push_back(new Label("font", 10, 70, "Press 'M' to move to the target", { 255,255,255,255 }));
-	DisplayManager::LabelList().push_back(new Label("font", 10, 90, "Press 'Righ Click' Change the goal position in debug mode", { 255,255,255,255 }));
-	DisplayManager::LabelList().push_back(new Label("font", 10, 110, "Press 'Left Click' Change the player position in debug mode", { 255,255,255,255 }));*/
 	
-	DisplayManager::LabelList().push_back(new LabelEnemiesAlive("font", 10, 10, "Number of enemies: ", {255,255,255,255}));
-	DisplayManager::LabelList().push_back(new LabelEnemiesKilled("font", 10, 10, "Number of enemies: ", { 255,255,255,255 }));
+	
+	DisplayManager::LabelList().push_back(new LabelEnemiesAlive("font", 10, 10, "Enemies: ", {255,255,255,255}));
+	DisplayManager::LabelList().push_back(new LabelEnemiesKilled("font", 300, 10, "Kills: ", { 255,255,255,255 }));
 }
 
 
