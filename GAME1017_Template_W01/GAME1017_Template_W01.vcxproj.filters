@@ -114,6 +114,9 @@
     <ClCompile Include="Pathing.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
+    <ClCompile Include="DestructableObj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionManager.h">
@@ -202,6 +205,9 @@
     </ClInclude>
     <ClInclude Include="Pathing.h">
       <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="DestructableObj.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
