@@ -8,7 +8,6 @@
 #include "PathManager.h"
 #include "DebugManager.h"
 #include "SoundManager.h"
-#include "Enemy.h"
 #include "LevelManager.h"
 #include "DisplayManager.h"
 #include <string>
@@ -20,6 +19,7 @@ std::vector<Label*> DisplayManager::listLabels;
 std::vector<Sprite*> DisplayManager::listOfAttacks;
 std::vector<Sprite*> DisplayManager::listOfEnemies;
 std::vector<Sprite*> DisplayManager::listOfPlayer;
+std::vector<Sprite*> DisplayManager::listOfDestructable;
 int DisplayManager::enemiesKilled = 0;
 
 PlayState::PlayState()
@@ -111,6 +111,8 @@ void PlayState::Render()
 	DisplayManager::draw(DisplayManager::EnemiesList());
 	DisplayManager::draw(DisplayManager::LabelList());
 	DisplayManager::draw(DisplayManager::AttackList());
+	DisplayManager::draw(DisplayManager::DestructableObj());
+	
 }
 
 void PlayState::Update()
@@ -124,11 +126,13 @@ void PlayState::Update()
 
 	DisplayManager::update(DisplayManager::AttackList());
 
+	DisplayManager::update(DisplayManager::DestructableObj());
+
 	checkCollision();
 
 	DisplayManager::deleteAttacks(); // delete bullets that collided before.
+	DisplayManager::deleteBarrels();
 	deleteDeathEnemies();
-
 
 }
 
@@ -153,6 +157,24 @@ void PlayState::checkCollision()
 				{
 					e->getLife() -= 20;
 					SoundManager::PlaySound("grunting", 0, -1);
+					a->isRunning() = false;
+				}
+
+			}
+		}
+	}
+	for (auto a : DisplayManager::AttackList())
+	{
+		if (a->isRunning())
+		{
+			for (auto e : DisplayManager::DestructableObj())
+			{
+				if (COMA::AABBCheck(*(a->GetCollisionBox()), *(e->GetCollisionBox())))
+				{
+					e->getNumofHits()++;
+					if (e->getNumofHits() == 4) {
+						e->isRunning() = false;
+					}
 					a->isRunning() = false;
 				}
 
@@ -206,11 +228,11 @@ void PlayState::Enter()
 
 	m_pPlayerText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/PlayerSpritesheet.png");
 	m_pEnemyText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/EnemySpriteSheet.png");
+	m_barrelText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/Barrel.png");
 	
 	DisplayManager::PlayerList().push_back(new Player({ 0 , 0 , 253,216 }, { (float)(16) * 32, (float)(14) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pPlayerText, 0, 0, 19, 4));
 	DisplayManager::EnemiesList().push_back(new Enemy({ 0 , 0 , 291,226 }, { (float)(16) * 32, (float)(4) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pEnemyText, 0, 0, 19, 4));
-
-	
+	DisplayManager::DestructableObj().push_back(new DestructableObj({ 0,0,51,60 }, { 192,320,51,60 }, Engine::Instance().GetRenderer(), m_barrelText, 0));
 
 	//Music
 	SOMA::Load("Aud/Background.mp3", "Background", SOUND_MUSIC);

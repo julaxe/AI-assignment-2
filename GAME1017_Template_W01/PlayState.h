@@ -3,6 +3,7 @@
 #include "Tile.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "DestructableObj.h"
 #include <array>
 #include <map>
 
@@ -22,10 +23,11 @@ public:
 private:
 	void checkCollision();
 	void deleteDeathEnemies();
-	SDL_Texture* m_pPlayerText, *m_pEnemyText;
+	SDL_Texture* m_pPlayerText, *m_pEnemyText, *m_barrelText;
 
 	//Player* m_pPlayer;
 	bool m_debugMode = false;
 	int m_pathCounter = 0;
 	bool RadiusCollisionCheck;
+	
 };

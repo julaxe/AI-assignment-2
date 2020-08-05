@@ -12,9 +12,9 @@ public:
 	~DestructableObj();
 	void Render() override;
 	void update() override;
+	
 private:
 	void updateCollision();
-	int m_numOfHits;
 	SDL_Rect src;
 	SDL_FRect dst;
 };

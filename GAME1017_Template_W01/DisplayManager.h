@@ -9,7 +9,7 @@ struct DisplayManager {
 	static std::vector<Sprite*>& AttackList() { return listOfAttacks; }
 	static std::vector<Sprite*>& EnemiesList() { return listOfEnemies; }
 	static std::vector<Sprite*>& PlayerList() { return listOfPlayer; }
-
+	static std::vector<Sprite*>& DestructableObj() { return listOfDestructable; }
 	template<typename T>
 	static void draw(std::vector<T*> list)
 	{
@@ -48,6 +48,19 @@ struct DisplayManager {
 		listOfAttacks.erase(std::remove(listOfAttacks.begin(), listOfAttacks.end(), nullptr), listOfAttacks.end());
 		listOfAttacks.shrink_to_fit();
 	}
+	static void deleteBarrels()
+	{
+		for (int i = 0; i < listOfDestructable.size(); i++)
+		{
+			if (!listOfDestructable[i]->isRunning())
+			{
+				delete listOfDestructable[i];
+				listOfDestructable[i] = nullptr;
+			}
+		}
+		listOfDestructable.erase(std::remove(listOfDestructable.begin(), listOfDestructable.end(), nullptr), listOfDestructable.end());
+		listOfDestructable.shrink_to_fit();
+	}
 
 	static void deleteNullPtr(std::vector<Sprite*>& list)
 	{
@@ -63,4 +76,5 @@ private:
 	static std::vector<Sprite*> listOfAttacks;
 	static std::vector<Sprite*> listOfEnemies;
 	static std::vector<Sprite*> listOfPlayer;
+	static std::vector<Sprite*> listOfDestructable;
 };
