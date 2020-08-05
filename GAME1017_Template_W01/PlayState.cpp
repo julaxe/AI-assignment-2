@@ -14,6 +14,7 @@
 #include "CollisionManager.h"
 #include "LabelEnemiesAlive.h"
 #include "LabelEnemiesKilled.h"
+#include "RangeEnemy.h"
 
 std::vector<Label*> DisplayManager::listLabels;
 std::vector<Sprite*> DisplayManager::listOfAttacks;
@@ -227,12 +228,15 @@ void PlayState::Enter()
 	LevelManager::loadTiles();
 	LevelManager::loadLevel();
 
+
 	m_pPlayerText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/PlayerSpritesheet.png");
 	m_pEnemyText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/EnemySpriteSheet.png");
 	m_barrelText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/Barrel.png");
-	
+	m_pRangeEnemyText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/EnemyRange.png");
+
 	DisplayManager::PlayerList().push_back(new Player({ 0 , 0 , 253,216 }, { (float)(16) * 32, (float)(14) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pPlayerText, 0, 0, 19, 4));
 	DisplayManager::EnemiesList().push_back(new Enemy({ 0 , 0 , 291,226 }, { (float)(16) * 32, (float)(4) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pEnemyText, 0, 0, 19, 4));
+	DisplayManager::EnemiesList().push_back(new RangeEnemy({0,412,313,207}, { (float)(14) * 32, (float)(8) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pRangeEnemyText, 0, 0, 19, 4));
 	DisplayManager::DestructableObj().push_back(new DestructableObj({ 0,0,51,60 }, { 192,320,51,60 }, Engine::Instance().GetRenderer(), m_barrelText, 0));
 
 	//Music
