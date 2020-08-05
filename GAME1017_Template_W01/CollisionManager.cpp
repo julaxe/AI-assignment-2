@@ -99,7 +99,7 @@ bool CollisionManager::AABBCollisionWithTilesUpdating(Sprite* obj1, std::vector<
 	return false;
 		
 }
-bool CollisionManager::AABBCollisionWithTiles(Sprite* obj1, std::vector<Tile*> obstacles)
+bool CollisionManager::AABBCollisionWithTiles(Sprite* obj1, std::vector<Sprite*> obstacles)
 {
 	for (auto obj2 : obstacles)
 	{
@@ -150,6 +150,13 @@ bool CollisionManager::CheckLOS(Sprite* obj1, std::vector<Sprite*> list /*= enem
 		{
 			return false;
 		}
+		for (auto d : DisplayManager::DestructableObjList())
+		{
+			if (LineRectCheck(obj1->getLOSendPosition(), *(d->GetCollisionBox())))
+			{
+				return false;
+			}
+		}
 		for (auto e : list)
 		{
 			if (LineRectCheck(obj1->getLOSendPosition(), *(e->GetCollisionBox())))
@@ -174,6 +181,13 @@ bool CollisionManager::CheckLOS(PathNode* obj1, std::vector<Sprite*> list /*= en
 		if (LevelManager::m_level[dy / LevelManager::SIZEOFTILES][dx / LevelManager::SIZEOFTILES]->IsObstacle())
 		{
 			return false;
+		}
+		for (auto d : DisplayManager::DestructableObjList())
+		{
+			if (LineRectCheck(obj1->getLOSendPosition(), *(d->GetCollisionBox())))
+			{
+				return false;
+			}
 		}
 		for (auto e : list)
 		{

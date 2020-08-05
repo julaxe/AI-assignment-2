@@ -15,6 +15,8 @@
 #include "LabelEnemiesAlive.h"
 #include "LabelEnemiesKilled.h"
 #include "RangeEnemy.h"
+#include "DestructableObj.h"
+
 
 std::vector<Label*> DisplayManager::listLabels;
 std::vector<Sprite*> DisplayManager::listOfAttacks;
@@ -106,13 +108,14 @@ void PlayState::Render()
 		DisplayManager::drawDebug(DisplayManager::AttackList());
 		DisplayManager::drawDebug(DisplayManager::PlayerList());
 		DisplayManager::drawDebug(DisplayManager::EnemiesList());
+		DisplayManager::drawDebug(DisplayManager::DestructableObjList());
 	}
 	
 	DisplayManager::draw(DisplayManager::PlayerList());
 	DisplayManager::draw(DisplayManager::EnemiesList());
 	DisplayManager::draw(DisplayManager::LabelList());
 	DisplayManager::draw(DisplayManager::AttackList());
-	DisplayManager::draw(DisplayManager::DestructableObj());
+	DisplayManager::draw(DisplayManager::DestructableObjList());
 	
 }
 
@@ -128,7 +131,7 @@ void PlayState::Update()
 
 	DisplayManager::update(DisplayManager::AttackList());
 
-	DisplayManager::update(DisplayManager::DestructableObj());
+	DisplayManager::update(DisplayManager::DestructableObjList());
 
 	checkCollision();
 
@@ -163,19 +166,13 @@ void PlayState::checkCollision()
 				}
 
 			}
-		}
-	}
-	for (auto a : DisplayManager::AttackList())
-	{
-		if (a->isRunning())
-		{
-			for (auto e : DisplayManager::DestructableObj())
+			for (auto d : DisplayManager::DestructableObjList())
 			{
-				if (COMA::AABBCheck(*(a->GetCollisionBox()), *(e->GetCollisionBox())))
+				if (COMA::AABBCheck(*(a->GetCollisionBox()), *(d->GetCollisionBox())))
 				{
-					e->getNumofHits()++;
-					if (e->getNumofHits() == 4) {
-						e->isRunning() = false;
+					d->getNumofHits()++;
+					if (d->getNumofHits() == 4) {
+						d->isRunning() = false;
 					}
 					a->isRunning() = false;
 				}
@@ -183,6 +180,7 @@ void PlayState::checkCollision()
 			}
 		}
 	}
+	
 	if (!RadiusCollisionCheck)
 	{
 		for (auto e : DisplayManager::EnemiesList())
@@ -237,7 +235,7 @@ void PlayState::Enter()
 	DisplayManager::PlayerList().push_back(new Player({ 0 , 0 , 253,216 }, { (float)(16) * 32, (float)(14) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pPlayerText, 0, 0, 19, 4));
 	DisplayManager::EnemiesList().push_back(new Enemy({ 0 , 0 , 291,226 }, { (float)(16) * 32, (float)(4) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pEnemyText, 0, 0, 19, 4));
 	DisplayManager::EnemiesList().push_back(new RangeEnemy({0,412,313,207}, { (float)(14) * 32, (float)(8) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pRangeEnemyText, 0, 0, 19, 4));
-	DisplayManager::DestructableObj().push_back(new DestructableObj({ 0,0,51,60 }, { 192,320,51,60 }, Engine::Instance().GetRenderer(), m_barrelText, 0));
+	DisplayManager::DestructableObjList().push_back(new DestructableObj({ 0,0,51,60 }, { 192,320,51,60 }, Engine::Instance().GetRenderer(), m_barrelText, 0));
 
 	//Music
 	SOMA::Load("Aud/Background.mp3", "Background", SOUND_MUSIC);

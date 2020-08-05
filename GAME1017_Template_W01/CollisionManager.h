@@ -19,7 +19,7 @@ public:
 
 	static bool AABBCollisionWithTilesUpdating(Sprite* obj1, std::vector<Tile*> obstacles);
 
-	static bool AABBCollisionWithTiles(Sprite* obj1, std::vector<Tile*> obstacles);
+	static bool AABBCollisionWithTiles(Sprite* obj1, std::vector<Sprite*> obstacles);
 
 	static bool LineRectCheck(const SDL_Point obj1, const SDL_FRect obj2);
 	

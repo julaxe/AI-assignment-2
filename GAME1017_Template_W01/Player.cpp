@@ -10,7 +10,7 @@
 #include "SoundManager.h"
 #include "DisplayManager.h"
 
-#define SPEED 2
+#define SPEED 2.0f
 
 
 Player::Player(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstart, int smin, int smax, int nf)
@@ -62,32 +62,22 @@ void Player::update()
 			break; // Skip movement parsing below.
 		}
 		SOMA::PlaySound("running", 0, 0);
-		//m_dst.x = m_collisionBox.x;
-		//m_dst.y = m_collisionBox.y;
+
 		if (EVMA::KeyHeld(SDL_SCANCODE_W))
 		{
-			Move(0, -SPEED);
-			if (COMA::AABBCollisionWithTiles(this, LevelManager::m_obstacles))
-				Move(0, SPEED);
-				
+			Move(0, -SPEED);	
 		}
 		else if (EVMA::KeyHeld(SDL_SCANCODE_S))
 		{
 			Move(0, SPEED);
-			if (COMA::AABBCollisionWithTiles(this, LevelManager::m_obstacles))
-				Move(0, -SPEED);
 		}
 		if (EVMA::KeyHeld(SDL_SCANCODE_A))
 		{
 			Move(-SPEED, 0);
-			if (COMA::AABBCollisionWithTiles(this, LevelManager::m_obstacles))
-				Move(SPEED, 0);
 		}
 		else if (EVMA::KeyHeld(SDL_SCANCODE_D))
 		{
 			Move(SPEED, 0);
-			if (COMA::AABBCollisionWithTiles(this, LevelManager::m_obstacles))
-				Move(-SPEED, 0);
 		}
 		
 		break;
@@ -118,8 +108,6 @@ void Player::update()
 
 void Player::Render()
 {
-
-	
 	SDL_RenderCopyExF(m_pRend, m_pText, GetSrcP(), GetDstP(), m_angle * 180 / M_PI , 0, SDL_FLIP_NONE);
 
 	for (auto s : UIList)
@@ -158,7 +146,7 @@ void Player::setAnimationState(AnimationState state)
 		m_dst.h = 216 * m_scale;
 		m_spriteMax = 19;
 		m_sprite = 0;
-		m_frameMax = 4;
+		m_frameMax = 2;
 		break;
 	case RUNNING:
 		m_src = { 0 , 474,260,222 };

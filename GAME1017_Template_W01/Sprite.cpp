@@ -2,13 +2,16 @@
 #include "CollisionManager.h"
 #include "EventManager.h"
 #include "DisplayManager.h"
+#include "LevelManager.h"
 
-void Sprite::Move(int speedX, int speedY)
+void Sprite::Move(float speedX, float speedY)
 {
 	m_dst.y += speedY;
-	m_collisionBox.y += speedY;
 	m_dst.x += speedX;
+	m_collisionBox.y += speedY;
 	m_collisionBox.x += speedX;
+	if (COMA::AABBCollisionWithTiles(this, LevelManager::m_obstacles) || COMA::AABBCollisionWithTiles(this, DisplayManager::DestructableObjList()))
+		Move(-speedX, -speedY);
 }
 
 void Sprite::updateAngleWithMouse()

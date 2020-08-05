@@ -42,7 +42,7 @@ public: // Inherited and public.
 	void updateCollisionBox(float width, float heigth) 
 		{ m_collisionBox = { (float)m_dst.x + (float)(m_dst.w * 0.5 - width*0.5), (float)m_dst.y + (float)(m_dst.h * 0.5 - heigth*0.5), width, heigth }; }
 	void updatePosition() { m_pos = { (float)(m_dst.x + m_dst.w * 0.5),(float)( m_dst.y + m_dst.h * 0.5) }; }
-	void Move(int speedX, int speedY);
+	void Move(float speedX, float speedY);
 	void updateAngleWithMouse();
 
 	void drawLOS();
