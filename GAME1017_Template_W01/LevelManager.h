@@ -8,6 +8,7 @@ struct LevelManager {
 	static void loadLevel();
 	static void drawLevel();
 	static void drawDebug();
+	static void updateNodes();
 	static void clean();
 	static std::vector<PathConnection*> calculatePathTo(AnimatedSprite* obj, PathNode* goal);
 
@@ -19,6 +20,7 @@ struct LevelManager {
 	static std::ifstream inFile;
 	static std::array<std::array<Tile*, COLS>, ROWS> m_level;
 	static std::vector<Tile*> m_obstacles;
+	static std::vector<Tile*> m_nodes;
 	static std::map<char, Tile*> m_tiles;
 
 };

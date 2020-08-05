@@ -14,12 +14,17 @@ public:
 	void Update();
 	void AddConnection(PathConnection* c);
 	std::vector<PathConnection*>& GetConnections();
+	SDL_Point& getLOSendPosition() { return LOSendPosition; }
 	SDL_Point Pt() { return { x, y }; }
 	double H() { return m_h; } // Getter.
 	void SetH(double h) { m_h = h; } // Setter.
+	bool updateLOSwithPlayer();
+	bool inLOS() { return m_inLOS; }
 private:
 	double m_h; // Heuristic cost for node.
 	std::vector<PathConnection*> m_connections;
+	SDL_Point LOSendPosition;
+	bool m_inLOS;
 };
 
 class PathConnection

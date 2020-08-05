@@ -21,12 +21,12 @@ public:
 	bool IsAlive() { return m_alive; }
 
 
-private:
+protected:
 
 	void Seeking(int x, int y);
 	void Patrol();
 	void Die();
-	void HardCodedPatrol();
+
 	std::vector<UIElements*> UIList;
 	std::vector<PathConnection*> m_path;
 	std::vector<PathNode*> m_destinations;

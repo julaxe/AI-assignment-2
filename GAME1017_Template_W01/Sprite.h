@@ -16,7 +16,7 @@ class Sprite // Inline class.
 {
 public: // Inherited and public.
 	Sprite(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t)
-		:m_src(s), m_dst(d), m_pRend(r), m_pText(t), m_angle(0.0), m_collisionBox(d), LOSalert(false)
+		:m_src(s), m_dst(d), m_pRend(r), m_pText(t), m_angle(0.0), m_collisionBox(d), LOSalert(false), m_inLOS(false)
 	{
 		updatePosition();
 	}
@@ -34,6 +34,7 @@ public: // Inherited and public.
 	void SetAngle(double a) { m_angle = a; }
 	virtual int& getLife() { return m_Life; };
 	bool& isRunning() { return m_running; }
+	bool& inLOS() { return m_inLOS; }
 
 
 	void updateCollisionBox(float width, float heigth) 
@@ -45,6 +46,7 @@ public: // Inherited and public.
 	void drawLOS();
 	void drawRadius(int radius);
 	bool updateLOS(std::vector<Sprite*> list);
+	bool updateLOSToPlayer();
 
 protected: // Private BUT inherited.
 	double m_angle;
@@ -60,6 +62,7 @@ protected: // Private BUT inherited.
 
 	int m_Life;
 	bool m_running;
+	bool m_inLOS;
 
 	bool LOSalert;
 private: // Private NOT inherited.

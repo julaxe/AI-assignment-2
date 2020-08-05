@@ -185,21 +185,6 @@ void Enemy::Seeking(int x, int y)
 }
 
 
-void Enemy::HardCodedPatrol()
-{
-	if (!COMA::AABBCollisionWithTiles(this, LevelManager::m_obstacles))
-	{
-		m_dst.x = m_collisionBox.x;
-		m_dst.y = m_collisionBox.y;
-		m_collisionBox.x += m_velocity.x * cos(m_angle * M_PI / 180);
-		m_collisionBox.y += m_velocity.y * sin(m_angle * M_PI / 180);
-	}
-	else
-	{
-		m_angle += 5;
-	}
-}
-
 void Enemy::Die()
 {
 	if (m_alive) {

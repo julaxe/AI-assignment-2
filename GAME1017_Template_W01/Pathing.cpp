@@ -1,6 +1,8 @@
 #include "Pathing.h"
 #include "EventManager.h"
 #include "MathManager.h"
+#include "DisplayManager.h"
+#include "CollisionManager.h"
 
 PathNode::PathNode(int x, int y)
 {
@@ -40,6 +42,22 @@ void PathNode::AddConnection(PathConnection* c)
 std::vector<PathConnection*>& PathNode::GetConnections()
 {
 	return m_connections;
+}
+
+bool PathNode::updateLOSwithPlayer()
+{
+		double dy = DisplayManager::PlayerList()[0]->getPosition().y - y;
+		double dx = DisplayManager::PlayerList()[0]->getPosition().x - x;
+		double angle = MAMA::AngleBetweenPoints(dy, dx);
+		SDL_Point direction = { cos(angle) * 2000, sin(angle) * 2000 };
+		LOSendPosition = { x + direction.x, y + direction.y };
+		if (COMA::CheckLOS(this, DisplayManager::PlayerList()))
+		{
+			m_inLOS = true;
+			return true;
+		}
+		m_inLOS = false;
+		return false;
 }
 
 PathConnection::PathConnection(PathNode* f, PathNode* t, double cost) : m_cost(cost), m_pFromNode(f), m_pToNode(t) {}

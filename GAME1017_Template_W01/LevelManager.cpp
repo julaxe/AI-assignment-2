@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "MathManager.h"
 #include "PathManager.h"
+#include "DisplayManager.h"
 
 //init of static variables
 float LevelManager::SIZEOFTILES = 64;
@@ -12,6 +13,7 @@ SDL_Texture* LevelManager::m_pTileText;
 std::ifstream LevelManager::inFile;
 std::array<std::array<Tile*, COLS>, ROWS> LevelManager::m_level;
 std::vector<Tile*> LevelManager::m_obstacles;
+std::vector<Tile*> LevelManager::m_nodes;
 std::map<char, Tile*> LevelManager::m_tiles;
 
 
@@ -58,6 +60,10 @@ void LevelManager::loadLevel()
 				{
 					m_obstacles.push_back(m_level[row][col]);
 				}
+				else
+				{
+					m_nodes.push_back(m_level[row][col]);
+				}
 			}
 		}
 	}
@@ -100,15 +106,25 @@ void LevelManager::drawLevel()
 
 void LevelManager::drawDebug()
 {
-	for (int row = 0; row < ROWS; row++)
+	
+	for (int i = 0; i < m_nodes.size(); i++)
 	{
-		for (int col = 0; col < COLS; col++)
+		if (m_nodes[i]->Node()->inLOS())
 		{
-			if (!m_level[row][col]->IsObstacle())
-				DEMA::DrawRect({ (float)m_level[row][col]->Node()->Pt().x , (float)m_level[row][col]->Node()->Pt().y, 5,5 }, { 1.0f,0.5f,0,1 });
-			else
-				DEMA::DrawRect(*(m_level[row][col]->GetDstP()), { 1.0f,1.0f,1.0f,1.0f });
+			DEMA::DrawRect({ (float)m_nodes[i]->Node()->Pt().x , (float)m_nodes[i]->Node()->Pt().y, 5,5 }, { 1.0f,0.0f,0.0f,1.0f });
 		}
+		else
+		{
+			DEMA::DrawRect({ (float)m_nodes[i]->Node()->Pt().x , (float)m_nodes[i]->Node()->Pt().y, 5,5 }, { 1.0f,1.0f,1.0f,1.0f});
+		}
+	}
+}
+
+void LevelManager::updateNodes()
+{
+	for (int i = 0; i < m_nodes.size(); i++) 
+	{
+		m_nodes[i]->Node()->updateLOSwithPlayer();
 	}
 }
 

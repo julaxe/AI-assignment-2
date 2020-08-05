@@ -115,7 +115,8 @@ void PlayState::Render()
 
 void PlayState::Update()
 {
-	
+	LevelManager::updateNodes();
+
 	DisplayManager::update(DisplayManager::LabelList());
 
 	DisplayManager::update(DisplayManager::PlayerList());
