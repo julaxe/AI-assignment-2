@@ -115,7 +115,7 @@
       <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="DestructableObj.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>SpriteObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

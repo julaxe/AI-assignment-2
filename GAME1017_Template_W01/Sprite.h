@@ -32,9 +32,11 @@ public: // Inherited and public.
 	double& GetAngle() { return m_angle; }
 	SDL_FRect& GetVelocity() { return m_velocity; }
 	void SetAngle(double a) { m_angle = a; }
-	virtual int& getLife() { return m_Life; };
+	virtual int& getLife() { return m_Life; }
 	bool& isRunning() { return m_running; }
 	bool& inLOS() { return m_inLOS; }
+	virtual int& getNumofHits() { return m_numOfHits; }
+
 
 
 	void updateCollisionBox(float width, float heigth) 
@@ -61,6 +63,7 @@ protected: // Private BUT inherited.
 	SDL_Point LOSendPosition;
 
 	int m_Life;
+	int m_numOfHits;
 	bool m_running;
 	bool m_inLOS;
 
