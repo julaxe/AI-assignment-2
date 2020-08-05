@@ -170,13 +170,13 @@ void Enemy::Seeking(int x, int y)
 	float currentVelocityX = m_velocity.x * cos(currentAngle);
 	float currentVelocityY = m_velocity.y * sin(currentAngle);
 
-	double SeekForce = 0.2;
+	double SeekForce = 0.1;
 	float steeringVelX = MAMA::LerpD(currentVelocityX, desiredVelocityX, SeekForce);
 	float steeringVelY = MAMA::LerpD(currentVelocityY, desiredVelocityY, SeekForce);
 
 	m_angle = MAMA::LerpRad(currentAngle, desiredAngle, SeekForce);
-	m_dst.x += steeringVelX;
-	m_dst.y += steeringVelY;
+
+	Move(steeringVelX, steeringVelY);
 	
 	if (abs(dx) < 10 && abs(dy) < 10)
 	{
@@ -187,10 +187,6 @@ void Enemy::Seeking(int x, int y)
 
 void Enemy::Die()
 {
-	if (m_alive) {
-		SoundManager::PlaySound("death", 0, -1);
-		m_alive = false;
-	}
 	int frameRate = 5;
 	m_pText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/skeleton.png");
 	if (deathTimer == 0)

@@ -9,7 +9,7 @@ struct DisplayManager {
 	static std::vector<Sprite*>& AttackList() { return listOfAttacks; }
 	static std::vector<Sprite*>& EnemiesList() { return listOfEnemies; }
 	static std::vector<Sprite*>& PlayerList() { return listOfPlayer; }
-	static std::vector<Sprite*>& DestructableObj() { return listOfDestructable; }
+	static std::vector<Sprite*>& DestructableObjList() { return listOfDestructable; }
 	template<typename T>
 	static void draw(std::vector<T*> list)
 	{

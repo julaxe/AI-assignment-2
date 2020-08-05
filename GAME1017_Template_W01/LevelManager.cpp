@@ -12,7 +12,7 @@ bool LevelManager::m_hEuclid = true;
 SDL_Texture* LevelManager::m_pTileText;
 std::ifstream LevelManager::inFile;
 std::array<std::array<Tile*, COLS>, ROWS> LevelManager::m_level;
-std::vector<Tile*> LevelManager::m_obstacles;
+std::vector<Sprite*> LevelManager::m_obstacles;
 std::vector<Tile*> LevelManager::m_nodes;
 std::map<char, Tile*> LevelManager::m_tiles;
 
