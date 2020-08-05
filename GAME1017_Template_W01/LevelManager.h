@@ -9,6 +9,7 @@ struct LevelManager {
 	static void drawLevel();
 	static void drawDebug();
 	static void updateNodes();
+	static void addConnectionNodes();
 	static void clean();
 	static std::vector<PathConnection*> calculatePathTo(AnimatedSprite* obj, PathNode* goal);
 

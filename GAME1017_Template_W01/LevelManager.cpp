@@ -70,27 +70,6 @@ void LevelManager::loadLevel()
 	}
 	inFile.close();
 	// Now build the graph from ALL the non-obstacle and non-hazard tiles. Only N-E-W-S compass points.
-	for (int row = 0; row < ROWS; row++)
-	{
-		for (int col = 0; col < COLS; col++)
-		{
-			if (m_level[row][col]->Node() == nullptr) // Now we can test for nullptr.
-				continue; // An obstacle or hazard tile has no connections.
-			// Make valid connections. Inside map and a valid tile.
-			if (row - 1 != -1 && m_level[row - 1][col]->Node() != nullptr) // Tile above. 
-				m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row - 1][col]->Node(),
-					MAMA::Distance(m_level[row][col]->Node()->x, m_level[row - 1][col]->Node()->x, m_level[row][col]->Node()->y, m_level[row - 1][col]->Node()->y)));
-			if (row + 1 != ROWS && m_level[row + 1][col]->Node() != nullptr) // Tile below.
-				m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row + 1][col]->Node(),
-					MAMA::Distance(m_level[row][col]->Node()->x, m_level[row + 1][col]->Node()->x, m_level[row][col]->Node()->y, m_level[row + 1][col]->Node()->y)));
-			if (col - 1 != -1 && m_level[row][col - 1]->Node() != nullptr) // Tile to Left.
-				m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row][col - 1]->Node(),
-					MAMA::Distance(m_level[row][col]->Node()->x, m_level[row][col - 1]->Node()->x, m_level[row][col]->Node()->y, m_level[row][col - 1]->Node()->y)));
-			if (col + 1 != COLS && m_level[row][col + 1]->Node() != nullptr) // Tile to right.
-				m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row][col + 1]->Node(),
-					MAMA::Distance(m_level[row][col]->Node()->x, m_level[row][col + 1]->Node()->x, m_level[row][col]->Node()->y, m_level[row][col + 1]->Node()->y)));
-		}
-	}
 }
 
 void LevelManager::drawLevel()
@@ -123,19 +102,66 @@ void LevelManager::drawDebug()
 
 void LevelManager::updateNodes()
 {
-	for (int i = 0; i < m_nodes.size(); i++) 
+	for (int row = 0; row < ROWS; row++)
 	{
-		m_nodes[i]->Node()->updateLOSwithPlayer();
-		for (auto o : DisplayManager::DestructableObjList())
+		for (int col = 0; col < COLS; col++)
 		{
-			if (COMA::AABBCheck({ (float)m_nodes[i]->Node()->Pt().x , (float)m_nodes[i]->Node()->Pt().y, 5,5 }, *(o->GetCollisionBox())))
+			if (m_level[row][col]->Node() == nullptr) // Now we can test for nullptr.
+				continue; // An obstacle or hazard tile has no connections.
+			m_level[row][col]->Node()->updateLOSwithPlayer();
+			bool colliding = false;
+			for (auto o : DisplayManager::DestructableObjList())
 			{
-				m_nodes[i]->Node()->isObstacle() = true;
+				if (COMA::AABBCheck2({ (float)(m_level[row][col]->Node()->Pt().x), (float)(m_level[row][col]->Node()->Pt().y), 5.0f,5.0f }, *(o->GetCollisionBox())))
+				{
+					m_level[row][col]->Node()->isObstacle() = true;
+					colliding = true;
+				}
 			}
-			else
+			if (m_level[row][col]->Node()->isObstacle())
 			{
-				m_nodes[i]->Node()->isObstacle() = false;
+				if (colliding == false)
+				{
+					m_level[row][col]->Node()->isObstacle() = false;
+					if (row - 1 != -1 && m_level[row - 1][col]->Node() != nullptr) // Tile above. 
+						m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row - 1][col]->Node(),
+							MAMA::Distance(m_level[row][col]->Node()->x, m_level[row - 1][col]->Node()->x, m_level[row][col]->Node()->y, m_level[row - 1][col]->Node()->y)));
+					if (row + 1 != ROWS && m_level[row + 1][col]->Node() != nullptr) // Tile below.
+						m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row + 1][col]->Node(),
+							MAMA::Distance(m_level[row][col]->Node()->x, m_level[row + 1][col]->Node()->x, m_level[row][col]->Node()->y, m_level[row + 1][col]->Node()->y)));
+					if (col - 1 != -1 && m_level[row][col - 1]->Node() != nullptr) // Tile to Left.
+						m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row][col - 1]->Node(),
+							MAMA::Distance(m_level[row][col]->Node()->x, m_level[row][col - 1]->Node()->x, m_level[row][col]->Node()->y, m_level[row][col - 1]->Node()->y)));
+					if (col + 1 != COLS && m_level[row][col + 1]->Node() != nullptr) // Tile to right.
+						m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row][col + 1]->Node(),
+							MAMA::Distance(m_level[row][col]->Node()->x, m_level[row][col + 1]->Node()->x, m_level[row][col]->Node()->y, m_level[row][col + 1]->Node()->y)));
+				}
 			}
+		}
+	}
+}
+
+void LevelManager::addConnectionNodes()
+{
+	for (int row = 0; row < ROWS; row++)
+	{
+		for (int col = 0; col < COLS; col++)
+		{
+			if (m_level[row][col]->Node() == nullptr || m_level[row][col]->Node()->isObstacle()) // Now we can test for nullptr.
+				continue; // An obstacle or hazard tile has no connections.
+			// Make valid connections. Inside map and a valid tile.
+			if (row - 1 != -1 && m_level[row - 1][col]->Node() != nullptr) // Tile above. 
+				m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row - 1][col]->Node(),
+					MAMA::Distance(m_level[row][col]->Node()->x, m_level[row - 1][col]->Node()->x, m_level[row][col]->Node()->y, m_level[row - 1][col]->Node()->y)));
+			if (row + 1 != ROWS && m_level[row + 1][col]->Node() != nullptr) // Tile below.
+				m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row + 1][col]->Node(),
+					MAMA::Distance(m_level[row][col]->Node()->x, m_level[row + 1][col]->Node()->x, m_level[row][col]->Node()->y, m_level[row + 1][col]->Node()->y)));
+			if (col - 1 != -1 && m_level[row][col - 1]->Node() != nullptr) // Tile to Left.
+				m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row][col - 1]->Node(),
+					MAMA::Distance(m_level[row][col]->Node()->x, m_level[row][col - 1]->Node()->x, m_level[row][col]->Node()->y, m_level[row][col - 1]->Node()->y)));
+			if (col + 1 != COLS && m_level[row][col + 1]->Node() != nullptr) // Tile to right.
+				m_level[row][col]->Node()->AddConnection(new PathConnection(m_level[row][col]->Node(), m_level[row][col + 1]->Node(),
+					MAMA::Distance(m_level[row][col]->Node()->x, m_level[row][col + 1]->Node()->x, m_level[row][col]->Node()->y, m_level[row][col + 1]->Node()->y)));
 		}
 	}
 }
@@ -163,7 +189,7 @@ std::vector<PathConnection*> LevelManager::calculatePathTo(AnimatedSprite* obj, 
 	{ // Update each node with the selected heuristic and set the text for debug mode.
 		for (int col = 0; col < COLS; col++)
 		{
-			if (m_level[row][col]->Node() == nullptr || m_level[row][col]->Node()->isObstacle())
+			if (m_level[row][col]->Node() == nullptr)
 				continue;
 			if (m_hEuclid)
 				m_level[row][col]->Node()->SetH(PAMA::HEuclid(m_level[row][col]->Node(), m_level[(int)(goal->Pt().y / SIZEOFTILES)][(int)(goal->Pt().x / SIZEOFTILES)]->Node()));

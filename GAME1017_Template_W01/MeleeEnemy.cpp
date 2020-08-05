@@ -1,16 +1,16 @@
-#include "RangeEnemy.h"
+#include "MeleeEnemy.h"
 #include "LifeBar.h"
 #include "SoundManager.h"
 #include"DisplayManager.h"
 #define SPEED 2
 
-RangeEnemy::RangeEnemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstart, int smin, int smax, int nf)
+MeleeEnemy::MeleeEnemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstart, int smin, int smax, int nf)
 	:Enemy(s, d, r, t, sstart, smin, smax, nf)
 {
 	setDestinations();
 	m_path = LevelManager::calculatePathTo(this, getDestinations()[destinationNumber]);
 }
-void RangeEnemy::update()
+void MeleeEnemy::update()
 {
 	updatePosition();
 	updateCollisionBox(40.0f, 40.0f);
@@ -58,37 +58,38 @@ void RangeEnemy::update()
 	}
 }
 
-void RangeEnemy::setState(AnimationState state)
+void MeleeEnemy::setState(AnimationState state)
 {
 	m_animationState = state;
 	switch (m_animationState)
 	{
 	case IDLE:
-		m_src = { 0 , 412 , 313,206 };
+		m_src = { 0 , 0 , 291,226 };
 		m_spriteMax = 19;
 		m_sprite = 0;
 		break;
 	case RUNNING:
-		m_src = { 0 , 0,313,206 };
+		m_src = { 0 , 528,281,221 };
 		m_spriteMax = 19;
 		m_sprite = 0;
 		break;
 	case MELEE:
+		m_src = { 0,226,331,302 };
+		m_spriteMax = 14;
+		m_sprite = 0;
 		break;
 	case SHOOTING:
-		m_src = { 0 ,206,316,206 };
-		m_spriteMax = 3;
-		m_sprite = 0;
+
 		break;
 	default:
 		break;
 	}
 }
 
-void RangeEnemy::setDestinations()
+void MeleeEnemy::setDestinations()
 {
-	m_destinations.push_back(LevelManager::m_level[4][6]->Node());
-	m_destinations.push_back(LevelManager::m_level[7][6]->Node());
-	m_destinations.push_back(LevelManager::m_level[7][9]->Node());
-	m_destinations.push_back(LevelManager::m_level[4][9]->Node());
+	m_destinations.push_back(LevelManager::m_level[2][2]->Node());
+	m_destinations.push_back(LevelManager::m_level[8][2]->Node());
+	m_destinations.push_back(LevelManager::m_level[8][8]->Node());
+	m_destinations.push_back(LevelManager::m_level[2][8]->Node());
 }

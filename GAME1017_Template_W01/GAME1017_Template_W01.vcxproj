@@ -130,6 +130,7 @@
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="LifeBar.cpp" />
     <ClCompile Include="MeleeAtk.cpp" />
+    <ClCompile Include="MeleeEnemy.cpp" />
     <ClCompile Include="Pathing.cpp" />
     <ClCompile Include="PathManager.cpp" />
     <ClCompile Include="PlayButton.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="LifeBar.h" />
     <ClInclude Include="MeleeAtk.h" />
+    <ClInclude Include="MeleeEnemy.h" />
     <ClInclude Include="Pathing.h" />
     <ClInclude Include="PathManager.h" />
     <ClInclude Include="PlayButton.h" />

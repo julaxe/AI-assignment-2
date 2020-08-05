@@ -8,14 +8,14 @@ class Enemy : public AnimatedSprite
 {
 public:
 	Enemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstart, int smin, int smax, int nf);
-	virtual void update() override;
+	virtual void update() = 0;
 	virtual void Render() override;
-	virtual void setState(AnimationState);
+	virtual void setState(AnimationState) = 0;
 	virtual AnimationState getState();
 	virtual void drawPath();
 	virtual std::vector<PathConnection*>& getPath() { return m_path; }
 	virtual std::vector<PathNode*> getDestinations() { return m_destinations; }
-	virtual void setDestinations();
+	virtual void setDestinations() = 0;
 
 
 	virtual bool IsAlive() { return m_alive; }

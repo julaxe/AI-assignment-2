@@ -17,66 +17,13 @@ Enemy::Enemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstar
 	m_angle = 0;
 	m_Life = 100;
 	UIList.push_back(new LifeBar);
-
-	setDestinations();
 	destinationNumber = 0;
 	pathCounter = 0;
-	m_path = LevelManager::calculatePathTo(this, getDestinations()[destinationNumber]);
-
-
 
 	m_alive = true;
 	deathTimer = 0;
-
 }
 
-void Enemy::update()
-{
-	updatePosition();
-	updateCollisionBox(40.0f, 40.0f);
-	if (updateLOS(DisplayManager::PlayerList()) && !LOSalert)
-	{
-		LOSalert = true;
-		std::cout << "Player in LOS" << std::endl;
-	}
-	else if (!updateLOS(DisplayManager::PlayerList()) && LOSalert)
-	{
-		LOSalert = false;
-		std::cout << "Player OUT of LOS" << std::endl;
-	}
-
-	switch (m_animationState)
-	{
-	case IDLE:
-		if (getLife() <= 0) {
-			setState(DEATH);
-			SoundManager::PlaySound("death", 0, -1);
-		}
-		break;
-	case RUNNING:
-		
-		Patrol();
-		if (getLife() <= 0) {
-			setState(DEATH);
-			SoundManager::PlaySound("death", 0, -1);
-		}
-			
-		break;
-	case MELEE:
-		break;
-	case SHOOTING:
-		break;
-	case DEATH:
-		Die();
-		break;
-	default:
-		break;
-	}
-	for (auto s : UIList)
-	{
-		s->update(this);
-	}
-}
 
 void Enemy::Render()
 {
@@ -84,34 +31,6 @@ void Enemy::Render()
 	for (auto s : UIList)
 	{
 		s->draw();
-	}
-}
-
-void Enemy::setState(AnimationState state)
-{
-	m_animationState = state;
-	switch (m_animationState)
-	{
-	case IDLE:
-		m_src = { 0 , 0 , 291,226 };
-		m_spriteMax = 19;
-		m_sprite = 0;
-		break;
-	case RUNNING:
-		m_src = { 0 , 528,281,221 };
-		m_spriteMax = 19;
-		m_sprite = 0;
-		break;
-	case MELEE:
-		m_src = { 0,226,331,302 };
-		m_spriteMax = 14;
-		m_sprite = 0;
-		break;
-	case SHOOTING:
-		
-		break;
-	default:
-		break;
 	}
 }
 
@@ -129,13 +48,6 @@ void Enemy::drawPath()
 	}
 }
 
-void Enemy::setDestinations()
-{
-	m_destinations.push_back(LevelManager::m_level[2][2]->Node());
-	m_destinations.push_back(LevelManager::m_level[8][2]->Node());
-	m_destinations.push_back(LevelManager::m_level[8][8]->Node());
-	m_destinations.push_back(LevelManager::m_level[2][8]->Node());
-}
 
 void Enemy::Patrol()
 {
@@ -170,7 +82,7 @@ void Enemy::Seeking(int x, int y)
 	float currentVelocityX = m_velocity.x * cos(currentAngle);
 	float currentVelocityY = m_velocity.y * sin(currentAngle);
 
-	double SeekForce = 0.1;
+	double SeekForce = 0.2;
 	float steeringVelX = MAMA::LerpD(currentVelocityX, desiredVelocityX, SeekForce);
 	float steeringVelY = MAMA::LerpD(currentVelocityY, desiredVelocityY, SeekForce);
 

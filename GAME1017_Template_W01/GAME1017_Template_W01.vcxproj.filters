@@ -120,6 +120,9 @@
     <ClCompile Include="RangeEnemy.cpp">
       <Filter>SpriteObjects</Filter>
     </ClCompile>
+    <ClCompile Include="MeleeEnemy.cpp">
+      <Filter>SpriteObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionManager.h">
@@ -213,6 +216,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RangeEnemy.h">
+      <Filter>SpriteObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="MeleeEnemy.h">
       <Filter>SpriteObjects</Filter>
     </ClInclude>
   </ItemGroup>

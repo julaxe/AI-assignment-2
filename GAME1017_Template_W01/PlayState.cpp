@@ -15,6 +15,7 @@
 #include "LabelEnemiesAlive.h"
 #include "LabelEnemiesKilled.h"
 #include "RangeEnemy.h"
+#include "MeleeEnemy.h"
 #include "DestructableObj.h"
 
 
@@ -233,11 +234,17 @@ void PlayState::Enter()
 	m_pRangeEnemyText = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/EnemyRange.png");
 
 	DisplayManager::PlayerList().push_back(new Player({ 0 , 0 , 253,216 }, { (float)(16) * 32, (float)(14) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pPlayerText, 0, 0, 19, 4));
-	DisplayManager::EnemiesList().push_back(new Enemy({ 0 , 0 , 291,226 }, { (float)(16) * 32, (float)(4) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pEnemyText, 0, 0, 19, 4));
-	DisplayManager::EnemiesList().push_back(new RangeEnemy({0,412,313,207}, { (float)(14) * 32, (float)(8) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pRangeEnemyText, 0, 0, 19, 4));
+	
 	DisplayManager::DestructableObjList().push_back(new DestructableObj({ 0,0,51,60 }, { 192,320,51,60 }, Engine::Instance().GetRenderer(), m_barrelText, 0));
 	DisplayManager::DestructableObjList().push_back(new DestructableObj({ 0,0,51,60 }, { 130,320,51,60 }, Engine::Instance().GetRenderer(), m_barrelText, 0));
 
+	//connections after the destructable objects.
+	LevelManager::updateNodes();
+	LevelManager::addConnectionNodes();
+
+	//Enemies after connections made.
+	DisplayManager::EnemiesList().push_back(new MeleeEnemy({ 0 , 0 , 291,226 }, { (float)(16) * 32, (float)(4) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pEnemyText, 0, 0, 19, 4));
+	DisplayManager::EnemiesList().push_back(new RangeEnemy({ 0,412,313,207 }, { (float)(14) * 32, (float)(8) * 32, 64, 64 }, Engine::Instance().GetRenderer(), m_pRangeEnemyText, 0, 0, 19, 4));
 	//Music
 	SOMA::Load("Aud/Background.mp3", "Background", SOUND_MUSIC);
 	//Sound Effects 

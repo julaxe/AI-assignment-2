@@ -11,6 +11,7 @@ class CollisionManager
 {
 public:
 	static bool AABBCheck(const SDL_FRect& object1, const SDL_FRect& object2);
+	static bool AABBCheck2(const SDL_FRect& object1, const SDL_FRect& object2);
 
 	static bool CircleCircleCheck(const SDL_FPoint object1, const SDL_FPoint object2, const double r1, const double r2 = 0.0);
 	static bool CircleAABBCheck(const SDL_FPoint object1, const double r, const SDL_FRect& object2);

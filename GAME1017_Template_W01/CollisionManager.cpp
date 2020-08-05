@@ -14,6 +14,30 @@ bool CollisionManager::AABBCheck(const SDL_FRect& object1, const SDL_FRect& obje
 	return SDL_HasIntersection(&temp1, &temp2);
 }
 
+bool CollisionManager::AABBCheck2(const SDL_FRect& object1, const SDL_FRect& object2)
+{
+	// prepare relevant variables
+	SDL_Point p1 = { object1.x, object1.y }; //collision box to the top corner
+	SDL_Point p2 = { object2.x, object2.y };
+	const float p1Width = object1.w;
+	const float p1Height = object1.h;
+	const float p2Width = object2.w;
+	const float p2Height = object2.h;
+
+	if (
+		p1.x < p2.x + p2Width &&
+		p1.x + p1Width > p2.x &&
+		p1.y < p2.y + p2Height &&
+		p1.y + p1Height > p2.y
+		)
+	{
+
+		return true;
+	}
+	return false;
+}
+
+
 bool CollisionManager::CircleCircleCheck(const SDL_FPoint object1, const SDL_FPoint object2, const double r1, const double r2)
 {
 	return (MAMA::Distance((double)object1.x, (double)object2.x, (double)object1.y, (double)object2.y) < (r1+r2));
