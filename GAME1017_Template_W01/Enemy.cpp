@@ -160,13 +160,23 @@ void Enemy::Patrol()
 
 void Enemy::Seeking(int x, int y)
 {
-	int dy = y - m_dst.y - m_dst.h * 0.5;
-	int dx = x - m_dst.x - m_dst.w * 0.5;
-	
-	m_angle = MAMA::AngleBetweenPoints(dy, dx);
-	
-	m_dst.x += m_velocity.x * cos(m_angle);
-	m_dst.y += m_velocity.y * sin(m_angle);
+	double dy = y - m_dst.y - m_dst.h * 0.5;
+	double dx = x - m_dst.x - m_dst.w * 0.5;
+	double desiredAngle = MAMA::AngleBetweenPoints(dy, dx);
+	float desiredVelocityX = m_velocity.x * cos(desiredAngle);
+	float desiredVelocityY = m_velocity.y * sin(desiredAngle);
+
+	double currentAngle = m_angle;
+	float currentVelocityX = m_velocity.x * cos(currentAngle);
+	float currentVelocityY = m_velocity.y * sin(currentAngle);
+
+	double SeekForce = 0.2;
+	float steeringVelX = MAMA::LerpD(currentVelocityX, desiredVelocityX, SeekForce);
+	float steeringVelY = MAMA::LerpD(currentVelocityY, desiredVelocityY, SeekForce);
+
+	m_angle = MAMA::LerpRad(currentAngle, desiredAngle, SeekForce);
+	m_dst.x += steeringVelX;
+	m_dst.y += steeringVelY;
 	
 	if (abs(dx) < 10 && abs(dy) < 10)
 	{
