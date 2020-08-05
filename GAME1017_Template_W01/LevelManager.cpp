@@ -4,6 +4,7 @@
 #include "MathManager.h"
 #include "PathManager.h"
 #include "DisplayManager.h"
+#include "CollisionManager.h"
 
 //init of static variables
 float LevelManager::SIZEOFTILES = 64;
@@ -115,7 +116,7 @@ void LevelManager::drawDebug()
 		}
 		else
 		{
-			DEMA::DrawRect({ (float)m_nodes[i]->Node()->Pt().x , (float)m_nodes[i]->Node()->Pt().y, 5,5 }, { 1.0f,1.0f,1.0f,1.0f});
+			DEMA::DrawRect({ (float)m_nodes[i]->Node()->Pt().x , (float)m_nodes[i]->Node()->Pt().y, 5,5 }, { 1.0f,1.0f,1.0f,1.0f });
 		}
 	}
 }
@@ -125,6 +126,17 @@ void LevelManager::updateNodes()
 	for (int i = 0; i < m_nodes.size(); i++) 
 	{
 		m_nodes[i]->Node()->updateLOSwithPlayer();
+		for (auto o : DisplayManager::DestructableObjList())
+		{
+			if (COMA::AABBCheck({ (float)m_nodes[i]->Node()->Pt().x , (float)m_nodes[i]->Node()->Pt().y, 5,5 }, *(o->GetCollisionBox())))
+			{
+				m_nodes[i]->Node()->isObstacle() = true;
+			}
+			else
+			{
+				m_nodes[i]->Node()->isObstacle() = false;
+			}
+		}
 	}
 }
 
@@ -151,7 +163,7 @@ std::vector<PathConnection*> LevelManager::calculatePathTo(AnimatedSprite* obj, 
 	{ // Update each node with the selected heuristic and set the text for debug mode.
 		for (int col = 0; col < COLS; col++)
 		{
-			if (m_level[row][col]->Node() == nullptr)
+			if (m_level[row][col]->Node() == nullptr || m_level[row][col]->Node()->isObstacle())
 				continue;
 			if (m_hEuclid)
 				m_level[row][col]->Node()->SetH(PAMA::HEuclid(m_level[row][col]->Node(), m_level[(int)(goal->Pt().y / SIZEOFTILES)][(int)(goal->Pt().x / SIZEOFTILES)]->Node()));
