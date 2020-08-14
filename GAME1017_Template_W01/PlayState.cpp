@@ -69,7 +69,7 @@ void PlayState::HandleEvents()
 		for (auto e : DisplayManager::EnemiesList())
 		{
 			if (dynamic_cast<Enemy*>(e)->getState() == IDLE)
-				dynamic_cast<Enemy*>(e)->setState(RUNNING);
+				dynamic_cast<Enemy*>(e)->setState(PATROL);
 			else
 				dynamic_cast<Enemy*>(e)->setState(IDLE);
 		}
@@ -178,29 +178,6 @@ void PlayState::checkCollision()
 					a->isRunning() = false;
 				}
 
-			}
-		}
-	}
-	
-	if (!RadiusCollisionCheck)
-	{
-		for (auto e : DisplayManager::EnemiesList())
-		{
-			if (COMA::CircleCircleCheck(e->getPosition(), DisplayManager::PlayerList()[0]->getPosition(), 200, 20) )
-			{
-				RadiusCollisionCheck = true;
-				std::cout << "Radius COLLISION!" << std::endl;
-			}
-		}
-	}
-	else
-	{
-		for (auto e : DisplayManager::EnemiesList())
-		{
-			if (!COMA::CircleCircleCheck(e->getPosition(), DisplayManager::PlayerList()[0]->getPosition(), 200, 20))
-			{
-				RadiusCollisionCheck = false;
-				std::cout << "No Radius COLLISION!" << std::endl;
 			}
 		}
 	}

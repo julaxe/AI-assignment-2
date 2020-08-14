@@ -1,5 +1,6 @@
 #pragma once
 #include "Enemy.h"
+#include "DecisionTree.h"
 class MeleeEnemy : public Enemy
 {
 public:
@@ -9,4 +10,11 @@ public:
 	void setDestinations() override;
 
 private:
+	bool closeCombatDistance();
+	void MeleeAttack();
+	void buildTree();
+	void buildMoveToLOSTree();
+	DecisionTree* m_MeleeTree;
+	DecisionTree* m_MoveToLOSTree;
+	
 };

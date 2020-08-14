@@ -25,6 +25,7 @@ Enemy::Enemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstar
 }
 
 
+
 void Enemy::Render()
 {
 	SDL_RenderCopyExF(m_pRend, m_pText, GetSrcP(), GetDstP(), m_angle*180/M_PI, 0, SDL_FLIP_NONE);
@@ -51,13 +52,12 @@ void Enemy::drawPath()
 
 void Enemy::Patrol()
 {
-
-	
-	Seeking(m_path[pathCounter]->GetToNode()->Pt().x, m_path[pathCounter]->GetToNode()->Pt().y);
-	
-	if (pathCounter > m_path.size() - 1)
+	if (pathCounter < m_path.size())
 	{
-		pathCounter = 0;
+		Seeking(m_path[pathCounter]->GetToNode()->Pt().x, m_path[pathCounter]->GetToNode()->Pt().y);
+	}
+	else
+	{
 		destinationNumber++;
 
 		if (destinationNumber > getDestinations().size() - 1)
@@ -65,9 +65,8 @@ void Enemy::Patrol()
 			destinationNumber = 0;
 		}
 		m_path = LevelManager::calculatePathTo(this, getDestinations()[destinationNumber]);
+		pathCounter = 0;
 	}
-
-
 }
 
 void Enemy::Seeking(int x, int y)
@@ -90,10 +89,44 @@ void Enemy::Seeking(int x, int y)
 
 	Move(steeringVelX, steeringVelY);
 	
-	if (abs(dx) < 10 && abs(dy) < 10)
+	if (abs(dx) < 2 && abs(dy) < 2)
 	{
 		pathCounter++;
 	}
+}
+
+bool Enemy::MoveToLOS()
+{
+	//buildPathToLOS();
+	if (pathCounter < m_path.size())
+	{
+		int x = m_path[pathCounter]->GetToNode()->Pt().x;
+		int y = m_path[pathCounter]->GetToNode()->Pt().y;
+		Seeking(x,y);
+		return false;
+	}
+	return true;
+}
+
+bool Enemy::LookPlayer()
+{
+	double dy = DisplayManager::PlayerList()[0]->getPosition().y - m_dst.y - m_dst.h * 0.5;
+	double dx = DisplayManager::PlayerList()[0]->getPosition().x - m_dst.x - m_dst.w * 0.5;
+	double desiredAngle = MAMA::AngleBetweenPoints(dy, dx);
+	float desiredVelocityX = m_velocity.x * cos(desiredAngle);
+	float desiredVelocityY = m_velocity.y * sin(desiredAngle);
+
+	double currentAngle = m_angle;
+	float currentVelocityX = m_velocity.x * cos(currentAngle);
+	float currentVelocityY = m_velocity.y * sin(currentAngle);
+
+	double SeekForce = 0.2;
+	float steeringVelX = MAMA::LerpD(currentVelocityX, desiredVelocityX, SeekForce);
+	float steeringVelY = MAMA::LerpD(currentVelocityY, desiredVelocityY, SeekForce);
+
+	m_angle = MAMA::LerpRad(currentAngle, desiredAngle, SeekForce);
+
+	return false;
 }
 
 
@@ -119,4 +152,65 @@ void Enemy::Die()
 		}
 	}
 	deathTimer++;
+}
+
+void Enemy::MoveToPlayer()
+{
+	Seeking(DisplayManager::PlayerList()[0]->getPosition().x, DisplayManager::PlayerList()[0]->getPosition().y);
+}
+
+void Enemy::buildPathToLOS()
+{
+	m_path.clear();
+	m_destLOS.clear();
+	Tile* path = nullptr;
+	float distance = 1000;
+	for (auto n : LevelManager::m_nodes)
+	{
+		if (n->Node()->inLOS())
+		{
+			int x1 = getPosition().x;
+			int x2 = n->Node()->Pt().x;
+			int y1 = getPosition().y;
+			int y2 = n->Node()->Pt().y;
+			int newDistance = MAMA::Distance(x1, x2, y1, y2);
+			if (newDistance < distance)
+			{
+				distance = newDistance;
+				path = n;
+			}
+		}
+	}
+	if(path != nullptr)
+		m_destLOS.push_back(path->Node());
+	if (m_destLOS.size() > 0)
+	{
+		m_path = LevelManager::calculatePathTo(this, m_destLOS[0]);
+		pathCounter = 0;
+	}
+
+	
+}
+
+void Enemy::FleeFromPlayer()
+{	
+	float x = DisplayManager::PlayerList()[0]->getPosition().x;
+	float y = DisplayManager::PlayerList()[0]->getPosition().y;
+	double dy = y - m_dst.y - m_dst.h * 0.5;
+	double dx = x - m_dst.x - m_dst.w * 0.5;
+	double desiredAngle = -MAMA::AngleBetweenPoints(dy, dx);
+	float desiredVelocityX = m_velocity.x * cos(desiredAngle);
+	float desiredVelocityY = m_velocity.y * sin(desiredAngle);
+
+	double currentAngle = m_angle;
+	float currentVelocityX = m_velocity.x * cos(currentAngle);
+	float currentVelocityY = m_velocity.y * sin(currentAngle);
+
+	double SeekForce = 0.2;
+	float steeringVelX = MAMA::LerpD(currentVelocityX, desiredVelocityX, SeekForce);
+	float steeringVelY = MAMA::LerpD(currentVelocityY, desiredVelocityY, SeekForce);
+
+	m_angle = MAMA::LerpRad(currentAngle, desiredAngle, SeekForce);
+
+	Move(steeringVelX, steeringVelY);
 }

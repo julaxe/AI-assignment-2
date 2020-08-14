@@ -34,7 +34,7 @@ void DebugManager::DrawRay(const SDL_Point start, const double angle, const doub
 	//std::cout << start.x << ',' << start.y << '|' << start.x+dX << ',' << start.y+dY << std::endl;
 	//DrawLine({(int)start.x, (int)start.y}, { (int)(start.x + dX), (int)(start.y + dY) }, col);
 }
-void DebugManager::DrawCircle(int32_t centreX, int32_t centreY, int32_t radius)
+void DebugManager::DrawCircle(int32_t centreX, int32_t centreY, int32_t radius, const SDL_Color col)
 {
     const int32_t diameter = (radius * 2);
 
@@ -43,6 +43,8 @@ void DebugManager::DrawCircle(int32_t centreX, int32_t centreY, int32_t radius)
     int32_t tx = 1;
     int32_t ty = 1;
     int32_t error = (tx - diameter);
+
+    SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), col.r, col.g, col.b, col.a);
 
     while (x >= y)
     {
@@ -70,6 +72,7 @@ void DebugManager::DrawCircle(int32_t centreX, int32_t centreY, int32_t radius)
             error += (tx - diameter);
         }
     }
+    SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 255, 255, 255);
 }
 void DebugManager::DrawRect(SDL_FRect rect ,SDL_FRect colour)
 {

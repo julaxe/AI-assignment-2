@@ -14,16 +14,8 @@ void RangeEnemy::update()
 {
 	updatePosition();
 	updateCollisionBox(40.0f, 40.0f);
-	if (updateLOS(DisplayManager::PlayerList()) && !LOSalert)
-	{
-		LOSalert = true;
-		std::cout << "Player in LOS" << std::endl;
-	}
-	else if (!updateLOS(DisplayManager::PlayerList()) && LOSalert)
-	{
-		LOSalert = false;
-		std::cout << "Player OUT of LOS" << std::endl;
-	}
+	updateLOS(DisplayManager::PlayerList());
+	updateRAD();
 
 	switch (m_animationState)
 	{
@@ -33,7 +25,7 @@ void RangeEnemy::update()
 			SoundManager::PlaySound("death", 0, -1);
 		}
 		break;
-	case RUNNING:
+	case PATROL:
 
 		Patrol();
 		if (getLife() <= 0) {
@@ -68,7 +60,7 @@ void RangeEnemy::setState(AnimationState state)
 		m_spriteMax = 19;
 		m_sprite = 0;
 		break;
-	case RUNNING:
+	case PATROL:
 		m_src = { 0 , 0,313,206 };
 		m_spriteMax = 19;
 		m_sprite = 0;

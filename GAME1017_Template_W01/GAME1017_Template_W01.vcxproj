@@ -153,6 +153,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="DebugManager.h" />
+    <ClInclude Include="DecisionTree.h" />
     <ClInclude Include="DestructableObj.h" />
     <ClInclude Include="DisplayManager.h" />
     <ClInclude Include="Enemy.h" />

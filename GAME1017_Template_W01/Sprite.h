@@ -7,16 +7,19 @@
 #include "DebugManager.h"
 enum AnimationState {
 	IDLE,
+	PATROL,
 	RUNNING,
+	MOVETOLOS,
 	MELEE,
 	SHOOTING,
+	FLEE,
 	DEATH
 };
 class Sprite // Inline class.
 {
 public: // Inherited and public.
 	Sprite(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t)
-		:m_src(s), m_dst(d), m_pRend(r), m_pText(t), m_angle(0.0), m_collisionBox(d), LOSalert(false), m_inLOS(false)
+		:m_src(s), m_dst(d), m_pRend(r), m_pText(t), m_angle(0.0), m_collisionBox(d), m_inLOS(false), m_inRadius(false)
 	{
 		updatePosition();
 	}
@@ -42,12 +45,15 @@ public: // Inherited and public.
 	void updateCollisionBox(float width, float heigth) 
 		{ m_collisionBox = { (float)m_dst.x + (float)(m_dst.w * 0.5 - width*0.5), (float)m_dst.y + (float)(m_dst.h * 0.5 - heigth*0.5), width, heigth }; }
 	void updatePosition() { m_pos = { (float)(m_dst.x + m_dst.w * 0.5),(float)( m_dst.y + m_dst.h * 0.5) }; }
+	void MoveUpdate(float speedX, float speedY);
 	void Move(float speedX, float speedY);
 	void updateAngleWithMouse();
+	bool OnTopOfNodeWLOS();
 
 	void drawLOS();
 	void drawRadius(int radius);
 	bool updateLOS(std::vector<Sprite*> list);
+	bool updateRAD();
 	bool updateLOSToPlayer();
 
 protected: // Private BUT inherited.
@@ -66,8 +72,8 @@ protected: // Private BUT inherited.
 	int m_numOfHits;
 	bool m_running;
 	bool m_inLOS;
+	bool m_inRadius;
 
-	bool LOSalert;
 private: // Private NOT inherited.
 };
 

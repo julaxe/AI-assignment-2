@@ -24,12 +24,18 @@ public:
 protected:
 
 	void Seeking(int x, int y);
+	bool MoveToLOS();
+	bool LookPlayer();
 	void Patrol();
 	void Die();
+	void MoveToPlayer();
+	void buildPathToLOS();
+	void FleeFromPlayer();
 
 	std::vector<UIElements*> UIList;
 	std::vector<PathConnection*> m_path;
 	std::vector<PathNode*> m_destinations;
+	std::vector<PathNode*> m_destLOS;
 	
 	int deathTimer;
 	int destinationNumber;

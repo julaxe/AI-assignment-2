@@ -221,6 +221,9 @@
     <ClInclude Include="MeleeEnemy.h">
       <Filter>SpriteObjects</Filter>
     </ClInclude>
+    <ClInclude Include="DecisionTree.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Img\play.png">

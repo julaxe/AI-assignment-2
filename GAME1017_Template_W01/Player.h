@@ -2,7 +2,6 @@
 #ifndef _PLAYER_H_
 #define _PLAYER_H_
 
-#include "Tile.h"
 #include <array>
 #include"UiElements.h"
 

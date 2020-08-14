@@ -30,17 +30,9 @@ void Player::update()
 	updatePosition();
 	updateCollisionBox(40.0f, 40.0f);
 	updateAngleWithMouse();
-
-	if (updateLOS(DisplayManager::EnemiesList()) && !LOSalert)
-	{
-		LOSalert = true;
-		std::cout << "Enemy in LOS" << std::endl;
-	}
-	else if (!updateLOS(DisplayManager::EnemiesList()) && LOSalert)
-	{
-		LOSalert = false;
-		std::cout << "Enemy OUT of LOS" << std::endl;
-	}
+	updateLOS(DisplayManager::EnemiesList());
+	updateRAD();
+	
 	
 	switch (m_animationState)
 	{

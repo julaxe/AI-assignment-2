@@ -14,7 +14,7 @@ public: // Public methods.
 	static void QueueLine(const SDL_Point start, const SDL_Point end, const SDL_Color col);
 	static void FlushLines();
 	static void DrawRay(const SDL_Point start, const double angle, const double length, const SDL_Color col);
-	static void DrawCircle(int32_t centreX, int32_t centreY, int32_t radius);
+	static void DrawCircle(int32_t centreX, int32_t centreY, int32_t radius, const SDL_Color col);
 	static void DrawRect(SDL_FRect rect, SDL_FRect colour);
 	static void Quit();
 private: // Private properties.
