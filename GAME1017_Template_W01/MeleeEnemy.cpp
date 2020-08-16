@@ -15,7 +15,7 @@ MeleeEnemy::MeleeEnemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t,
 	setDestinations();
 	m_MeleeTree = new DecisionTree();
 	m_MoveToLOSTree = new DecisionTree();
-	
+	setState(PATROL);
 	buildMoveToLOSTree();
 	buildTree();
 }
@@ -47,7 +47,7 @@ void MeleeEnemy::update()
 		if (m_animationDone)
 		{
 			m_animationDone = false;
-			setState(PATROL);
+			m_MeleeTree->solveTree();
 		}
 		break;
 	case MOVETOLOS:
@@ -64,9 +64,7 @@ void MeleeEnemy::update()
 		break;
 	case FLEE:
 		if (MoveToFleeLocation())
-		{
 			setState(PATROL);
-		}
 	default:
 		break;
 	}

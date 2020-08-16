@@ -161,7 +161,17 @@ void PlayState::checkCollision()
 			{
 				if (COMA::AABBCheck(*(a->GetCollisionBox()), *(e->GetCollisionBox())))
 				{
-					e->getLife() -= 20;
+					e->getHit(10);
+					SoundManager::PlaySound("grunting", 0, -1);
+					a->isRunning() = false;
+				}
+
+			}
+			for (auto e : DisplayManager::PlayerList())
+			{
+				if (COMA::AABBCheck(*(a->GetCollisionBox()), *(e->GetCollisionBox())))
+				{
+					e->getHit(10);
 					SoundManager::PlaySound("grunting", 0, -1);
 					a->isRunning() = false;
 				}

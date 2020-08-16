@@ -43,6 +43,12 @@ bool Sprite::checkLevelBorders()
 	return false;
 }
 
+void Sprite::getHit(int damage)
+{
+	m_Life -= damage;
+	m_gettingHit = true;
+}
+
 void Sprite::updateAngleWithMouse()
 {
 	SDL_Point mousePos = EVMA::GetMousePos();

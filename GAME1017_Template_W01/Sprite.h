@@ -10,6 +10,7 @@ enum AnimationState {
 	PATROL,
 	RUNNING,
 	MOVETOLOS,
+	MOVETONOLOS,
 	LOOKINGPLAYER,
 	MELEE,
 	SHOOTING,
@@ -20,7 +21,7 @@ class Sprite // Inline class.
 {
 public: // Inherited and public.
 	Sprite(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t)
-		:m_src(s), m_dst(d), m_pRend(r), m_pText(t), m_angle(0.0), m_collisionBox(d), m_inLOS(false), m_inRadius(false)
+		:m_src(s), m_dst(d), m_pRend(r), m_pText(t), m_angle(0.0), m_collisionBox(d), m_inLOS(false), m_inRadius(false), m_gettingHit(false)
 	{
 		updatePosition();
 	}
@@ -52,6 +53,8 @@ public: // Inherited and public.
 	void MovePlayer(float speedX, float speedY);
 	bool checkLevelBorders();
 	
+	void getHit(int damage);
+
 	void updateAngleWithMouse();
 	bool OnTopOfNodeWLOS();
 
@@ -75,6 +78,7 @@ protected: // Private BUT inherited.
 	SDL_Point LOSendPosition;
 	SDL_Point LOSRadiusendPosition;
 
+	bool m_gettingHit;
 	int m_Life;
 	int m_numOfHits;
 	bool m_running;

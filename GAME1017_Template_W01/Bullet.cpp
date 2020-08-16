@@ -59,8 +59,8 @@ void Bullet::Execute(SDL_FRect PlayerDst, int angle)
 	int angleToGun = 20;
 	float centerX = (PlayerDst.x + PlayerDst.w * 0.5);
 	float centerY = (PlayerDst.y + PlayerDst.h * 0.5);
-	float frontX = 0.7 * PlayerDst.w * cos((angle+ angleToGun) * M_PI / 180);
-	float frontY = 0.7 * PlayerDst.w * sin((angle + angleToGun) * M_PI / 180);
+	float frontX = 0.9 * PlayerDst.w * cos((angle+ angleToGun) * M_PI / 180);
+	float frontY = 0.9 * PlayerDst.w * sin((angle + angleToGun) * M_PI / 180);
 	float PosX = centerX + frontX;
 	float PosY = centerY + frontY;
 	

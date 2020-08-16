@@ -32,6 +32,7 @@ protected:
 	void Die();
 	void MoveToPlayer();
 	void buildPathToLOS();
+	void buildPathToNOLOS();
 	void buildPathToFlee();
 	void FleeFromPlayer();
 
@@ -39,6 +40,7 @@ protected:
 	std::vector<PathConnection*> m_path;
 	std::vector<PathNode*> m_destinations;
 	std::vector<PathNode*> m_destLOS;
+	std::vector<PathNode*> 	m_destNOLOS;
 	std::vector<PathNode*> m_destFlee;
 	
 	int deathTimer;

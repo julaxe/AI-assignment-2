@@ -207,6 +207,38 @@ void Enemy::buildPathToLOS()
 
 	
 }
+void Enemy::buildPathToNOLOS()
+{
+	m_path.clear();
+	m_destNOLOS.clear();
+	Tile* path = nullptr;
+	float distance = 1000;
+	for (auto n : LevelManager::m_nodes)
+	{
+		if (!n->Node()->inLOS())
+		{
+			int x1 = getPosition().x;
+			int x2 = n->Node()->Pt().x;
+			int y1 = getPosition().y;
+			int y2 = n->Node()->Pt().y;
+			int newDistance = MAMA::Distance(x1, x2, y1, y2);
+			if (newDistance < distance)
+			{
+				distance = newDistance;
+				path = n;
+			}
+		}
+	}
+	if (path != nullptr)
+		m_destNOLOS.push_back(path->Node());
+	if (m_destNOLOS.size() > 0)
+	{
+		m_path = LevelManager::calculatePathTo(this, m_destNOLOS[0]);
+		pathCounter = 0;
+	}
+
+
+}
 
 void Enemy::buildPathToFlee()
 {

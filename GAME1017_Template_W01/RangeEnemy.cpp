@@ -9,32 +9,44 @@ RangeEnemy::RangeEnemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t,
 	:Enemy(s, d, r, t, sstart, smin, smax, nf)
 {
 	setDestinations();
+	m_RangeTree = new DecisionTree();
+	buildTree();
+	setState(PATROL);
 }
 void RangeEnemy::update()
 {
 	updatePosition();
 	updateCollisionBox(40.0f, 40.0f);
 	updateLOS(DisplayManager::PlayerList());
+	updateLOSToPlayerInsideRadius();
 	updateRAD();
 
 	switch (m_animationState)
 	{
-	case IDLE:
-		if (getLife() <= 0) {
-			setState(DEATH);
-			SoundManager::PlaySound("death", 0, -1);
-		}
-		break;
 	case PATROL:
 
+		m_RangeTree->solveTree();
 		Patrol();
-		if (getLife() <= 0) {
-			setState(DEATH);
-			SoundManager::PlaySound("death", 0, -1);
-		}
-
 		break;
-	case MELEE:
+	case RUNNING:
+		m_RangeTree->solveTree();
+		MoveToPlayer();
+		break;
+	case MOVETOLOS:
+		m_RangeTree->solveTree();
+		if (MoveToLOS())
+			setState(MOVETOLOS);
+		break;
+	case MOVETONOLOS:
+		m_RangeTree->solveTree();
+		if (MoveToLOS()) { //same method as LOS
+			setState(MOVETONOLOS);
+			m_gettingHit = false;
+		}
+		break;
+	case LOOKINGPLAYER:
+		m_RangeTree->solveTree();
+		LookPlayer();
 		break;
 	case SHOOTING:
 		break;
@@ -44,10 +56,15 @@ void RangeEnemy::update()
 	default:
 		break;
 	}
+	if (getLife() <= 0) {
+		setState(DEATH);
+		SoundManager::PlaySound("death", 0, -1);
+	}
 	for (auto s : UIList)
 	{
 		s->update(this);
 	}
+	Animate();
 }
 
 void RangeEnemy::setState(AnimationState state)
@@ -58,23 +75,37 @@ void RangeEnemy::setState(AnimationState state)
 	case IDLE:
 		m_src = { 0 , 412 , 313,206 };
 		m_spriteMax = 19;
-		m_sprite = 0;
 		break;
 	case PATROL:
+		setDestinations();
 		m_src = { 0 , 0,313,206 };
 		m_spriteMax = 19;
-		m_sprite = 0;
 		break;
-	case MELEE:
+	case MOVETOLOS:
+		buildPathToLOS();
+		m_src = { 0 , 0,313,206 };
+		m_spriteMax = 19;
+		break;
+	case MOVETONOLOS:
+		buildPathToNOLOS();
+		m_src = { 0 , 0,313,206 };
+		m_spriteMax = 19;
+		break;
+	case FLEE:
+		buildPathToFlee();
+		m_src = { 0 , 0,313,206 };
+		m_spriteMax = 19;
 		break;
 	case SHOOTING:
 		m_src = { 0 ,206,316,206 };
 		m_spriteMax = 3;
-		m_sprite = 0;
 		break;
 	default:
+		m_src = { 0 , 0,313,206 };
+		m_spriteMax = 19;
 		break;
 	}
+	m_sprite = 0;
 }
 
 void RangeEnemy::setDestinations()
@@ -98,7 +129,7 @@ bool RangeEnemy::WeaponRangeDistance()
 
 bool RangeEnemy::wasHit()
 {
-	return false;
+	return m_gettingHit;
 }
 
 void RangeEnemy::RangeAttack()
@@ -111,22 +142,49 @@ void RangeEnemy::buildTree()
 	TreeNode* RangeAttack = new TreeNode();
 	RangeAttack->Action = [this]() {std::cout << "Range attack \n";  };
 
+	TreeNode* LookToPlayer = new TreeNode();
+	LookToPlayer->Action = [this]() {
+		setState(LOOKINGPLAYER);
+	};
+
 	TreeNode* MoveToRange = new TreeNode();
-	MoveToRange->Action = [this]() {std::cout << "Move to Range \n"; };
+	MoveToRange->Action = [this]() {
+		if (m_animationState != RUNNING)
+			setState(RUNNING);
+	};
 
 	TreeNode* MoveToLOS = new TreeNode();
-	MoveToLOS->Action = [this]() {std::cout << "Move to LOS \n"; };
+	MoveToLOS->Action = [this]() {
+		if (m_animationState != MOVETOLOS)
+			setState(MOVETOLOS);
+	};
 
 	TreeNode* MoveToCover = new TreeNode();
-	MoveToCover->Action = [this]() {std::cout << "Move to Cover \n"; };
+	MoveToCover->Action = [this]() {
+		if (m_animationState != MOVETONOLOS)
+			setState(MOVETONOLOS);
+	};
 
 	TreeNode* Flee = new TreeNode();
-	Flee->Action = [this]() {std::cout << "Flee \n"; };
+	Flee->Action = [this]() {
+		if (m_animationState != FLEE)
+			setState(FLEE);
+	};
 
 	TreeNode* Patrol = new TreeNode();
-	Patrol->Action = [this]() {std::cout << "Patrol \n"; };
+	Patrol->Action = [this]() {
+		if (m_animationState != PATROL)
+			setState(PATROL);
+	};
 
 	// Conditions
+
+	TreeNode* canLook = new TreeNode();
+	canLook->Condition = [this]() {
+		return canLookPlayer();
+	};
+	canLook->Left = LookToPlayer;
+	canLook->Right = MoveToLOS;
 
 	TreeNode* inCCRange = new TreeNode();
 	inCCRange->Condition = [this]() { return WeaponRangeDistance(); };
@@ -135,7 +193,7 @@ void RangeEnemy::buildTree()
 
 	TreeNode* inRadius = new TreeNode();
 	inRadius->Condition = [this]() { return m_inRadius; };
-	inRadius->Left = MoveToLOS;
+	inRadius->Left = canLook;
 	inRadius->Right = Patrol;
 
 	TreeNode* inLOS = new TreeNode();
@@ -145,8 +203,8 @@ void RangeEnemy::buildTree()
 
 	TreeNode* NotHit = new TreeNode();
 	NotHit->Condition = [this]() { return wasHit(); };
-	NotHit->Left = inLOS;
-	NotHit->Right = MoveToCover;
+	NotHit->Left = MoveToCover;
+	NotHit->Right = inLOS;
 
 	TreeNode* NotlowHp = new TreeNode();
 	NotlowHp->Condition = [this]() {
@@ -163,7 +221,7 @@ void RangeEnemy::buildTree()
 
 void RangeEnemy::buildMoveToLOSTree()
 {
-	TreeNode* MoveToNodeWLOS = new TreeNode();
+	/*TreeNode* MoveToNodeWLOS = new TreeNode();
 	MoveToNodeWLOS->Action = [this]() {
 		MoveToLOS();
 	};
@@ -179,5 +237,5 @@ void RangeEnemy::buildMoveToLOSTree()
 	onNodeWLOS->Left = LookPlayer;
 	onNodeWLOS->Right = MoveToNodeWLOS;
 
-	m_MoveToLOSTree->setRoot(onNodeWLOS);
+	m_MoveToLOSTree->setRoot(onNodeWLOS);*/
 }
