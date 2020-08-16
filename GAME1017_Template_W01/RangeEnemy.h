@@ -1,5 +1,6 @@
 #pragma once
 #include "Enemy.h"
+#include "DecisionTree.h"
 class RangeEnemy : public Enemy
 {
 public:
@@ -9,4 +10,11 @@ public:
 	void setDestinations() override;
 
 private:
+	bool WeaponRangeDistance();
+	bool wasHit();
+	void RangeAttack();
+	void buildTree();
+	void buildMoveToLOSTree();
+	DecisionTree* m_RangeTree;
+	DecisionTree* m_MoveToLOSTree;
 };
