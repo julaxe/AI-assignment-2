@@ -65,6 +65,7 @@ void LevelManager::loadLevel()
 				{
 					m_nodes.push_back(m_level[row][col]);
 				}
+				
 			}
 		}
 	}

@@ -192,6 +192,37 @@ bool CollisionManager::CheckLOS(Sprite* obj1, std::vector<Sprite*> list /*= enem
 	return false;
 }
 
+bool CollisionManager::CheckLOSInsideRadius(Sprite* obj1, std::vector<Sprite*> list /*= enemy or player*/)
+{
+	SDL_Point end = obj1->getLOSRadiusendPosition();
+	int iterations = 500;
+	for (int i = 1; i <= iterations; i++)
+	{
+		double factor = (double)i / (double)iterations;
+		int dx = MAMA::LerpD(obj1->getPosition().x, end.x, factor);
+		int dy = MAMA::LerpD(obj1->getPosition().y, end.y, factor);
+		obj1->getLOSRadiusendPosition() = { dx, dy };
+		if (LevelManager::m_level[dy / LevelManager::SIZEOFTILES][dx / LevelManager::SIZEOFTILES]->IsObstacle())
+		{
+			return false;
+		}
+		for (auto d : DisplayManager::DestructableObjList())
+		{
+			if (LineRectCheck(obj1->getLOSRadiusendPosition(), *(d->GetCollisionBox())))
+			{
+				return false;
+			}
+		}
+		for (auto e : list)
+		{
+			if (LineRectCheck(obj1->getLOSRadiusendPosition(), *(e->GetCollisionBox())))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
 bool CollisionManager::CheckLOS(PathNode* obj1, std::vector<Sprite*> list /*= enemy or player*/)
 {
 	SDL_Point end = obj1->getLOSendPosition();

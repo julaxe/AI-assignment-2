@@ -15,7 +15,7 @@ MeleeEnemy::MeleeEnemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t,
 	setDestinations();
 	m_MeleeTree = new DecisionTree();
 	m_MoveToLOSTree = new DecisionTree();
-	m_path = LevelManager::calculatePathTo(this, getDestinations()[destinationNumber]);
+	
 	buildMoveToLOSTree();
 	buildTree();
 }
@@ -23,17 +23,10 @@ void MeleeEnemy::update()
 {
 	updatePosition();
 	updateCollisionBox(40.0f, 40.0f);
-	if (updateLOS(DisplayManager::PlayerList()))
-	{
-		m_path = LevelManager::calculatePathTo(this, getDestinations()[destinationNumber]);
-		pathCounter = 0;
-	}
-	if (updateRAD())
-	{
-		setDestinations();
-		m_path = LevelManager::calculatePathTo(this, getDestinations()[destinationNumber]);
-		pathCounter = 0;
-	}
+	updateLOSToPlayerInsideRadius();
+	updateLOS(DisplayManager::PlayerList());
+	updateRAD();
+	
 	
 	DEMA::DrawCircle(m_dst.x + m_dst.w * 0.5, m_dst.y + m_dst.h * 0.5, 50, { 255,20,20,255 }); //for meleeAtck
 	
@@ -58,16 +51,22 @@ void MeleeEnemy::update()
 		}
 		break;
 	case MOVETOLOS:
-		m_MoveToLOSTree->solveTree();
-		m_MeleeTree->solveTree();			
+		m_MeleeTree->solveTree();
+		if(MoveToLOS())
+			setState(MOVETOLOS);
 		break;
-	case SHOOTING:
+	case LOOKINGPLAYER:
+		m_MeleeTree->solveTree();
+		LookPlayer();
 		break;
 	case DEATH:
 		Die();
 		break;
 	case FLEE:
-		FleeFromPlayer();
+		if (MoveToFleeLocation())
+		{
+			setState(PATROL);
+		}
 	default:
 		break;
 	}
@@ -92,11 +91,7 @@ void MeleeEnemy::setState(AnimationState state)
 		m_spriteMax = 19;
 		break;
 	case PATROL:
-		
-		m_src = { 0 , 528,281,221 };
-		m_spriteMax = 19;
-		break;
-	case RUNNING:
+		setDestinations();
 		m_src = { 0 , 528,281,221 };
 		m_spriteMax = 19;
 		break;
@@ -105,18 +100,20 @@ void MeleeEnemy::setState(AnimationState state)
 		m_src = { 0 , 528,281,221 };
 		m_spriteMax = 19;
 		break;
+	case FLEE:
+		buildPathToFlee();
+		m_src = { 0 , 528,281,221 };
+		m_spriteMax = 19;
+		break;
 	case MELEE:
 		m_src = { 0,226,331,302 };
 		m_spriteMax = 14;
 		break;
-	case SHOOTING:
 
 		break;
-	case FLEE:
+	default:
 		m_src = { 0 , 528,281,221 };
 		m_spriteMax = 19;
-		break;
-	default:
 		break;
 	}
 	m_sprite = 0;
@@ -124,11 +121,14 @@ void MeleeEnemy::setState(AnimationState state)
 
 void MeleeEnemy::setDestinations()
 {
+	m_path.clear();
 	m_destinations.clear();
 	m_destinations.push_back(LevelManager::m_level[2][2]->Node());
 	m_destinations.push_back(LevelManager::m_level[8][2]->Node());
 	m_destinations.push_back(LevelManager::m_level[8][8]->Node());
 	m_destinations.push_back(LevelManager::m_level[2][8]->Node());
+	m_path = LevelManager::calculatePathTo(this, getDestinations()[destinationNumber]);
+	pathCounter = 0;
 }
 
 bool MeleeEnemy::closeCombatDistance()
@@ -155,6 +155,11 @@ void MeleeEnemy::buildTree()
 	TreeNode* MeleeAtk = new TreeNode();
 	MeleeAtk->Action = [this]() { MeleeAttack();  };
 
+	TreeNode* LookToPlayer = new TreeNode();
+	LookToPlayer->Action = [this]() {
+		setState(LOOKINGPLAYER);
+	};
+
 	TreeNode* MoveToPlayer = new TreeNode();
 	MoveToPlayer->Action = [this]() {
 		if(m_animationState != RUNNING)
@@ -163,7 +168,7 @@ void MeleeEnemy::buildTree()
 
 	TreeNode* MoveToLOS = new TreeNode();
 	MoveToLOS->Action = [this]() { 
-		if (m_animationState != MOVETOLOS)
+		if(m_animationState != MOVETOLOS)
 			setState(MOVETOLOS);
 	};
 
@@ -180,6 +185,13 @@ void MeleeEnemy::buildTree()
 	};
 
 	/////////////////////////////////////////////////////////////////////////////////
+	TreeNode* canLook = new TreeNode();
+	canLook->Condition = [this]() {
+		return canLookPlayer();
+	};
+	canLook->Left = LookToPlayer;
+	canLook->Right = MoveToLOS;
+
 	TreeNode* inCCRange = new TreeNode();
 	inCCRange->Condition = [this]() {
 		return closeCombatDistance();
@@ -191,7 +203,7 @@ void MeleeEnemy::buildTree()
 	inRadius->Condition = [this]() {
 		return m_inRadius;
 	};
-	inRadius->Left = MoveToLOS;
+	inRadius->Left = canLook;
 	inRadius->Right = Patrol;
 
 	TreeNode* inLOS = new TreeNode();
@@ -217,9 +229,12 @@ void MeleeEnemy::buildTree()
 
 void MeleeEnemy::buildMoveToLOSTree()
 {
-	TreeNode* MoveToNodeWLOS = new TreeNode();
+	/*TreeNode* MoveToNodeWLOS = new TreeNode();
 	MoveToNodeWLOS->Action = [this]() {
-	    MoveToLOS();
+		if (MoveToLOS())
+		{
+			setState(MOVETOLOS);
+		}
 	};
 
 	TreeNode* LookPlayer = new TreeNode();
@@ -234,6 +249,6 @@ void MeleeEnemy::buildMoveToLOSTree()
 	onNodeWLOS->Left = LookPlayer;
 	onNodeWLOS->Right = MoveToNodeWLOS;
 
-	m_MoveToLOSTree->setRoot(onNodeWLOS);
+	m_MoveToLOSTree->setRoot(onNodeWLOS);*/
 
 }

@@ -57,19 +57,19 @@ void Player::update()
 
 		if (EVMA::KeyHeld(SDL_SCANCODE_W))
 		{
-			Move(0, -SPEED);	
+			MovePlayer(0, -SPEED);	
 		}
 		else if (EVMA::KeyHeld(SDL_SCANCODE_S))
 		{
-			Move(0, SPEED);
+			MovePlayer(0, SPEED);
 		}
 		if (EVMA::KeyHeld(SDL_SCANCODE_A))
 		{
-			Move(-SPEED, 0);
+			MovePlayer(-SPEED, 0);
 		}
 		else if (EVMA::KeyHeld(SDL_SCANCODE_D))
 		{
-			Move(SPEED, 0);
+			MovePlayer(SPEED, 0);
 		}
 		
 		break;
@@ -168,6 +168,8 @@ void Player::setAnimationState(AnimationState state)
 		break;
 	}
 }
+
+
 
 
 

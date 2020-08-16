@@ -9,7 +9,6 @@ RangeEnemy::RangeEnemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t,
 	:Enemy(s, d, r, t, sstart, smin, smax, nf)
 {
 	setDestinations();
-	m_path = LevelManager::calculatePathTo(this, getDestinations()[destinationNumber]);
 }
 void RangeEnemy::update()
 {
@@ -80,10 +79,13 @@ void RangeEnemy::setState(AnimationState state)
 
 void RangeEnemy::setDestinations()
 {
+	m_path.clear();
 	m_destinations.push_back(LevelManager::m_level[4][6]->Node());
 	m_destinations.push_back(LevelManager::m_level[7][6]->Node());
 	m_destinations.push_back(LevelManager::m_level[7][9]->Node());
 	m_destinations.push_back(LevelManager::m_level[4][9]->Node());
+	m_path = LevelManager::calculatePathTo(this, getDestinations()[destinationNumber]);
+	pathCounter = 0;
 }
 
 bool RangeEnemy::WeaponRangeDistance()
@@ -170,7 +172,7 @@ void RangeEnemy::buildMoveToLOSTree()
 		Enemy::LookPlayer();
 		};
 
-	reeNode* onNodeWLOS = new TreeNode();
+	TreeNode* onNodeWLOS = new TreeNode();
 	onNodeWLOS->Condition = [this]() {
 		return OnTopOfNodeWLOS();
 	};

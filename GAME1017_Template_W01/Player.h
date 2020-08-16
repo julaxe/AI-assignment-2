@@ -19,6 +19,7 @@ public:
 	
 
 private:
+	void ckeckLevelBorders();
 	bool m_isMoving;
 	std::vector<UIElements*> UIList;
 	float m_scale;

@@ -10,6 +10,7 @@ enum AnimationState {
 	PATROL,
 	RUNNING,
 	MOVETOLOS,
+	LOOKINGPLAYER,
 	MELEE,
 	SHOOTING,
 	FLEE,
@@ -29,6 +30,7 @@ public: // Inherited and public.
 
 	SDL_FPoint& getPosition() { return m_pos; }
 	SDL_Point& getLOSendPosition() { return LOSendPosition; }
+	SDL_Point& getLOSRadiusendPosition() { return LOSRadiusendPosition; }
 	SDL_Rect* GetSrcP() { return &m_src; }
 	SDL_FRect* GetDstP() { return &m_dst; }
 	SDL_FRect* GetCollisionBox() { return &m_collisionBox; }
@@ -47,14 +49,18 @@ public: // Inherited and public.
 	void updatePosition() { m_pos = { (float)(m_dst.x + m_dst.w * 0.5),(float)( m_dst.y + m_dst.h * 0.5) }; }
 	void MoveUpdate(float speedX, float speedY);
 	void Move(float speedX, float speedY);
+	void MovePlayer(float speedX, float speedY);
+	bool checkLevelBorders();
+	
 	void updateAngleWithMouse();
 	bool OnTopOfNodeWLOS();
 
 	void drawLOS();
 	void drawRadius(int radius);
-	bool updateLOS(std::vector<Sprite*> list);
+	bool updateLOS(std::vector<Sprite*> list);	
 	bool updateRAD();
 	bool updateLOSToPlayer();
+	bool updateLOSToPlayerInsideRadius();
 
 protected: // Private BUT inherited.
 	double m_angle;
@@ -67,11 +73,12 @@ protected: // Private BUT inherited.
 	SDL_Renderer* m_pRend;
 	SDL_Texture* m_pText;
 	SDL_Point LOSendPosition;
+	SDL_Point LOSRadiusendPosition;
 
 	int m_Life;
 	int m_numOfHits;
 	bool m_running;
-	bool m_inLOS;
+	bool m_inLOS, m_inLOSInRadius;
 	bool m_inRadius;
 
 private: // Private NOT inherited.

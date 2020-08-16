@@ -6,7 +6,7 @@
 #include "Label.h"
 
 #define ROWS 12
-#define COLS 16
+#define COLS 19
 
 class Tile : public Sprite
 {

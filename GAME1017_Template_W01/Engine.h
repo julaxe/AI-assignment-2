@@ -11,7 +11,7 @@
 
 
 #define ROWS 12
-#define COLS 16
+#define COLS 19
 #define WIDTH 1024
 #define HEIGHT 768
 #define FPS 60

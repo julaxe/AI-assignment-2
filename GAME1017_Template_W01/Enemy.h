@@ -25,17 +25,21 @@ protected:
 
 	void Seeking(int x, int y);
 	bool MoveToLOS();
+	bool MoveToFleeLocation();
+	bool canLookPlayer();
 	bool LookPlayer();
 	void Patrol();
 	void Die();
 	void MoveToPlayer();
 	void buildPathToLOS();
+	void buildPathToFlee();
 	void FleeFromPlayer();
 
 	std::vector<UIElements*> UIList;
 	std::vector<PathConnection*> m_path;
 	std::vector<PathNode*> m_destinations;
 	std::vector<PathNode*> m_destLOS;
+	std::vector<PathNode*> m_destFlee;
 	
 	int deathTimer;
 	int destinationNumber;

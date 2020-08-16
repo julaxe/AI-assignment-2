@@ -3,6 +3,7 @@
 #include "EventManager.h"
 #include "DisplayManager.h"
 #include "LevelManager.h"
+#include "Engine.h"
 
 void Sprite::MoveUpdate(float speedX, float speedY)
 {
@@ -21,6 +22,25 @@ void Sprite::Move(float speedX, float speedY)
 	MoveUpdate(0, speedY);
 	if (COMA::AABBCollisionWithTiles(this, LevelManager::m_obstacles) || COMA::AABBCollisionWithTiles(this, DisplayManager::DestructableObjList()))
 		MoveUpdate(0, -speedY);
+}
+void Sprite::MovePlayer(float speedX, float speedY)
+{
+	MoveUpdate(speedX, 0);
+	if (COMA::AABBCollisionWithTiles(this, LevelManager::m_obstacles) || COMA::AABBCollisionWithTiles(this, DisplayManager::DestructableObjList()) || checkLevelBorders())
+		MoveUpdate(-speedX, 0);
+
+	MoveUpdate(0, speedY);
+	if (COMA::AABBCollisionWithTiles(this, LevelManager::m_obstacles) || COMA::AABBCollisionWithTiles(this, DisplayManager::DestructableObjList()) || checkLevelBorders())
+		MoveUpdate(0, -speedY);
+}
+
+bool Sprite::checkLevelBorders()
+{
+	if (GetCollisionBox()->x + GetCollisionBox()->w > WIDTH)
+	{
+		return true;
+	}
+	return false;
 }
 
 void Sprite::updateAngleWithMouse()
@@ -111,3 +131,20 @@ bool Sprite::updateLOSToPlayer()
 	m_inLOS = false;
 	return false;
 }
+
+bool Sprite::updateLOSToPlayerInsideRadius()
+{
+	double dy = DisplayManager::PlayerList()[0]->getPosition().y - m_pos.y;
+	double dx = DisplayManager::PlayerList()[0]->getPosition().x - m_pos.x;
+	double angle = MAMA::AngleBetweenPoints(dy, dx);
+	SDL_Point direction = { cos(angle) * 2000, sin(angle) * 2000 };
+	LOSRadiusendPosition = { (int)m_pos.x + direction.x, (int)m_pos.y + direction.y };
+	if (COMA::CheckLOSInsideRadius(this, DisplayManager::PlayerList()))
+	{
+		m_inLOSInRadius = true;
+		return true;
+	}
+	m_inLOSInRadius = false;
+	return false;
+}
+

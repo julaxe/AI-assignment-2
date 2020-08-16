@@ -97,7 +97,6 @@ void Enemy::Seeking(int x, int y)
 
 bool Enemy::MoveToLOS()
 {
-	//buildPathToLOS();
 	if (pathCounter < m_path.size())
 	{
 		int x = m_path[pathCounter]->GetToNode()->Pt().x;
@@ -106,6 +105,23 @@ bool Enemy::MoveToLOS()
 		return false;
 	}
 	return true;
+}
+
+bool Enemy::MoveToFleeLocation()
+{
+	if (pathCounter < m_path.size())
+	{
+		int x = m_path[pathCounter]->GetToNode()->Pt().x;
+		int y = m_path[pathCounter]->GetToNode()->Pt().y;
+		Seeking(x, y);
+		return false;
+	}
+	m_Life = 100;
+	return true;
+}
+bool Enemy::canLookPlayer()
+{
+	return m_inLOSInRadius;
 }
 
 bool Enemy::LookPlayer()
@@ -192,6 +208,13 @@ void Enemy::buildPathToLOS()
 	
 }
 
+void Enemy::buildPathToFlee()
+{
+	m_path.clear();
+	m_destFlee.push_back(LevelManager::m_level[1][17]->Node());
+	m_path = LevelManager::calculatePathTo(this, m_destFlee[0]);
+	pathCounter = 0;
+}
 void Enemy::FleeFromPlayer()
 {	
 	float x = DisplayManager::PlayerList()[0]->getPosition().x;
