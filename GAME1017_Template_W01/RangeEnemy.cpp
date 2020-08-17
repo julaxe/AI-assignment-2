@@ -14,6 +14,7 @@ RangeEnemy::RangeEnemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t,
 	m_RangeTree = new DecisionTree();
 	buildTree();
 	setState(PATROL);
+	m_shootTimer = 0;
 }
 void RangeEnemy::update()
 {
@@ -35,9 +36,9 @@ void RangeEnemy::update()
 		MoveToPlayer();
 		break;
 	case MOVETOLOS:
-		m_RangeTree->solveTree();
 		if (MoveToLOS())
 			setState(MOVETOLOS);
+		m_RangeTree->solveTree();
 		break;
 	case MOVETONOLOS:
 		m_RangeTree->solveTree();
@@ -51,7 +52,17 @@ void RangeEnemy::update()
 		LookPlayer();
 		break;
 	case SHOOTING:
+		if (m_shootTimer > 30)
+		{
+			RangeAttack();
+			m_shootTimer = 0;
+		}
 		m_RangeTree->solveTree();
+		m_shootTimer++;
+		break;
+	case FLEE:
+		if (MoveToFleeLocation())
+			setState(PATROL);
 		break;
 	case DEATH:
 		Die();
@@ -59,7 +70,7 @@ void RangeEnemy::update()
 	default:
 		break;
 	}
-	if (getLife() <= 0) {
+	if (getLife() <= 0 && m_animationState != DEATH) {
 		setState(DEATH);
 		SoundManager::PlaySound("death", 0, -1);
 	}
@@ -124,7 +135,7 @@ void RangeEnemy::setDestinations()
 
 bool RangeEnemy::WeaponRangeDistance()
 {
-	if (COMA::CircleCircleCheck(getPosition(), DisplayManager::PlayerList()[0]->getPosition(), 500, 20))
+	if (COMA::CircleCircleCheck(getPosition(), DisplayManager::PlayerList()[0]->getPosition(), 200, 20))
 		return true;
 	else
 		return false;
@@ -151,7 +162,7 @@ void RangeEnemy::buildTree()
 	TreeNode* RangeAttack = new TreeNode();
 	RangeAttack->Action = [this]() {
 		if (m_animationState != SHOOTING)
-		RangeEnemy::RangeAttack();
+			setState(SHOOTING);
 	};
 
 	TreeNode* LookToPlayer = new TreeNode();

@@ -123,8 +123,10 @@
     <ClCompile Include="DestructableObj.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="EscapeButton.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="FontManager.cpp" />
+    <ClCompile Include="GameOverState.cpp" />
     <ClCompile Include="LabelEnemiesAlive.cpp" />
     <ClCompile Include="LabelEnemiesKilled.cpp" />
     <ClCompile Include="LevelManager.cpp" />
@@ -137,6 +139,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayState.cpp" />
     <ClCompile Include="RangeEnemy.cpp" />
+    <ClCompile Include="RestartButton.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="StartScene.cpp" />
@@ -147,6 +150,7 @@
     <ClCompile Include="States.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="UiElements.cpp" />
+    <ClCompile Include="VictoryState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
@@ -158,8 +162,10 @@
     <ClInclude Include="DisplayManager.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="EscapeButton.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="FontManager.h" />
+    <ClInclude Include="GameOverState.h" />
     <ClInclude Include="LabelEnemiesAlive.h" />
     <ClInclude Include="LabelEnemiesKilled.h" />
     <ClInclude Include="LevelManager.h" />
@@ -172,6 +178,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayState.h" />
     <ClInclude Include="RangeEnemy.h" />
+    <ClInclude Include="RestartButton.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="StartScene.h" />
     <ClInclude Include="StateManager.h" />
@@ -182,6 +189,7 @@
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="UiElements.h" />
+    <ClInclude Include="VictoryState.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Img\EnemySpriteSheet.png" />

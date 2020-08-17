@@ -75,9 +75,6 @@
     <ClCompile Include="MeleeAtk.cpp">
       <Filter>SpriteObjects</Filter>
     </ClCompile>
-    <ClCompile Include="PlayButton.cpp">
-      <Filter>SpriteObjects</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>SpriteObjects</Filter>
     </ClCompile>
@@ -122,6 +119,21 @@
     </ClCompile>
     <ClCompile Include="MeleeEnemy.cpp">
       <Filter>SpriteObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOverState.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="VictoryState.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayButton.cpp">
+      <Filter>Label</Filter>
+    </ClCompile>
+    <ClCompile Include="RestartButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EscapeButton.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -173,9 +185,6 @@
     <ClInclude Include="MeleeAtk.h">
       <Filter>SpriteObjects</Filter>
     </ClInclude>
-    <ClInclude Include="PlayButton.h">
-      <Filter>SpriteObjects</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>SpriteObjects</Filter>
     </ClInclude>
@@ -212,9 +221,6 @@
     <ClInclude Include="Pathing.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="DestructableObj.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RangeEnemy.h">
       <Filter>SpriteObjects</Filter>
     </ClInclude>
@@ -223,6 +229,24 @@
     </ClInclude>
     <ClInclude Include="DecisionTree.h">
       <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOverState.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="VictoryState.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="DestructableObj.h">
+      <Filter>SpriteObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayButton.h">
+      <Filter>Label</Filter>
+    </ClInclude>
+    <ClInclude Include="RestartButton.h">
+      <Filter>Label</Filter>
+    </ClInclude>
+    <ClInclude Include="EscapeButton.h">
+      <Filter>Label</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

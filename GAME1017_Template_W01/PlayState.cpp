@@ -17,7 +17,9 @@
 #include "RangeEnemy.h"
 #include "MeleeEnemy.h"
 #include "DestructableObj.h"
-
+#include "StateManager.h"
+#include "GameOverState.h"
+#include "VictoryState.h"
 
 std::vector<Label*> DisplayManager::listLabels;
 std::vector<Sprite*> DisplayManager::listOfAttacks;
@@ -140,11 +142,19 @@ void PlayState::Update()
 	DisplayManager::deleteBarrels();
 	deleteDeathEnemies();
 
+	if (DisplayManager::PlayerList()[0]->getLife() <= 0)
+		StateManager::ChangeState(new GameOverState());
+	if(DisplayManager::EnemiesList().size() == 0)
+		StateManager::ChangeState(new VictoryState());
+
 }
 
 void PlayState::Exit()
 {
-	LevelManager::clean();
+	//LevelManager::clean();
+	DisplayManager::EnemiesList().clear();
+	DisplayManager::PlayerList().clear();
+	DisplayManager::AttackList().clear();
 }
 
 void PlayState::Resume()

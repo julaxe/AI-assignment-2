@@ -15,6 +15,7 @@ private:
 	void RangeAttack();
 	void buildTree();
 	void buildMoveToLOSTree();
+	int m_shootTimer;
 	DecisionTree* m_RangeTree;
 	DecisionTree* m_MoveToLOSTree;
 };

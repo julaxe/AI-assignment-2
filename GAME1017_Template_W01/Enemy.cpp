@@ -153,6 +153,8 @@ void Enemy::Die()
 	if (deathTimer == 0)
 	{
 		m_src = { 0,0,64,64 };
+		m_sprite = 0;
+		m_spriteMax = 24;
 	}
 	if (deathTimer % frameRate == 0)
 	{
