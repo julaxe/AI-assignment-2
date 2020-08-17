@@ -3,6 +3,8 @@
 #include "SoundManager.h"
 #include"DisplayManager.h"
 #include "CollisionManager.h"
+#include "Engine.h"
+#include "Bullet.h"
 #define SPEED 2
 
 RangeEnemy::RangeEnemy(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstart, int smin, int smax, int nf)
@@ -49,6 +51,7 @@ void RangeEnemy::update()
 		LookPlayer();
 		break;
 	case SHOOTING:
+		m_RangeTree->solveTree();
 		break;
 	case DEATH:
 		Die();
@@ -98,7 +101,7 @@ void RangeEnemy::setState(AnimationState state)
 		break;
 	case SHOOTING:
 		m_src = { 0 ,206,316,206 };
-		m_spriteMax = 3;
+		m_spriteMax = 2;
 		break;
 	default:
 		m_src = { 0 , 0,313,206 };
@@ -133,14 +136,23 @@ bool RangeEnemy::wasHit()
 }
 
 void RangeEnemy::RangeAttack()
-{
+{	
+	setState(SHOOTING);
+	SDL_Texture* BulletTexture = IMG_LoadTexture(Engine::Instance().GetRenderer(), "Img/bullet1.png");
+	Bullet* m_shoot = new Bullet({ 0,0,813,306 }, { 0,0,20,8 }, Engine::Instance().GetRenderer(), BulletTexture, 0, false);
+	m_shoot->Execute(m_collisionBox, m_angle * 180 / M_PI);
+	delete m_shoot; //don't need this anymore till we press shoot again.
+	m_shoot = nullptr;
 }
 
 void RangeEnemy::buildTree()
 {
 	//Actions
 	TreeNode* RangeAttack = new TreeNode();
-	RangeAttack->Action = [this]() {std::cout << "Range attack \n";  };
+	RangeAttack->Action = [this]() {
+		if (m_animationState != SHOOTING)
+		RangeEnemy::RangeAttack();
+	};
 
 	TreeNode* LookToPlayer = new TreeNode();
 	LookToPlayer->Action = [this]() {
